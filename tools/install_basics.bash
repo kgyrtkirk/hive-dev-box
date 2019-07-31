@@ -12,10 +12,10 @@ EOF
 apt-get update
 apt-get install -y \
         wget curl nano gnupg lsb-release sysvbanner git \
-        default-mysql-client screen psmisc netcat         #xbase-clients
+        default-mysql-client screen psmisc netcat psmisc nano screen sysvbanner #xbase-clients
 apt-get clean
 
-useradd -m -d /home/dev -s /bin/bash dev
+useradd -m -o -u 1000 -g 1000 -d /home/dev -s /bin/bash dev
 
 echo 'root:root' | chpasswd
 echo 'dev:dev' | chpasswd

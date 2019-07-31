@@ -3,7 +3,7 @@
 <configuration>
  <property>
  <name>hive.metastore.warehouse.dir</name>
- <value>/home/dev/hive/warehouse</value>
+ <value>/data/hive/warehouse</value>
  <description>
   Local or HDFS directory where Hive keeps table contents.
  </description>
@@ -17,7 +17,7 @@
  </property>
  <property>
  <name>javax.jdo.option.ConnectionURL</name>
- <value>jdbc:derby:;databaseName=/home/dev/metastore_db;create=true</value>
+ <value>jdbc:derby:;databaseName=/data/hive/metastore_db;create=true</value>
  <description>
   The JDBC connection URL.
  </description>
