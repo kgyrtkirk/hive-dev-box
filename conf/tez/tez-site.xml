@@ -1,0 +1,6 @@
+<configuration>
+  <property>
+    <name>tez.lib.uris</name>
+    <value>${fs.defaultFS}/apps/tez/tez.tar.gz</value>
+  </property>
+</configuration>
