@@ -4,16 +4,16 @@ After=syslog.target network.target remote-fs.target nss-lookup.target network-on
 Requires=network-online.target
 
 [Service]
-#User=hadoop
+User=vagrant
 #Group=hadoop
 #Type=forking
-ExecStart=/usr/local/hadoop/bin/yarn resourcemanager
+ExecStart=/hadoop/bin/yarn resourcemanager
 #ExecStop=/home/hadoop/envs/dwh/hadoop/sbin/stop-dfs.sh
-WorkingDirectory=/usr/local/hadoop
+WorkingDirectory=/hadoop
 
-Environment=JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-Environment=HADOOP_HOME=/usr/local/hadoop
-Environment=HADOOP_CLASSPATH=/usr/local/tez/conf:/usr/local/tez/lib
+
+Environment=JAVA_HOME=/usr/local/sdkman/candidates/java/current/
+EnvironmentFile=/etc/profile.d/confs.sh
 
 TimeoutStartSec=2min
 #Restart=on-failure
