@@ -17,6 +17,7 @@ apt-get install -y \
 
 apt-get clean
 
+groupadd -f -g 1000 dev
 useradd -m -o -u 1000 -g 1000 -d /home/dev -s /bin/bash dev
 
 echo 'root:root' | chpasswd
