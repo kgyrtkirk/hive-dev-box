@@ -3,15 +3,17 @@
 set -e
 set -x
 
+mkdir -p /etc/{hadoop,hive}
 cp -r /hadoop/etc/hadoop /etc/
-cp -r /hive/conf /etc/hive/
+#cp -r /hive/conf/ /etc/hive/
 
 cat >> /etc/screenrc << EOF
 shell /bin/bash
 EOF
 
-mkdir -p data
-chown dev /data
+mkdir -p /data/hive
+chown dev /data{,/hive}
+chmod 777 /data/hive
 
 mkdir -p /apps/tez && cp /tez/share/tez.tar.gz /apps/tez/
 

@@ -1,7 +1,6 @@
-#!/bin/bash
+#!/bin/bash -ex
 
-set -e
-#killall java
-rm -rf /home/vagrant/metastore_db
+D=/data/hive/metastore_db
+rm -rf $D
 /hive/bin/schematool -dbType derby -initSchema
 banner ok

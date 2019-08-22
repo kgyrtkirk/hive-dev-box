@@ -7,6 +7,7 @@ file_to_disk = './tmp/large_disk.vdi'
 Vagrant.configure(2) do |config|
 
   config.vm.box = "debian/contrib-stretch64"
+  config.vm.hostname = "hive-box"
 
 #  config.disksize.size = "16GB"
 #  config.vm.box = "ubuntu/xenial64"
@@ -28,8 +29,8 @@ Vagrant.configure(2) do |config|
     sudo /tools/install_hive.bash
     sudo /tools/install_tez.bash
     sudo /tools/install_conf.bash
-    sudo cp -r /vagrant/conf/* /etc/
-    sudo cp -r /vagrant/bin/* /bin/
+    sudo cp -rsf /vagrant/conf/* /etc/
+    sudo cp -rsf /vagrant/bin/* /bin/
 SHELL
 
   #config.vm.synced_folder "../hive/master/packaging/target/apache-hive-3.0.0-SNAPSHOT-bin/apache-hive-3.0.0-SNAPSHOT-bin/", "/hive-dev"
