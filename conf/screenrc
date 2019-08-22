@@ -16,3 +16,5 @@ defbce on
 # mouse tracking allows to switch region focus by clicking
 mousetrack on
 
+shell "/bin/bash"
+
