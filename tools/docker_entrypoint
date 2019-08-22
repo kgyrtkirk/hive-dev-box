@@ -1,0 +1,10 @@
+#!/bin/bash --login
+
+echo " * initialize metastore..."
+reinit_metastore > /dev/null 2>&1
+echo "exitcode: $?"
+
+cat /etc/motd
+
+export USER=`whoami`
+exec bash --login

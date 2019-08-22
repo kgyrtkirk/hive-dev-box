@@ -23,3 +23,7 @@ COPY bin  /bin
 
 USER dev
 WORKDIR /home/dev
+
+COPY tools/docker_entrypoint /.entrypoint
+ENTRYPOINT ["/.entrypoint"]
+

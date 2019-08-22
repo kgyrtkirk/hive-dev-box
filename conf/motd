@@ -1,0 +1,10 @@
+
+Welcome to hive-dev-box!
+
+quick guide:
+* hive_launch
+  launches a screen session which starts: NM,RM,HS2,BL
+  you may terminate the show with CTRL+A, CTRL+\ and answering yes
+* reinit_metastore
+  clears and recreates the derby metastore
+
