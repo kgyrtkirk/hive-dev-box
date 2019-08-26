@@ -14,8 +14,8 @@ Vagrant.configure(2) do |config|
   
   config.vm.provider "virtualbox" do |v|
     v.memory = 8192
-    v.customize ['createhd', '--filename', file_to_disk, '--size', 16 * 1024]
-    v.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', file_to_disk]
+#    v.customize ['createhd', '--filename', file_to_disk, '--size', 16 * 1024]
+#    v.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', file_to_disk]
   end
   config.vm.network "private_network", ip: "192.168.64.4"
 

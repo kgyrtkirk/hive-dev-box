@@ -3,7 +3,7 @@
 echo "waiting for hs2..."
 t=60
 while [ $t -gt 0 ];do
-	netstat -n -p -l -t |grep :10000 && break
+	sudo netstat -n -p -l -t |grep :10000 && break
 	echo -n "."
 	sleep 1
 	t=$[ $t - 1 ]
