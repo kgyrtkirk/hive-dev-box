@@ -3,4 +3,6 @@
 D=/data/hive/metastore_db
 rm -rf $D
 /hive/bin/schematool -dbType derby -initSchema
+/hive/bin/schematool -dbType hive -initSchema -metaDbType derby
 banner ok
+

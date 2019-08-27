@@ -16,6 +16,7 @@ chown dev /data{,/hive}
 chmod 777 /data/hive
 
 mkdir -p /apps/tez && cp /tez/share/tez.tar.gz /apps/tez/
+mkdir -p /apps/lib && cp /hive/lib/derby-*.jar /apps/lib/
 
 # use ssd for docker
 

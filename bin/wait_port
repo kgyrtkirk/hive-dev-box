@@ -1,0 +1,28 @@
+#!/bin/bash
+
+[ "$#" -ne 2 ] && echo "usage: $0 [open|close] [portnumber]" && exit 1
+
+state=$1
+port=$2
+
+echo -n "waiting for port $port to be $state..."
+t=60
+while [ $t -gt 0 ];do
+        sudo netstat -n -p -l -t |grep ":$port " > /dev/null
+	if [ $? -eq 0 ];then
+		current=open
+	else
+		current=close
+	fi
+	if [ "$current" = "$state" ];then
+		echo "done!"
+		exit 0
+	fi
+        echo -n "."
+        sleep 1
+        t=$[ $t - 1 ]
+done
+
+echo "timed out..."
+
+exit 2
