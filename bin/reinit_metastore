@@ -2,7 +2,12 @@
 
 D=/data/hive/metastore_db
 rm -rf $D
-/hive/bin/schematool -dbType derby -initSchema
-/hive/bin/schematool -dbType hive -initSchema -metaDbType derby
+
+#sudo -u postgres dropdb metastore
+#sudo -u postgres createdb metastore -O hiveuser
+
+type=derby
+/hive/bin/schematool -dbType $type -initSchema
+/hive/bin/schematool -dbType hive -initSchema -metaDbType $type
 banner ok
 
