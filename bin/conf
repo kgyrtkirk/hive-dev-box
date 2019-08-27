@@ -1,0 +1,47 @@
+#!/bin/bash -e
+
+[ "$EUID" != 0 ] && sudo $0 "$@" && exit 0
+
+D=/conf
+
+function gen_content() {
+	cat >&3 << EOF
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+EOF
+
+	cd $D
+	for f in `find $1 -type f`;do
+		k="`basename "$f"`"
+		echo "<property>"		>&3
+		echo " <name>$k</name>"		>&3
+		echo " <value>`cat $f`</value>"	>&3
+		echo "</property>"		>&3
+	done
+echo '</configuration>' >&3
+
+}
+
+function deploy() {
+	gen_content $1 3> /etc/$1
+}
+
+case "$1" in
+	init)
+		git init $D
+	;;
+	set)
+		[ "$#" -ne 4 ] && echo "incorrect args" && exit 1
+		cd $D
+		mkdir -p "$2"
+		echo "$4" > "$2/$3"
+		git add .
+		git commit -m "$2/$3 => $4" || echo no-op
+		deploy $2
+	;;
+	*)
+		echo "see source..." && exit 1
+	;;
+esac
+
