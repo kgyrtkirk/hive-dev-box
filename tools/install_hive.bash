@@ -2,7 +2,7 @@
 
 set -e
 
-version=3.1.1
+version=3.1.2
 bin_dir=apache-hive-$version-bin
 [ -d "$bin_dir" ] && echo "$bin_dir  already installed" && exit 0
 

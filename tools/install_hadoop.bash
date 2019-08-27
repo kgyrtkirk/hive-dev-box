@@ -8,7 +8,7 @@ set -x
 #FIXME move to basic
 apt-get install -y psmisc nano screen sysvbanner
 
-version=3.1.1
+version=3.1.2
 bin_dir=hadoop-$version
 [ -d "$bin_dir" ] && echo "$bin_dir  already installed" && exit 0
 
