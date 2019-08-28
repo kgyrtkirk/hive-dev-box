@@ -6,7 +6,7 @@ set -x
 git config --global user.email foo@acme.com
 git config --global user.name "John Doe"
 
-mkdir -p /etc/{hadoop,hive}
+mkdir -p /etc/{hadoop,hive,tez}
 #cp -r /hadoop/etc/hadoop /etc/
 #cp -r /hive/conf/ /etc/hive/
 
