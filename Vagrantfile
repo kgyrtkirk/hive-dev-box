@@ -28,9 +28,9 @@ Vagrant.configure(2) do |config|
     sudo /tools/install_hadoop.bash
     sudo /tools/install_hive.bash
     sudo /tools/install_tez.bash
-    sudo /tools/install_conf.bash
     sudo cp -rsf /vagrant/conf/* /etc/
     sudo cp -rsf /vagrant/bin/* /bin/
+    sudo /tools/install_conf.bash
 SHELL
 
   #config.vm.synced_folder "../hive/master/packaging/target/apache-hive-3.0.0-SNAPSHOT-bin/apache-hive-3.0.0-SNAPSHOT-bin/", "/hive-dev"

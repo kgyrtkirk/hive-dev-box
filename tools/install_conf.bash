@@ -3,14 +3,21 @@
 set -e
 set -x
 
+conf set hadoop/yarn-site yarn.nodemanager.aux-services mapreduce_shuffle
+conf set hadoop/yarn-site yarn.nodemanager.aux-services.mapreduce_shuffle.class org.apache.hadoop.mapred.ShuffleHandler
+conf set hadoop/yarn-site yarn.nodemanager.resource.memory-mb 8192
+conf set hadoop/yarn-site yarn.nodemanager.resource.cpu-vcores 2
+conf set hadoop/yarn-site yarn.nodemanager.disk-health-checker.max-disk-utilization-per-disk-percentage 99
+
 conf set hive/hive-site hive.metastore.warehouse.dir /data/hive/warehouse
-# probably defunct
+# FIXME: probably defunct
 conf set hive/hive-site hive.metastore.local true
 conf set hive/hive-site hive.user.install.directory file:///tmp
 conf set hive/hive-site hive.execution.engine tez
 conf set hive/hive-site hive.log.explain.output true
 conf set hive/hive-site hive.in.test true
 conf set hive/hive-site hive.exec.scratchdir /data/hive
+# FIXME: this might not needed...
 conf set hive/hive-site yarn.nodemanager.disk-health-checker.max-disk-utilization-per-disk-percentage 99
 
 mkdir -p /etc/{hadoop,hive}
