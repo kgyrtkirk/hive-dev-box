@@ -11,9 +11,9 @@ cat >> /etc/screenrc << EOF
 shell /bin/bash
 EOF
 
-mkdir -p /data/hive
-chown dev /data{,/hive}
-chmod 777 /data/hive
+mkdir -p /data/hive /data/log
+chown dev /data{,/hive,/log}
+chmod 777 /data/hive /data/log
 
 mkdir -p /apps/tez && cp /tez/share/tez.tar.gz /apps/tez/
 mkdir -p /apps/lib && cp /hive/lib/derby-*.jar /apps/lib/
@@ -24,6 +24,7 @@ mkdir -p /apps/lib && cp /hive/lib/derby-*.jar /apps/lib/
 cat > /etc/profile.d/confs.sh << EOF
 
 export HADOOP_CONF_DIR=/etc/hadoop
+export HADOOP_LOG_DIR=/data/log
 export HADOOP_CLASSPATH=/etc/tez/:/tez/lib/*:/tez/*
 export HIVE_CONF_DIR=/etc/hive/
 
