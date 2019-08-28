@@ -8,7 +8,10 @@ case $type in
     derby)
         D=/data/hive/metastore_db
         rm -rf $D
+        conf del hive/hive-site javax.jdo.option.ConnectionDriverName
         conf set hive/hive-site javax.jdo.option.ConnectionURL "jdbc:derby:;databaseName=/data/hive/metastore_db;create=true"
+        conf del hive/hive-site javax.jdo.option.ConnectionUserName
+        conf del hive/hive-site javax.jdo.option.ConnectionPassword
     ;;
     postgres)
         sudo -u postgres dropdb metastore

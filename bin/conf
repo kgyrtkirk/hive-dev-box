@@ -44,6 +44,14 @@ case "$1" in
 		git commit -m "$2/$3 => $4" || echo no-op
 		deploy $2
 	;;
+	del)
+		[ "$#" -ne 3 ] && echo "incorrect args" && exit 1
+		cd $D
+		rm -f "$2/$3"
+		git add .
+		git commit -m "del $2/$3" || echo no-op
+		deploy $2
+	;;
 	show)
 		cd $D
 		find *  -type f -printf "%p " -exec cat "{}" \;
