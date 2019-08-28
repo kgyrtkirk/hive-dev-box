@@ -25,18 +25,19 @@ Vagrant.configure(2) do |config|
     ln -s vagrant/tools tools
     sudo /tools/install_basics.bash
     sudo /tools/install_sdk.bash
+    sudo /tools/install_psql.bash
+    sudo cp -rsf /vagrant/etc/* /etc/
+    sudo cp -rsf /vagrant/bin/* /bin/
+    sudo sw hadoop
+    sudo sw tez
+    sudo sw hive
     sudo /tools/install_hadoop.bash
     sudo /tools/install_hive.bash hive
     sudo /tools/install_tez.bash
-    sudo /tools/install_psql.bash
-    sudo cp -rsf /vagrant/conf/* /etc/
-    sudo cp -rsf /vagrant/bin/* /bin/
     sudo /tools/install_conf.bash
 SHELL
 
-  #config.vm.synced_folder "../hive/master/packaging/target/apache-hive-3.0.0-SNAPSHOT-bin/apache-hive-3.0.0-SNAPSHOT-bin/", "/hive-dev"
   config.vm.synced_folder "../hive/ws/", "/hive-dev"
-  #config.vm.synced_folder "../hive/master/", "/hive-dev"
 
 end
 

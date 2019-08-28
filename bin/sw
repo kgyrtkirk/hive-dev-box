@@ -88,7 +88,15 @@ case "$component" in
 		activate $component $bin_dir
 	;;
 	*)
-		echo "switches b"
+		cat << EOF
+Switches between installed components
+	$0 <hadoop|hive|hive-dev|tez> [version]
+	example:
+		$0 hive			# activates some recent hive
+		$0 hive 3.1.1
+		$0 hadoop
+		$0 hive-dev		# switches to use /hive-dev's binary package
+EOF
 		exit 1
 	;;
 esac

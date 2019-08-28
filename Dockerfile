@@ -18,7 +18,7 @@ RUN /tools/install_tez.bash
 COPY tools/install_conf.bash /tools/
 RUN /tools/install_conf.bash
 
-COPY conf /etc
+COPY etc  /etc
 COPY bin  /bin
 
 USER dev
