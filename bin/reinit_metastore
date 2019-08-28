@@ -1,13 +1,30 @@
 #!/bin/bash -ex
 
-D=/data/hive/metastore_db
-rm -rf $D
+type=${1:-derby}
 
-#sudo -u postgres dropdb metastore
-#sudo -u postgres createdb metastore -O hiveuser
+echo "@ initializing: $type"
 
-type=derby
+case $type in
+    derby)
+        D=/data/hive/metastore_db
+        rm -rf $D
+        conf set hive/hive-site javax.jdo.option.ConnectionURL "jdbc:derby:;databaseName=/data/hive/metastore_db;create=true"
+    ;;
+    postgres)
+        sudo -u postgres dropdb metastore
+        sudo -u postgres createdb metastore -O hiveuser
+        conf set hive/hive-site javax.jdo.option.ConnectionDriverName org.postgresql.Driver
+        conf set hive/hive-site javax.jdo.option.ConnectionURL 'jdbc:postgresql://localhost/metastore'
+        conf set hive/hive-site javax.jdo.option.ConnectionUserName hiveuser
+        conf set hive/hive-site javax.jdo.option.ConnectionPassword mypassword
+    ;;
+    *)
+        banner not impl
+        exit 1
+esac
+
 /hive/bin/schematool -dbType $type -initSchema
 /hive/bin/schematool -dbType hive -initSchema -metaDbType $type
+
 banner ok
 

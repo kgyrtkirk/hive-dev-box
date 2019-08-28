@@ -1,1 +1,3 @@
-conf/motd
+hive-dev-box
+
+also see conf/motd

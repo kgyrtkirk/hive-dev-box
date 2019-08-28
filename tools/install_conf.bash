@@ -3,13 +3,19 @@
 set -e
 set -x
 
+conf set hive/hive-site hive.metastore.warehouse.dir /data/hive/warehouse
+# probably defunct
+conf set hive/hive-site hive.metastore.local true
+conf set hive/hive-site hive.user.install.directory file:///tmp
+conf set hive/hive-site hive.execution.engine tez
+conf set hive/hive-site hive.log.explain.output true
+conf set hive/hive-site hive.in.test true
+conf set hive/hive-site hive.exec.scratchdir /data/hive
+conf set hive/hive-site yarn.nodemanager.disk-health-checker.max-disk-utilization-per-disk-percentage 99
+
 mkdir -p /etc/{hadoop,hive}
 cp -r /hadoop/etc/hadoop /etc/
 #cp -r /hive/conf/ /etc/hive/
-
-cat >> /etc/screenrc << EOF
-shell /bin/bash
-EOF
 
 mkdir -p /data/hive /data/log
 chown dev /data{,/hive,/log}
