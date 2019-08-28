@@ -3,11 +3,40 @@
 set -e
 set -x
 
+git config --global user.email foo@acme.com
+git config --global user.name "John Doe"
+
+mkdir -p /etc/{hadoop,hive}
+#cp -r /hadoop/etc/hadoop /etc/
+#cp -r /hive/conf/ /etc/hive/
+
+conf init
+
+for u in root vagrant dev hive;do
+        conf set hadoop/core-site hadoop.proxyuser.${u}.groups *
+        conf set hadoop/core-site hadoop.proxyuser.${u}.hosts *
+done
+conf set hadoop/core-site hadoop.tmp.dir '/data/hadoop-${user.name}'
+
 conf set hadoop/yarn-site yarn.nodemanager.aux-services mapreduce_shuffle
 conf set hadoop/yarn-site yarn.nodemanager.aux-services.mapreduce_shuffle.class org.apache.hadoop.mapred.ShuffleHandler
 conf set hadoop/yarn-site yarn.nodemanager.resource.memory-mb 8192
 conf set hadoop/yarn-site yarn.nodemanager.resource.cpu-vcores 2
 conf set hadoop/yarn-site yarn.nodemanager.disk-health-checker.max-disk-utilization-per-disk-percentage 99
+
+conf set hadoop/hdfs-site dfs.replication 1
+
+conf set hadoop/capacity-scheduler yarn.scheduler.capacity.maximum-am-resource-percent 0.6
+yarn.scheduler.capacity.resource-calculator org.apache.hadoop.yarn.util.resource.DefaultResourceCalculator
+yarn.scheduler.capacity.root.queues default
+yarn.scheduler.capacity.root.default.capacity 100
+yarn.scheduler.capacity.root.default.user-limit-factor 1
+yarn.scheduler.capacity.root.default.maximum-capacity 100
+yarn.scheduler.capacity.root.default.state RUNNING
+yarn.scheduler.capacity.root.default.acl_submit_applications '*'
+
+conf set tez/tez-site tez.lib.uris '${fs.defaultFS}/apps/tez/tez.tar.gz'
+#conf set tez/tez-site tez.am.resource.memory.mb 512
 
 conf set hive/hive-site hive.metastore.warehouse.dir /data/hive/warehouse
 # FIXME: probably defunct
@@ -20,9 +49,6 @@ conf set hive/hive-site hive.exec.scratchdir /data/hive
 # FIXME: this might not needed...
 conf set hive/hive-site yarn.nodemanager.disk-health-checker.max-disk-utilization-per-disk-percentage 99
 
-mkdir -p /etc/{hadoop,hive}
-cp -r /hadoop/etc/hadoop /etc/
-#cp -r /hive/conf/ /etc/hive/
 
 mkdir -p /data/hive /data/log
 chown dev /data{,/hive,/log}
@@ -52,7 +78,6 @@ function sw_j7() {
 function sw_j8() {
         sdk use java 8.0.212-zulu
 }
-
 
 export PATH=$PATH:/hive/bin:/hadoop/bin
 

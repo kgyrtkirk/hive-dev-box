@@ -27,7 +27,7 @@ echo '</configuration>' >&3
 
 function deploy() {
 	OUT=/etc/${1}.xml
-	rm $OUT
+	rm -f $OUT
 	gen_content $1 3> $OUT
 }
 
@@ -43,6 +43,10 @@ case "$1" in
 		git add .
 		git commit -m "$2/$3 => $4" || echo no-op
 		deploy $2
+	;;
+	show)
+		cd $D
+		find *  -type f -printf "%p " -exec cat "{}" \;
 	;;
 	*)
 		echo "see source..." && exit 1
