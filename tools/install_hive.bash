@@ -37,8 +37,7 @@ shift
 case "$component" in
 	hive-dev)
 		d=/hive-dev/packaging/target/apache-hive-*-SNAPSHOT-bin/apache-hive-*-SNAPSHOT-bin/
-		echo "$d"
-		[ ! -d "$d" ] && echo "expected a directory at: $d" && exit 1
+		[ ! -d $d ] && echo "expected a directory at: $d" && exit 1
 		activate hive $d
 	;;
 	hive)
