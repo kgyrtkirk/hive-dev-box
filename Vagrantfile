@@ -37,7 +37,8 @@ Vagrant.configure(2) do |config|
     sudo /tools/install_conf.bash
 SHELL
 
-  config.vm.synced_folder "../hive/ws/", "/hive-dev"
+    hiveSrcs=ENV['HIVE_SOURCES']
+    config.vm.synced_folder hiveSrcs, "/hive-dev" unless hiveSrcs.nil?
 
 end
 
