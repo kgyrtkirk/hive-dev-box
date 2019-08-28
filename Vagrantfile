@@ -26,7 +26,7 @@ Vagrant.configure(2) do |config|
     sudo /tools/install_basics.bash
     sudo /tools/install_sdk.bash
     sudo /tools/install_hadoop.bash
-    sudo /tools/install_hive.bash
+    sudo /tools/install_hive.bash hive
     sudo /tools/install_tez.bash
     sudo /tools/install_psql.bash
     sudo cp -rsf /vagrant/conf/* /etc/

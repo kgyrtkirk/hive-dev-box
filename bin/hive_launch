@@ -1,12 +1,12 @@
 #!/bin/bash
 
+set -e
 wait_port close 8040
 wait_port close 8042
 wait_port close 8030
 wait_port close 8032
 wait_port close 10000
 
-set -e
 cat > /tmp/screenrc1 << EOF
 screen -t term
 screen -t RM   1        spawn_shell_after yarn resourcemanager

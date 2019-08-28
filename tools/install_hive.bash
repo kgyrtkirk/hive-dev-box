@@ -84,10 +84,11 @@ case "$component" in
 			tar xzf $fn
 			#rm $fn
 		fi
+		mkdir -p /apps/tez && cp /tez/share/tez.tar.gz /apps/tez/
 		activate $component $bin_dir
 	;;
 	*)
-		echo "see source.."
+		echo "switches b"
 		exit 1
 	;;
 esac

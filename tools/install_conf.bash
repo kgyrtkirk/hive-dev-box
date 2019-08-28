@@ -13,8 +13,8 @@ mkdir -p /etc/{hadoop,hive}
 conf init
 
 for u in root vagrant dev hive;do
-        conf set hadoop/core-site hadoop.proxyuser.${u}.groups *
-        conf set hadoop/core-site hadoop.proxyuser.${u}.hosts *
+        conf set hadoop/core-site hadoop.proxyuser.${u}.groups '*'
+        conf set hadoop/core-site hadoop.proxyuser.${u}.hosts '*'
 done
 conf set hadoop/core-site hadoop.tmp.dir '/data/hadoop-${user.name}'
 
@@ -27,13 +27,20 @@ conf set hadoop/yarn-site yarn.nodemanager.disk-health-checker.max-disk-utilizat
 conf set hadoop/hdfs-site dfs.replication 1
 
 conf set hadoop/capacity-scheduler yarn.scheduler.capacity.maximum-am-resource-percent 0.6
-yarn.scheduler.capacity.resource-calculator org.apache.hadoop.yarn.util.resource.DefaultResourceCalculator
-yarn.scheduler.capacity.root.queues default
-yarn.scheduler.capacity.root.default.capacity 100
-yarn.scheduler.capacity.root.default.user-limit-factor 1
-yarn.scheduler.capacity.root.default.maximum-capacity 100
-yarn.scheduler.capacity.root.default.state RUNNING
-yarn.scheduler.capacity.root.default.acl_submit_applications '*'
+conf set hadoop/capacity-scheduler yarn.scheduler.capacity.resource-calculator org.apache.hadoop.yarn.util.resource.DefaultResourceCalculator
+conf set hadoop/capacity-scheduler yarn.scheduler.capacity.root.queues default
+conf set hadoop/capacity-scheduler yarn.scheduler.capacity.root.default.capacity 100
+conf set hadoop/capacity-scheduler yarn.scheduler.capacity.root.default.user-limit-factor 1
+conf set hadoop/capacity-scheduler yarn.scheduler.capacity.root.default.maximum-capacity 100
+conf set hadoop/capacity-scheduler yarn.scheduler.capacity.root.default.state RUNNING
+#yarn.scheduler.capacity.root.default.acl_submit_applications '*'
+#yarn.scheduler.capacity.root.default.acl_administer_queue '*'
+#yarn.scheduler.capacity.root.default.acl_application_max_priority '*'
+#yarn.scheduler.capacity.root.default.maximum-application-lifetime -1
+#yarn.scheduler.capacity.root.default.default-application-lifetime -1
+#yarn.scheduler.capacity.node-locality-delay 40
+#yarn.scheduler.capacity.rack-locality-additional-delay -1
+#yarn.scheduler.capacity.queue-mappings ''
 
 conf set tez/tez-site tez.lib.uris '${fs.defaultFS}/apps/tez/tez.tar.gz'
 #conf set tez/tez-site tez.am.resource.memory.mb 512
@@ -54,7 +61,6 @@ mkdir -p /data/hive /data/log
 chown dev /data{,/hive,/log}
 chmod 777 /data/hive /data/log
 
-mkdir -p /apps/tez && cp /tez/share/tez.tar.gz /apps/tez/
 mkdir -p /apps/lib && cp /hive/lib/derby-*.jar /apps/lib/
 
 # use ssd for docker
