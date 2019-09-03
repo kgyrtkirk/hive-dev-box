@@ -2,6 +2,9 @@
 
 type=${1:-derby}
 
+
+# FIXME enable hive.metastore.schema.verification
+
 echo "@ initializing: $type"
 
 case $type in
@@ -21,13 +24,20 @@ case $type in
         conf set hive/hive-site javax.jdo.option.ConnectionUserName hiveuser
         conf set hive/hive-site javax.jdo.option.ConnectionPassword mypassword
     ;;
+    mysql)
+        sudo mysql < <(echo 'drop database if exists metastore; create database metastore;')
+        conf set hive/hive-site javax.jdo.option.ConnectionDriverName com.mysql.jdbc.Driver
+        conf set hive/hive-site javax.jdo.option.ConnectionURL 'jdbc:mysql://localhost:3306/metastore'
+        conf set hive/hive-site javax.jdo.option.ConnectionUserName hive
+        conf set hive/hive-site javax.jdo.option.ConnectionPassword mypassword
+    ;;
     *)
         banner not impl
         exit 1
 esac
 
-/hive/bin/schematool -dbType $type -initSchema
-/hive/bin/schematool -dbType hive -initSchema -metaDbType $type
+/hive/bin/schematool -verbose -dbType $type -initSchema
+/hive/bin/schematool -verbose -dbType hive -initSchema -metaDbType $type
 
 banner ok
 

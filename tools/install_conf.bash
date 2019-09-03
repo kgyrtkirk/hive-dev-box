@@ -70,7 +70,7 @@ cat > /etc/profile.d/confs.sh << EOF
 
 export HADOOP_CONF_DIR=/etc/hadoop
 export HADOOP_LOG_DIR=/data/log
-export HADOOP_CLASSPATH=/etc/tez/:/tez/lib/*:/tez/*
+export HADOOP_CLASSPATH=/etc/tez/:/tez/lib/*:/tez/*:/apps/lib/*
 export HIVE_CONF_DIR=/etc/hive/
 
 export SDKMAN_DIR="/usr/local/sdkman"

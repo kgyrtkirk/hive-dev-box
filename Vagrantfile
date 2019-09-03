@@ -4,7 +4,14 @@
 # symlink some directoy as /tmp which has some space (16G)
 file_to_disk = './tmp/large_disk.vdi'
 
+
 Vagrant.configure(2) do |config|
+
+VAGRANT_COMMAND = ARGV[0]
+  if VAGRANT_COMMAND == "ssh"
+#    config.ssh.username = 'dev'
+  end
+
 
   config.vm.box = "debian/contrib-stretch64"
   config.vm.hostname = "hive-box"
@@ -26,6 +33,7 @@ Vagrant.configure(2) do |config|
     sudo /tools/install_basics.bash
     sudo /tools/install_sdk.bash
     sudo /tools/install_psql.bash
+    sudo /tools/install_mysql.bash
     sudo cp -rsf /vagrant/etc/* /etc/
     sudo cp -rsf /vagrant/bin/* /bin/
     sudo sw hadoop

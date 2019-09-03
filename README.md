@@ -28,6 +28,16 @@ sw hive 2.3.5
 sw tez 0.8.4
 ```
 
+## reinit_metastore [type]
+
+* optionally switch to a different metastore implementation
+* wipe it clean
+* populate schema and load sysdb
+
+```
+reinit_metastore [derby|postgres|mysql]
+```
+
 ## use a development version of Hive
 
 ```shell
@@ -35,7 +45,7 @@ sw tez 0.8.4
 mvn install -Pdist -DskipTests
 # build the machine with HIVE_SOURCES set
 HIVE_SOURCES=/path/to/my/hive vagrant up
-# or a refresh might also work
+# ..or if you already have the box built; a refresh might also work
 HIVE_SOURCES=/path/to/my/hive vagrant refresh
 # inside the machine switch to your development
 vagrant ssh
