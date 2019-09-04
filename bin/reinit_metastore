@@ -31,6 +31,41 @@ case $type in
         conf set hive/hive-site javax.jdo.option.ConnectionUserName hive
         conf set hive/hive-site javax.jdo.option.ConnectionPassword mypassword
     ;;
+    oracle)
+        # docker must be installed/set up
+	docker kill ora11 || echo 'not killed; probably not running...'
+	sleep 1
+	docker run -p 1521:1521 -d --name ora11 --rm oracleinanutshell/oracle-xe-11g
+	echo "docker exec -it ora11 /bin/bash -ic 'sqlplus -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys
+    # FIXME it would be better to detect wether stdin is a file or not...
+	echo "docker exec -i ora11 /bin/bash -ic 'sqlplus -S -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys0
+	echo "docker exec -it ora11 /bin/bash -ic 'sqlplus -L \"hive/mypassword\"' "'$@' | sudo dd of=/bin/sqlplus
+	sudo chmod +x /bin/sqlplus{,_sys*}
+
+    while true;do
+        if sqlplus_sys0 < <(echo -e 'QUIT;');then
+            echo "ok"
+            break
+        else
+            echo "waiting for oracle.."
+        fi
+        sleep 1
+    done
+    
+	sqlplus_sys0 << EOF
+	CREATE USER hive IDENTIFIED BY mypassword;
+	GRANT SELECT_CATALOG_ROLE TO hive;
+	GRANT CONNECT, RESOURCE TO hive;
+	QUIT;
+EOF
+    conf set hive/hive-site javax.jdo.option.ConnectionDriverName oracle.jdbc.OracleDriver
+    conf set hive/hive-site javax.jdo.option.ConnectionURL 'jdbc:oracle:thin:@//localhost/xe'
+    conf set hive/hive-site javax.jdo.option.ConnectionUserName hive
+    conf set hive/hive-site javax.jdo.option.ConnectionPassword mypassword
+
+    sudo docker cp ora11:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar /apps/lib
+	#
+    ;;
     *)
         banner not impl
         exit 1
@@ -41,3 +76,5 @@ esac
 
 banner ok
 
+
+SELECT "SD_ID", "BUCKET_COL_NAME", "INTEGER_IDX" FROM "BUCKETING_COLS";
