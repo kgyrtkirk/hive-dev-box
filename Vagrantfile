@@ -13,7 +13,8 @@ VAGRANT_COMMAND = ARGV[0]
   end
 
 
-  config.vm.box = "debian/contrib-stretch64"
+#  config.vm.box = "debian/contrib-stretch64"
+  config.vm.box = "debian/contrib-buster64"
   config.vm.hostname = "hive-box"
 
 #  config.disksize.size = "16GB"

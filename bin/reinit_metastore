@@ -51,7 +51,7 @@ case $type in
         fi
         sleep 1
     done
-    
+
 	sqlplus_sys0 << EOF
 	CREATE USER hive IDENTIFIED BY mypassword;
 	GRANT SELECT_CATALOG_ROLE TO hive;
@@ -77,4 +77,4 @@ esac
 banner ok
 
 
-SELECT "SD_ID", "BUCKET_COL_NAME", "INTEGER_IDX" FROM "BUCKETING_COLS";
+#SELECT "SD_ID", "BUCKET_COL_NAME", "INTEGER_IDX" FROM "BUCKETING_COLS";
