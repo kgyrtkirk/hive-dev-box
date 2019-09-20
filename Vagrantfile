@@ -1,9 +1,14 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+def getUserPubKey()
+	pubKeyFile="#{ENV['HOME']}/.ssh/id_rsa.pub"
+	return File.read(pubKeyFile) if File.exists? pubKeyFile
+	return "# #{pubKeyFile} doesnt exists on host"
+end
+
 # symlink some directoy as /tmp which has some space (16G)
 file_to_disk = './tmp/large_disk.vdi'
-
 
 Vagrant.configure(2) do |config|
 
@@ -28,10 +33,13 @@ VAGRANT_COMMAND = ARGV[0]
   config.vm.network "private_network", ip: "192.168.64.4"
 
   config.vm.provision "shell", inline: <<SHELL
+    set -e
+    echo '#{getUserPubKey()}' >> ~vagrant/.ssh/authorized_keys
     cd /
     rm -f tools
     ln -s vagrant/tools tools
     sudo /tools/install_basics.bash
+    sudo /tools/install_x2go.bash
     sudo /tools/install_sdk.bash
     sudo /tools/install_psql.bash
     sudo /tools/install_mysql.bash
@@ -48,6 +56,6 @@ SHELL
 
     hiveSrcs=ENV['HIVE_SOURCES']
     config.vm.synced_folder hiveSrcs, "/hive-dev" unless hiveSrcs.nil?
-
+#    config.vm.synced_folder "/home/kirk/projects/toolbox", "/toolbox"
 end
 
