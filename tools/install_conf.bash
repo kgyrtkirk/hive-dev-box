@@ -73,9 +73,11 @@ export HADOOP_LOG_DIR=/data/log
 export HADOOP_CLASSPATH=/etc/tez/:/tez/lib/*:/tez/*:/apps/lib/*
 export HIVE_CONF_DIR=/etc/hive/
 
-export SDKMAN_DIR="/usr/local/sdkman"
+#export SDKMAN_DIR="/usr/local/sdkman"
 #source "/root/.sdkman/bin/sdkman-init.sh"
-source "/usr/local/sdkman/bin/sdkman-init.sh"
+#source "/usr/local/sdkman/bin/sdkman-init.sh"
+
+export JAVA_HOME=/usr/lib/jvm/zulu-8-amd64/
 
 function sw_j7() {
         sdk use java 7.0.222-zulu

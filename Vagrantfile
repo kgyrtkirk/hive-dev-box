@@ -40,7 +40,7 @@ VAGRANT_COMMAND = ARGV[0]
     ln -s vagrant/tools tools
     sudo /tools/install_basics.bash
     sudo /tools/install_x2go.bash
-    sudo /tools/install_sdk.bash
+    sudo /tools/install_java_zulu.bash
     sudo /tools/install_psql.bash
     sudo /tools/install_mysql.bash
     sudo cp -rsf /vagrant/etc/* /etc/
@@ -48,9 +48,6 @@ VAGRANT_COMMAND = ARGV[0]
     sudo sw hadoop
     sudo sw tez
     sudo sw hive
-    sudo /tools/install_hadoop.bash
-    sudo /tools/install_hive.bash hive
-    sudo /tools/install_tez.bash
     sudo /tools/install_conf.bash
 SHELL
 
