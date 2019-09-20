@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-sudo apt-get install postgresql
+sudo apt-get install -y postgresql
 sudo -u postgres psql -c "CREATE USER hiveuser WITH PASSWORD 'mypassword'"
 sudo -u postgres createdb metastore -O hiveuser
 

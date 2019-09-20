@@ -1,6 +1,7 @@
 #!/bin/bash
 
-apt-get install -y libmysql-java
+set -e
+apt-get install -y mariadb-server default-mysql-client
 
 sudo mysql << EOF
 DROP DATABASE IF EXISTS metastore;
@@ -20,4 +21,5 @@ database=metastore
 EOF
 
 mkdir -p /apps/lib
-cp -L /usr/share/java/mysql-connector-java.jar /apps/lib/
+cd /apps/lib
+[ ! -f mysql-connector-java-8.0.17.jar ] && wget -nv https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.17/mysql-connector-java-8.0.17.jar
