@@ -3,23 +3,22 @@ FROM debian:buster
 COPY tools/install_basics.bash /tools/
 RUN /tools/install_basics.bash
 
-COPY tools/install_sdk.bash /tools/
-RUN /tools/install_sdk.bash
+COPY tools/install_java_zulu.bash /tools/
+RUN /tools/install_java_zulu.bash
 
-COPY tools/install_hadoop.bash /tools/
-RUN /tools/install_hadoop.bash
+#COPY bin/sw /tools/_sw
+#RUN /tools/_sw tez
+#RUN /tools/_sw hadoop
+#RUN /tools/_sw hive
 
-COPY tools/install_hive.bash /tools/
-RUN /tools/install_hive.bash
-
-COPY tools/install_tez.bash /tools/
-RUN /tools/install_tez.bash
-
-COPY tools/install_conf.bash /tools/
-RUN /tools/install_conf.bash
+COPY tools/i_sort.bash /tools/
+RUN /tools/i_sort.bash
 
 COPY etc  /etc
 COPY bin  /bin
+
+COPY tools/install_conf.bash /tools/
+RUN /tools/install_conf.bash
 
 USER dev
 WORKDIR /home/dev

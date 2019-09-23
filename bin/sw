@@ -1,6 +1,12 @@
 #!/bin/bash -e
 
-[ "$EUID" != 0 ] && sudo $0 "$@" && exit 0
+#[ "$EUID" != 0 ] && sudo $0 "$@" && exit 0
+
+
+SW_DIR=${SW_DIR:-/work/}
+SW_DL_DIR=${SW_DL_DIR:-$SW_DIR/.downloads}
+
+mkdir -p $SW_DIR $SW_DL_DIR
 
 apache_mirror='http://xenia.sote.hu/ftp/mirrors/www.apache.org/'
 archive_mirror='https://archive.apache.org/dist/'
@@ -26,12 +32,13 @@ function dl() {
 
 function activate() {
 	echo "@ activating: $2 for $1"
-	rm -f "$1"
-	ln -s "$2" "$1"
+	T=/active/$1
+	rm -f "$T"
+	ln -s "$2" "$T"
 
 }
 
-cd /
+cd $SW_DIR
 component="${1}"
 shift
 case "$component" in
@@ -42,11 +49,11 @@ case "$component" in
 	;;
 	hive)
 		version=${1:-3.1.2}
-		bin_dir=apache-hive-$version-bin
+		bin_dir=$SW_DIR/apache-hive-$version-bin
 		if [ -d "$bin_dir" ];then
 			echo "$bin_dir already installed"
 		else
-			fn=/tmp/hive-${version}.tar.gz
+			fn=$SW_DL_DIR/hive-${version}.tar.gz
 			dl $fn \
 				$apache_mirror/hive/hive-${version}/apache-hive-${version}-bin.tar.gz	\
 				$archive_mirror/hive/hive-${version}/apache-hive-${version}-bin.tar.gz
@@ -57,15 +64,14 @@ case "$component" in
 	;;
 	hadoop)
 		version=${1:-3.1.2}
-		bin_dir=hadoop-$version
+		bin_dir=$SW_DIR/hadoop-$version
 		if [ -d "$bin_dir" ];then
 			echo "$bin_dir already installed"
 		else
-			fn=/tmp/hadoop-${version}.tar.gz
+			fn=$SW_DL_DIR/hadoop-${version}.tar.gz
 			dl $fn \
 				${apache_mirror}/hadoop/common/hadoop-${version}/hadoop-${version}.tar.gz	\
 				${archive_mirror}/hadoop/common/hadoop-${version}/hadoop-${version}.tar.gz
-			cd /
 			tar xzf $fn
 			#rm $fn
 		fi
@@ -73,19 +79,48 @@ case "$component" in
 	;;
 	tez)
 		version=${1:-0.9.1}
-		bin_dir=apache-tez-$version-bin
+		bin_dir=$SW_DIR/apache-tez-$version-bin
 		if [ -d "$bin_dir" ];then
 			echo "$bin_dir already installed"
 		else
-			fn=/tmp/tez-${version}.tar.gz
+			fn=$SW_DL_DIR//tez-${version}.tar.gz
 			dl $fn \
 				${apache_mirror}/tez/${version}/apache-tez-${version}-bin.tar.gz
-			cd /
 			tar xzf $fn
 			#rm $fn
 		fi
 		activate $component $bin_dir
-		mkdir -p /apps/tez && cp /tez/share/tez.tar.gz /apps/tez/
+		mkdir -p /apps/tez && cp /active/tez/share/tez.tar.gz /apps/tez/
+	;;
+	eclipse)
+		bin_dir=$SW_DIR/eclipse
+		if [ -d "$bin_dir" ];then
+			echo "$bin_dir already installed"
+		else
+			fn=$SW_DL_DIR/eclipse.tar.gz
+			dl $fn \
+				http://eclipse.mirror.garr.it/mirrors/eclipse//technology/epp/downloads/release/2019-09/R/eclipse-jee-2019-09-R-linux-gtk-x86_64.tar.gz
+			tar xzf $fn
+			wget -nv https://github.com/seeq12/eclipse-import-projects-plugin/raw/master/jar/com.seeq.eclipse.importprojects_1.4.0.jar \
+				-O eclipse/plugins/com.seeq.eclipse.importprojects_1.4.0.jar
+			sed 's/-Xmx1024m/-Xmx3024m/' eclipse/eclipse.ini
+			#rm $fn
+		fi
+		activate $component $bin_dir
+	;;
+	maven)
+		version=${1:-3.6.1}
+		bin_dir=$SW_DIR/apache-maven-$version
+		if [ -d "$bin_dir" ];then
+			echo "$bin_dir already installed"
+		else
+			fn=$SW_DL_DIR//tez-${version}.tar.gz
+			dl $fn \
+				${apache_mirror}/maven/maven-3/${version}/binaries/apache-maven-${version}-bin.tar.gz
+			tar xzf $fn
+			#rm $fn
+		fi
+		activate $component $bin_dir
 	;;
 	*)
 		cat << EOF

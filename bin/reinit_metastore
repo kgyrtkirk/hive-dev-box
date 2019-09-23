@@ -15,6 +15,7 @@ case $type in
         conf set hive/hive-site javax.jdo.option.ConnectionURL "jdbc:derby:;databaseName=/data/hive/metastore_db;create=true"
         conf del hive/hive-site javax.jdo.option.ConnectionUserName
         conf del hive/hive-site javax.jdo.option.ConnectionPassword
+	cp /active/hive/lib/derby-*.jar /apps/lib/
     ;;
     postgres)
         sudo -u postgres dropdb metastore
@@ -71,10 +72,7 @@ EOF
         exit 1
 esac
 
-/hive/bin/schematool -verbose -dbType $type -initSchema
-/hive/bin/schematool -verbose -dbType hive -initSchema -metaDbType $type
+schematool -verbose -dbType $type -initSchema
+schematool -verbose -dbType hive -initSchema -metaDbType $type
 
 banner ok
-
-
-#SELECT "SD_ID", "BUCKET_COL_NAME", "INTEGER_IDX" FROM "BUCKETING_COLS";

@@ -1,10 +1,28 @@
 #!/bin/bash --login
 
-echo " * initialize metastore..."
-reinit_metastore > /dev/null 2>&1
-echo "exitcode: $?"
+set -e
+
+echo " * installing some basic stuff..."
+
+sudo cp -rsf /hive-dev-box/etc/* /etc/
+sudo cp -rsf /hive-dev-box/bin/* /bin/
+
+
+/bin/sw tez
+/bin/sw hadoop
+/bin/sw hive
+/bin/sw eclipse
+
+#reinit_metastore > /dev/null 2>&1
+#echo "exitcode: $?"
 
 cat /etc/motd
+if [ -t 0 ];then
+    export USER=`whoami`
+    exec bash --login
+else
+    echo "non-interactive shell detected; waiting... "
+    echo > /tmp/.empty
+    exec tail -f /tmp/.empty
+fi
 
-export USER=`whoami`
-exec bash --login

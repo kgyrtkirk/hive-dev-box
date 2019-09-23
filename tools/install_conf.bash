@@ -57,11 +57,9 @@ conf set hive/hive-site hive.exec.scratchdir /data/hive
 conf set hive/hive-site yarn.nodemanager.disk-health-checker.max-disk-utilization-per-disk-percentage 99
 
 
-mkdir -p /data/hive /data/log
-chown dev /data{,/hive,/log}
-chmod 777 /data/hive /data/log
-
-mkdir -p /apps/lib && cp /hive/lib/derby-*.jar /apps/lib/
+mkdir -p /data/hive /data/log /apps/lib /work /active
+chown dev /data{,/hive,/log} /apps/lib /work /active /apps
+chmod 777 /data/hive /data/log /apps/lib /active
 
 # use ssd for docker
 
@@ -70,23 +68,12 @@ cat > /etc/profile.d/confs.sh << EOF
 
 export HADOOP_CONF_DIR=/etc/hadoop
 export HADOOP_LOG_DIR=/data/log
-export HADOOP_CLASSPATH=/etc/tez/:/tez/lib/*:/tez/*:/apps/lib/*
+export HADOOP_CLASSPATH=/etc/tez/:/active/tez/lib/*:/active/tez/*:/apps/lib/*
 export HIVE_CONF_DIR=/etc/hive/
-
-#export SDKMAN_DIR="/usr/local/sdkman"
-#source "/root/.sdkman/bin/sdkman-init.sh"
-#source "/usr/local/sdkman/bin/sdkman-init.sh"
 
 export JAVA_HOME=/usr/lib/jvm/zulu-8-amd64/
 
-function sw_j7() {
-        sdk use java 7.0.222-zulu
-}
+export PATH=$PATH:/active/hive/bin:/active/hadoop/bin:/active/eclipse/
 
-function sw_j8() {
-        sdk use java 8.0.212-zulu
-}
-
-export PATH=$PATH:/hive/bin:/hadoop/bin
 
 EOF
