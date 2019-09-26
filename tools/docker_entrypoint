@@ -19,6 +19,10 @@ git clone --reference /reference/hive https://github.com/apache/hive hive
 cd hive
 git remote add kgyrtkirk git@github.com:kgyrtkirk/hive
 
+cd ..
+
+[ -d /toolbox/build ] && sudo dpkg -i /toolbox/build/distributions/*.deb
+
 #reinit_metastore > /dev/null 2>&1
 #echo "exitcode: $?"
 

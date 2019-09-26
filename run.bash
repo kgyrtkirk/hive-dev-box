@@ -10,7 +10,7 @@ fi
 RUN_OPTS+=" -v hive-dev-box_work:/work"
 RUN_OPTS+=" -v `pwd`:/hive-dev-box"
 if [ "$TOOLBOX_SOURCES" != "" ];then
-	RUN_OPTS+=" -v $TOOLBOX_SOURCES:/toobox"
+	RUN_OPTS+=" -v $TOOLBOX_SOURCES:/toolbox"
 fi
 
 if [ "$DISPLAY" != "" ];then
