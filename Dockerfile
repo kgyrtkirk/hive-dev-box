@@ -6,6 +6,12 @@ RUN /tools/install_basics.bash
 COPY tools/install_java_zulu.bash /tools/
 RUN /tools/install_java_zulu.bash
 
+COPY tools/install_eclipse.bash /tools/
+RUN /tools/install_eclipse.bash
+
+COPY tools/clone_references.bash /tools/
+RUN /tools/clone_references.bash
+
 #COPY bin/sw /tools/_sw
 #RUN /tools/_sw tez
 #RUN /tools/_sw hadoop

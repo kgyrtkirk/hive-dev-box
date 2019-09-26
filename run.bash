@@ -26,7 +26,8 @@ fi
 # FIXME: do this right..
 RUN_OPTS+=" -v `pwd`/settings.xml:/home/dev/.m2/settings.xml"
 RUN_OPTS+=" -v $HOME/.ssh:/home/dev/.ssh"
-#RUN_OPTS+=" --link artifactory:artifactory "
+RUN_OPTS+=" -v $HOME/.gitconfig:/home/dev/.gitconfig"
+RUN_OPTS+=" --link artifactory:artifactory "
 
 docker run          \
     $RUN_OPTS       \

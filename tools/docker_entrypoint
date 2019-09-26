@@ -12,6 +12,12 @@ sudo cp -rsf /hive-dev-box/bin/* /bin/
 /bin/sw hadoop
 /bin/sw hive
 /bin/sw eclipse
+/bin/sw maven
+
+
+git clone --reference /reference/hive https://github.com/apache/hive hive
+cd hive
+git remote add kgyrtkirk git@github.com:kgyrtkirk/hive
 
 #reinit_metastore > /dev/null 2>&1
 #echo "exitcode: $?"
@@ -21,7 +27,7 @@ if [ -t 0 ];then
     export USER=`whoami`
     exec bash --login
 else
-    echo "non-interactive shell detected; waiting... "
+    echo "non-interactive shell detected; waiting for the end of the world... "
     echo > /tmp/.empty
     exec tail -f /tmp/.empty
 fi

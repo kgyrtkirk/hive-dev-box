@@ -12,7 +12,7 @@ EOF
 apt-get update
 apt-get install -y \
         wget curl nano gnupg lsb-release sysvbanner git \
-        psmisc nano screen sysvbanner net-tools \
+        psmisc nano screen sysvbanner net-tools procps \
         screen psmisc netcat psmisc nano screen sysvbanner #xbase-clients
 
 apt-get clean

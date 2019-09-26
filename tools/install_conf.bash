@@ -57,8 +57,8 @@ conf set hive/hive-site hive.exec.scratchdir /data/hive
 conf set hive/hive-site yarn.nodemanager.disk-health-checker.max-disk-utilization-per-disk-percentage 99
 
 
-mkdir -p /data/hive /data/log /apps/lib /work /active
-chown dev /data{,/hive,/log} /apps/lib /work /active /apps
+mkdir -p /data/hive /data/log /apps/lib /work /active ~dev/.m2
+chown dev /data{,/hive,/log} /apps/lib /work /active /apps ~dev/.m2
 chmod 777 /data/hive /data/log /apps/lib /active
 
 # use ssd for docker
@@ -73,7 +73,7 @@ export HIVE_CONF_DIR=/etc/hive/
 
 export JAVA_HOME=/usr/lib/jvm/zulu-8-amd64/
 
-export PATH=$PATH:/active/hive/bin:/active/hadoop/bin:/active/eclipse/
+export PATH=$PATH:/active/hive/bin:/active/hadoop/bin:/active/eclipse/:/active/maven/bin/
 
 
 EOF
