@@ -9,6 +9,9 @@ fi
 #RUN_OPTS+=" --name hdb "
 RUN_OPTS+=" -v hive-dev-box_work:/work"
 RUN_OPTS+=" -v `pwd`:/hive-dev-box"
+if [ "$TOOLBOX_SOURCES" != "" ];then
+	RUN_OPTS+=" -v $TOOLBOX_SOURCES:/toobox"
+fi
 
 if [ "$DISPLAY" != "" ];then
     echo " * enabling X forward!!!"
