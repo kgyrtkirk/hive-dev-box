@@ -2,10 +2,19 @@
 set -e
 docker build -t hive-dev-box .
 
-if [ "$1" == "" ];then
-    RUN_OPTS+=" --restart always"
+if [ "$1" == "-d" ];then
+    #RUN_OPTS+=" --restart always"
     RUN_OPTS+=" -d"
+    shift
+else
+    RUN_OPTS+=" -it"
 fi
+
+if [ "$1" != "" ];then
+    RUN_OPTS+=" --name $1 --hostname $1"
+    shift
+fi
+
 #RUN_OPTS+=" --name hdb "
 RUN_OPTS+=" -v hive-dev-box_work:/work"
 RUN_OPTS+=" -v `pwd`:/hive-dev-box"
