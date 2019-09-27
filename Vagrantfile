@@ -38,6 +38,8 @@ VAGRANT_COMMAND = ARGV[0]
     cd /
     rm -f tools
     ln -s vagrant/tools tools
+    sudo apt-get update
+    sudo mkdir /active
     sudo /tools/install_basics.bash
     sudo /tools/install_x2go.bash
     sudo /tools/install_java_zulu.bash
