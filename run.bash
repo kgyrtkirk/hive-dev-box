@@ -1,6 +1,13 @@
 #!/bin/bash
 set -e
-docker build -t hive-dev-box .
+if [ "$GITHUB_USER" != "" ];then
+	RUN_OPTS+=" -e GITHUB_USER=$GITHUB_USER"
+	BUILD_OPTS+=" --build-arg GITHUB_USER=$GITHUB_USER"
+else
+	echo " * warning: you should set GITHUB_USER to your github account"
+fi
+
+docker build $BUILD_OPTS -t hive-dev-box .
 
 if [ "$1" == "-d" ];then
     #RUN_OPTS+=" --restart always"
@@ -36,7 +43,10 @@ fi
 RUN_OPTS+=" -v `pwd`/settings.xml:/home/dev/.m2/settings.xml"
 RUN_OPTS+=" -v $HOME/.ssh:/home/dev/.ssh"
 RUN_OPTS+=" -v $HOME/.gitconfig:/home/dev/.gitconfig"
-RUN_OPTS+=" --link artifactory:artifactory "
+RUN_OPTS+=" -e TERM=$TERM"
+
+# link artifactory
+[ "`docker ps -q -f name=artifactory`" != "" ] && RUN_OPTS+=" --link artifactory:artifactory "
 
 docker run          \
     $RUN_OPTS       \

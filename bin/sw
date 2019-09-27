@@ -38,13 +38,19 @@ function activate() {
 
 }
 
+
 cd $SW_DIR
 component="${1}"
 shift
 case "$component" in
 	hive-dev)
 		d=/hive-dev/packaging/target/apache-hive-*-SNAPSHOT-bin/apache-hive-*-SNAPSHOT-bin/
-		[ ! -d $d ] && echo "expected a directory at: $d" && exit 1
+		[ ! -d $d ] && echo "ERROR: expected a directory at: $d" && exit 1
+		activate hive $d
+	;;
+	hive-dev2)
+		d=/home/dev/hive/packaging/target/apache-hive-*-SNAPSHOT-bin/apache-hive-*-SNAPSHOT-bin/
+		[ ! -d $d ] && echo "ERROR: expected a directory at: $d" && exit 1
 		activate hive $d
 	;;
 	hive)

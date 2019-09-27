@@ -2,6 +2,8 @@
 
 set -e
 
+#first_run_wizard
+
 echo " * installing some basic stuff..."
 
 sudo cp -rsf /hive-dev-box/etc/* /etc/
@@ -13,13 +15,6 @@ sudo cp -rsf /hive-dev-box/bin/* /bin/
 /bin/sw hive
 /bin/sw eclipse
 /bin/sw maven
-
-
-git clone --reference /reference/hive https://github.com/apache/hive hive
-cd hive
-git remote add kgyrtkirk git@github.com:kgyrtkirk/hive
-
-cd ..
 
 [ -d /toolbox/build ] && sudo dpkg -i /toolbox/build/distributions/*.deb
 
