@@ -71,10 +71,13 @@ Every container will be reaching out to almost the same artifacts; so employing 
 
 ```shell
 # start artifactory instance
-./start_artifactory
+./start_artifactory.bash
 ```
 
 You will have to manually configure this instance (once)
+
+it will be available at https://127.0.0.1:8081/
+use admin/password to login
 
 * enable security / unauthorized connections
 * add some remote repositories like maven central or a caching mirror site if you know one
