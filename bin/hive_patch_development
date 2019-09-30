@@ -21,8 +21,10 @@ case $branch in
     HIVE-*)
             if [ -e .git/refs/remotes/$GITHUB_USER/$branch ] ;then
                 git branch $branch $GITHUB_USER/$branch
+                git checkout $branch
             else
                 git branch $branch
+                git checkout $branch
                 git push $GITHUB_USER -u HEAD
             fi
         ;;
@@ -31,7 +33,6 @@ case $branch in
         ;;
 esac
 
-git checkout $branch
 modules=${HIVE_DEFAULT_MODULES:-ql,common}
 
 git config --local extra.ideProjects $modules
