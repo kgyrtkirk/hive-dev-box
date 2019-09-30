@@ -34,8 +34,8 @@ if [ "$DISPLAY" != "" ];then
     if [ "`which sw_vers`" != "" ] ; then
         # MacOSX assumed
         xhost + 127.0.0.1
-        D="${DISPLAY/:*/}"
-        RUN_OPTS+=" -e DISPLAY -v $D:$D"
+        #D="${DISPLAY/:*/}"
+        RUN_OPTS+=" -e DISPLAY=host.docker.internal:0"
     else
         XSOCK=/tmp/.X11-unix
         XAUTH=/tmp/.docker.xauth
