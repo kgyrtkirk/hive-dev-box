@@ -76,10 +76,10 @@ Every container will be reaching out to almost the same artifacts; so employing 
 
 You will have to manually configure this instance (once)
 
-it will be available at https://127.0.0.1:8081/
+It will be available at http://127.0.0.1:8081/
 use admin/password to login
 
-* enable security / unauthorized connections
+* make sure that Configurations / security / allow anonymous access is enabled
 * add some remote repositories like maven central or a caching mirror site if you know one
 * add a virtual repository named "wonder"  and add the remotes to it
 
