@@ -1,0 +1,9 @@
+#!/bin/bash -e
+
+rm -rf hive-test-data
+cd /tmp
+git clone https://github.com/abstractdog/hive-test-data
+cd hive-test-data/
+BEELINE=bl load_10000.sh 
+
+banner ok

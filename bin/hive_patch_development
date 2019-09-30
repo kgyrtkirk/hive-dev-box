@@ -49,14 +49,14 @@ cd $WS
 tar xzf /hive-dev-box/tools/def_ws.tgz
 cd ..
 
-cat > /bin/dev_eclipse << EOF
+sudo dd of=/bin/dev_eclipse << EOF
 #!/bin/bash -e
 /active/eclipse/eclipse -nosplash -data ~/$WS "\$@"
 EOF
-chmod +x /bin/dev_eclipse
+sudo chmod +x /bin/dev_eclipse
 
 eclipse -nosplash -data ~/$WS -application com.seeq.eclipse.importprojects.headlessimport -import ~/hive
 
 
-
-
+banner ok
+echo "run dev_eclipse to open eclipse"

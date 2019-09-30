@@ -1,3 +1,3 @@
 #!/bin/bash
 
-beeline -n $USER -u 'jdbc:hive2://localhost:10000/default' "$@"
+beeline -n ${USER:-dev} -u 'jdbc:hive2://localhost:10000/default' "$@"
