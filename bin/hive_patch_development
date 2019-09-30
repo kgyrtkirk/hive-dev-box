@@ -32,7 +32,7 @@ case $branch in
 esac
 
 git checkout $branch
-modules=${HIVE_DEFAULT_MODULE:-ql,common}
+modules=${HIVE_DEFAULT_MODULES:-ql,common}
 
 git config --local extra.ideProjects $modules
 git config --local extra.mavenOpts "-Denforcer.skip -Phadoop-2,itests -DskipSparkTests"
@@ -49,12 +49,11 @@ cd $WS
 tar xzf /hive-dev-box/tools/def_ws.tgz
 cd ..
 
-mkdir -p bin
-cat > bin/eclipse << EOF
+cat > /bin/dev_eclipse << EOF
 #!/bin/bash -e
-$HOME/eclipse/eclipse -nosplash -data ~/$WS "\$@"
+/active/eclipse/eclipse -nosplash -data ~/$WS "\$@"
 EOF
-chmod +x bin/eclipse
+chmod +x /bin/dev_eclipse
 
 eclipse -nosplash -data ~/$WS -application com.seeq.eclipse.importprojects.headlessimport -import ~/hive
 

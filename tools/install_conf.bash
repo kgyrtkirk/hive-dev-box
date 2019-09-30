@@ -57,9 +57,9 @@ conf set hive/hive-site hive.exec.scratchdir /data/hive
 conf set hive/hive-site yarn.nodemanager.disk-health-checker.max-disk-utilization-per-disk-percentage 99
 
 
-mkdir -p /data/hive /data/log /apps/lib /work /active ~dev/.m2
-chown dev /data{,/hive,/log} /apps/lib /work /active /apps ~dev/.m2
-chmod 777 /data/hive /data/log /apps/lib /active
+mkdir -p /data/hive /data/log /apps/lib /apps/tez /work /active ~dev/.m2
+chown dev /data{,/hive,/log} /apps/lib /apps/tez /work /active /apps ~dev/.m2
+chmod 777 -R /data
 
 # use ssd for docker
 

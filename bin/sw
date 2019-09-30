@@ -44,59 +44,12 @@ component="${1}"
 shift
 case "$component" in
 	hive-dev)
-		d=/hive-dev/packaging/target/apache-hive-*-SNAPSHOT-bin/apache-hive-*-SNAPSHOT-bin/
-		[ ! -d $d ] && echo "ERROR: expected a directory at: $d" && exit 1
-		activate hive $d
-	;;
-	hive-dev2)
 		d=/home/dev/hive/packaging/target/apache-hive-*-SNAPSHOT-bin/apache-hive-*-SNAPSHOT-bin/
 		[ ! -d $d ] && echo "ERROR: expected a directory at: $d" && exit 1
 		activate hive $d
 	;;
-	hive)
-		version=${1:-3.1.2}
-		bin_dir=$SW_DIR/apache-hive-$version-bin
-		if [ -d "$bin_dir" ];then
-			echo "$bin_dir already installed"
-		else
-			fn=$SW_DL_DIR/hive-${version}.tar.gz
-			dl $fn \
-				$apache_mirror/hive/hive-${version}/apache-hive-${version}-bin.tar.gz	\
-				$archive_mirror/hive/hive-${version}/apache-hive-${version}-bin.tar.gz
-			tar xzf $fn
-			#rm $fn
-		fi
-		activate $component $bin_dir
-	;;
-	hadoop)
-		version=${1:-3.1.2}
-		bin_dir=$SW_DIR/hadoop-$version
-		if [ -d "$bin_dir" ];then
-			echo "$bin_dir already installed"
-		else
-			fn=$SW_DL_DIR/hadoop-${version}.tar.gz
-			dl $fn \
-				${apache_mirror}/hadoop/common/hadoop-${version}/hadoop-${version}.tar.gz	\
-				${archive_mirror}/hadoop/common/hadoop-${version}/hadoop-${version}.tar.gz
-			tar xzf $fn
-			#rm $fn
-		fi
-		activate $component $bin_dir
-	;;
-	tez)
-		version=${1:-0.9.1}
-		bin_dir=$SW_DIR/apache-tez-$version-bin
-		if [ -d "$bin_dir" ];then
-			echo "$bin_dir already installed"
-		else
-			fn=$SW_DL_DIR//tez-${version}.tar.gz
-			dl $fn \
-				${apache_mirror}/tez/${version}/apache-tez-${version}-bin.tar.gz
-			tar xzf $fn
-			#rm $fn
-		fi
-		activate $component $bin_dir
-		mkdir -p /apps/tez && cp /active/tez/share/tez.tar.gz /apps/tez/
+	hive|hadoop|tez)
+		sw2 $component "$@"
 	;;
 	eclipse)
 		bin_dir=$SW_DIR/eclipse

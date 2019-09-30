@@ -10,11 +10,11 @@ sudo cp -rsf /hive-dev-box/etc/* /etc/
 sudo cp -rsf /hive-dev-box/bin/* /bin/
 
 
-/bin/sw tez
-/bin/sw hadoop
-/bin/sw hive
+/bin/sw tez     0.9.1
+/bin/sw hadoop	3.1.2
+/bin/sw hive	3.1.2
 /bin/sw eclipse
-/bin/sw maven
+/bin/sw maven	3.6.1
 
 [ -d /toolbox/build ] && sudo dpkg -i /toolbox/build/distributions/*.deb
 

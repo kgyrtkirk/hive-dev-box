@@ -13,6 +13,9 @@ ARG GITHUB_USER=
 COPY tools/clone_references.bash /tools/
 RUN /tools/clone_references.bash ${GITHUB_USER}
 
+COPY tools/install_toolbox.bash /tools/
+RUN /tools/install_toolbox.bash
+
 #COPY bin/sw /tools/_sw
 #RUN /tools/_sw tez
 #RUN /tools/_sw hadoop
