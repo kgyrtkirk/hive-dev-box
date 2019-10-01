@@ -52,6 +52,7 @@ RUN_OPTS+=" -v $HOME/.gitconfig:/home/dev/.gitconfig"
 RUN_OPTS+=" -e TERM=$TERM"
 
 [ "$HIVE_DEV_BOX_HOST_DIR" != "" ] && RUN_OPTS+=" -v $HIVE_DEV_BOX_HOST_DIR:/home/dev/host"
+[ "$HIVE_SOURCES" != "" ] && RUN_OPTS+=" -v $HIVE_SOURCES:/home/dev/hive"
 
 # link artifactory
 [ "`docker ps -q -f name=artifactory`" != "" ] && RUN_OPTS+=" --link artifactory:artifactory "
