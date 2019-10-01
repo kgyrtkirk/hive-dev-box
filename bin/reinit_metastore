@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 type=${1:-derby}
 
@@ -7,7 +7,35 @@ type=${1:-derby}
 
 echo "@ initializing: $type"
 
+DOCKER="sudo docker"
+function isContainerRunning() {
+    [ "`$DOCKER ps -q -f name=$1`" != "" ]
+}
+
 case $type in
+    rebuild)
+        n="`git status -s | wc -l `"
+        if [ "$n" -ne 0 ];then
+            git status -s
+            echo ">> ok to purge and rebuild? "
+            read
+            if [ "$REPLY" != "y" ];then
+                echo " ...exiting"
+                exit 1
+            fi
+        fi
+        /usr/local/hive-toolbox/scripts/xl_hive_reinit `git config --get extra.ideProjects`
+        exit 0
+    ;;
+    x)
+        if isContainerRunning artifactory;then
+
+            echo ok
+        else
+            echo start
+        fi
+        exit 0
+    ;;
     derby)
         D=/data/hive/metastore_db
         rm -rf $D
@@ -34,9 +62,9 @@ case $type in
     ;;
     oracle)
         # docker must be installed/set up
-	docker kill ora11 || echo 'not killed; probably not running...'
-	sleep 1
-	docker run -p 1521:1521 -d --name ora11 --rm oracleinanutshell/oracle-xe-11g
+        docker kill ora11 || echo 'not killed; probably not running...'
+    	sleep 1
+    	docker run -p 1521:1521 -d --name ora11 --rm oracleinanutshell/oracle-xe-11g
 	echo "docker exec -it ora11 /bin/bash -ic 'sqlplus -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys
     # FIXME it would be better to detect wether stdin is a file or not...
 	echo "docker exec -i ora11 /bin/bash -ic 'sqlplus -S -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys0

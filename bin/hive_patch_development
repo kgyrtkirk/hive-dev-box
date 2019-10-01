@@ -16,7 +16,10 @@ fi
 
 case $branch in
     master|branch-*)
+            git branch -m junk
             git branch $branch apache/$branch
+            git checkout $branch
+            git branch -d junk
         ;;
     HIVE-*)
             if [ -e .git/refs/remotes/$GITHUB_USER/$branch ] ;then

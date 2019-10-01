@@ -33,6 +33,10 @@ RUN /tools/install_conf.bash
 USER dev
 WORKDIR /home/dev
 
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
 COPY tools/docker_entrypoint /.entrypoint
 ENTRYPOINT ["/.entrypoint"]
 
