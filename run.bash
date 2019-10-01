@@ -53,6 +53,7 @@ RUN_OPTS+=" -e TERM=$TERM"
 
 [ "$HIVE_DEV_BOX_HOST_DIR" != "" ] && RUN_OPTS+=" -v $HIVE_DEV_BOX_HOST_DIR:/home/dev/host"
 [ "$HIVE_SOURCES" != "" ] && RUN_OPTS+=" -v $HIVE_SOURCES:/home/dev/hive"
+[ -e "$HOME/.config/asf_toolbox.yml" ] && RUN_OPTS+=" -v $HOME/.config/asf_toolbox.yml:/home/dev/.config/asf_toolbox.yml"
 
 # link artifactory
 [ "`docker ps -q -f name=artifactory`" != "" ] && RUN_OPTS+=" --link artifactory:artifactory "
