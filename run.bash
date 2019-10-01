@@ -10,7 +10,6 @@ fi
 docker build $BUILD_OPTS -t hive-dev-box .
 
 if [ "$1" == "-d" ];then
-    #RUN_OPTS+=" --restart always"
     RUN_OPTS+=" -d"
     shift
 else
@@ -22,7 +21,6 @@ if [ "$1" != "" ];then
     shift
 fi
 
-#RUN_OPTS+=" --name hdb "
 RUN_OPTS+=" -v hive-dev-box_work:/work"
 RUN_OPTS+=" -v `pwd`:/hive-dev-box"
 if [ "$TOOLBOX_SOURCES" != "" ];then
