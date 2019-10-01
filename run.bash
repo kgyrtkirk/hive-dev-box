@@ -7,8 +7,6 @@ else
 	echo " * warning: you should set GITHUB_USER to your github account"
 fi
 
-docker build $BUILD_OPTS -t hive-dev-box .
-
 if [ "$1" == "-d" ];then
     RUN_OPTS+=" -d"
     shift
@@ -32,7 +30,6 @@ if [ "$DISPLAY" != "" ];then
     if [ "`which sw_vers`" != "" ] ; then
         # MacOSX assumed
         xhost + 127.0.0.1
-        #D="${DISPLAY/:*/}"
         RUN_OPTS+=" -e DISPLAY=host.docker.internal:0"
     else
         XSOCK=/tmp/.X11-unix
@@ -43,7 +40,6 @@ if [ "$DISPLAY" != "" ];then
     fi
 fi
 
-# FIXME: do this right..
 RUN_OPTS+=" -v `pwd`/settings.xml:/home/dev/.m2/settings.xml"
 RUN_OPTS+=" -v $HOME/.ssh:/home/dev/.ssh"
 RUN_OPTS+=" -v $HOME/.gitconfig:/home/dev/.gitconfig"
@@ -57,6 +53,11 @@ RUN_OPTS+=" -e TERM=$TERM"
 # link artifactory
 [ "`docker ps -q -f name=artifactory`" != "" ] && RUN_OPTS+=" --link artifactory:artifactory "
 
+NET=hive-dev-box-net
+RUN_OPTS+=" --network $NET"
+
+docker build $BUILD_OPTS -t hive-dev-box .
+docker network create $NET || true
 docker run          \
     $RUN_OPTS       \
     "$@"            \
