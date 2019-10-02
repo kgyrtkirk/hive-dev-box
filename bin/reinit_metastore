@@ -28,11 +28,20 @@ case $type in
         exit 0
     ;;
     x)
-        if isContainerRunning artifactory;then
-
+        #FIXME:move
+        sudo apt-get install -y mariadb-client
+        name=dev_mysql
+        if isContainerRunning $name;then
             echo ok
         else
             echo start
+            RUN_OPTS+=" --name $name"
+            RUN_OPTS+=" --network hive-dev-box-net"
+            RUN_OPTS+=" -e MYSQL_ALLOW_EMPTY_PASSWORD=1"
+            RUN_OPTS+=" --restart always -d"
+            $DOCKER run $RUN_OPTS mariadb
+            #wait_net_port dev_mysql 3306
+            #sleep 30
         fi
         exit 0
     ;;
@@ -65,10 +74,10 @@ case $type in
         docker kill ora11 || echo 'not killed; probably not running...'
     	sleep 1
     	docker run -p 1521:1521 -d --name ora11 --rm oracleinanutshell/oracle-xe-11g
-	echo "docker exec -it ora11 /bin/bash -ic 'sqlplus -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys
+	echo "sudo docker exec -it ora11 /bin/bash -ic 'sqlplus -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys
     # FIXME it would be better to detect wether stdin is a file or not...
-	echo "docker exec -i ora11 /bin/bash -ic 'sqlplus -S -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys0
-	echo "docker exec -it ora11 /bin/bash -ic 'sqlplus -L \"hive/mypassword\"' "'$@' | sudo dd of=/bin/sqlplus
+	echo "sudo docker exec -i ora11 /bin/bash -ic 'sqlplus -S -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys0
+	echo "sudo docker exec -it ora11 /bin/bash -ic 'sqlplus -L \"hive/mypassword\"' "'$@' | sudo dd of=/bin/sqlplus
 	sudo chmod +x /bin/sqlplus{,_sys*}
 
     while true;do

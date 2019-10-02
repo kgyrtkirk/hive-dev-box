@@ -51,6 +51,7 @@ WS=ws_$branch
 mkdir $WS
 cd $WS
 tar xzf /hive-dev-box/tools/def_ws.tgz
+git reset --hard
 cd ..
 
 sudo dd of=/bin/dev_eclipse << EOF
