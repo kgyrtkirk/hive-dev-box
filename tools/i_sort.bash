@@ -7,3 +7,11 @@ echo "LANG=en_US.UTF-8" > /etc/locale.conf
 locale-gen en_US.UTF-8
 
 sed -i 's/32m/36m/' ~dev/.bashrc
+
+
+# FIXME: consider setting
+#Set hive.tez.container.size=3356;
+#Set hive.tez.java.opts=-Xmx2g;
+#conf set hive/hive-site hive.tez.container.size 3356
+#conf set hive/hive-site hive.tez.java.opts -Xmx2g
+# FIXME: scale up mem values?

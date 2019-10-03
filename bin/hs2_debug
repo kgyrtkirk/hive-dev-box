@@ -1,4 +1,5 @@
 #!/bin/bash
 
 export HADOOP_CLIENT_OPTS+=" -agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=n"
+export HADOOP_OPTS+=" -Xmx1g"
 hiveserver2

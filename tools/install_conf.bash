@@ -56,6 +56,8 @@ conf set hive/hive-site hive.exec.scratchdir /data/hive
 # FIXME: this might not needed...
 conf set hive/hive-site yarn.nodemanager.disk-health-checker.max-disk-utilization-per-disk-percentage 99
 
+conf set hive/hive-site hive.tez.container.size 3356
+conf set hive/hive-site hive.tez.java.opts -Xmx2g
 
 mkdir -p /data/hive /data/log /apps/lib /apps/tez /work /active ~dev/.m2
 chown dev /data{,/hive,/log} /apps/lib /apps/tez /work /active /apps ~dev/.m2

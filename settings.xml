@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd" xmlns="http://maven.apache.org/SETTINGS/1.1.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
   <mirrors>
     <mirror>
       <mirrorOf>*</mirrorOf>
@@ -23,7 +24,9 @@
           <url>http://artifactory:8081/artifactory/wonder</url>
         </repository>
         <repository>
-          <snapshots />
+          <snapshots>
+		<updatePolicy>never</updatePolicy>
+          </snapshots>
           <id>snapshots</id>
           <name>wonder</name>
           <url>http://artifactory:8081/artifactory/wonder</url>
