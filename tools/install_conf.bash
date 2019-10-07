@@ -59,7 +59,7 @@ conf set hive/hive-site yarn.nodemanager.disk-health-checker.max-disk-utilizatio
 conf set hive/hive-site hive.tez.container.size 3356
 conf set hive/hive-site hive.tez.java.opts -Xmx2g
 
-mkdir -p /data/hive /data/log /apps/lib /apps/tez /work /active ~dev/.m2
+mkdir -p /data/hive /data/log /apps/lib /apps/tez /work /active ~dev/.m2 ~dev/.config
 chown dev /data{,/hive,/log} /apps/lib /apps/tez /work /active /apps ~dev/.m2 ~dev/.config
 chmod 777 -R /data
 
