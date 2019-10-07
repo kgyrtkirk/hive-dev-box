@@ -60,7 +60,7 @@ conf set hive/hive-site hive.tez.container.size 3356
 conf set hive/hive-site hive.tez.java.opts -Xmx2g
 
 mkdir -p /data/hive /data/log /apps/lib /apps/tez /work /active ~dev/.m2
-chown dev /data{,/hive,/log} /apps/lib /apps/tez /work /active /apps ~dev/.m2
+chown dev /data{,/hive,/log} /apps/lib /apps/tez /work /active /apps ~dev/.m2 ~dev/.config
 chmod 777 -R /data
 
 # use ssd for docker
@@ -75,7 +75,7 @@ export HIVE_CONF_DIR=/etc/hive/
 
 export JAVA_HOME=/usr/lib/jvm/zulu-8-amd64/
 
-export PATH=$PATH:/active/hive/bin:/active/hadoop/bin:/active/eclipse/:/active/maven/bin/
+export PATH=$PATH:/active/hive/bin:/active/hadoop/bin:/active/eclipse/:/active/maven/bin/:/active/protobuf/bin:/active/jvisualvm/bin
 
 
 EOF
