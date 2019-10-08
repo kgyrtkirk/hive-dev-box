@@ -43,7 +43,7 @@ git config --local extra.mavenOpts "-Denforcer.skip -Phadoop-2,itests -DskipSpar
 #FIXME install thrift/protobuf/etc
 #git config --local extra.mavenOpts "-Denforcer.skip -Phadoop-2,itests -Ditest.jdbc.jars=/home/kirk/projects/hive/jdbc/ojdbc6.jar -Dthrift.home=/home/kirk/tools/thrift/thrift-0.9.3 -DskipSparkTests -Dprotoc.path=/home/kirk/tools/protobuf-2.5.0/protobuf-2.5.0/src/protoc"
 
-/usr/local/hive-toolbox/scripts/xl_hive_reinit $modules
+xl_hive_reinit $modules
 
 cd ..
 

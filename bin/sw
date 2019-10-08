@@ -48,21 +48,39 @@ case "$component" in
 		[ ! -d $d ] && echo "ERROR: expected a directory at: $d" && exit 1
 		activate hive $d
 	;;
+	tez-dev)
+		rm -f /active/tez
+		f=/home/dev/tez/tez-dist/target/tez-*.tar.gz 
+		[ ! -e $f ] && echo "ERROR: expected a tar.gz: $d" && exit 1
+		cp $f /apps/tez/tez.tar.gz
+	;;
 	hive|hadoop|tez)
 		sw2 $component "$@"
 	;;
 	eclipse)
-		bin_dir=$SW_DIR/eclipse
+		version=${1:-2019-06}
+		state=${2:-R}
+		type=${3:-java}
+		bin_dir=$SW_DIR/eclipse-${version}-${state}-${type}
 		if [ -d "$bin_dir" ];then
 			echo "$bin_dir already installed"
 		else
-			fn=$SW_DL_DIR/eclipse.tar.gz
+			fn=$SW_DL_DIR/eclipse-${type}-${version}.tar.gz
+			#http://mirrors.uniri.hr/eclipse//technology/epp/downloads/release/2019-03/R/eclipse-java-2019-03-R-linux-gtk-x86_64.tar.gz
+			path=eclipse//technology/epp/downloads/release/${version}/${state}/eclipse-${type}-${version}-${state}-linux-gtk-x86_64.tar.gz
 			dl $fn \
-				http://eclipse.mirror.garr.it/mirrors/eclipse//technology/epp/downloads/release/2019-09/R/eclipse-jee-2019-09-R-linux-gtk-x86_64.tar.gz
+				http://eclipse.mirror.garr.it/mirrors/${path}	\
+				http://mirrors.uniri.hr/${path}
+			rm -rf _eclipse_unpack
+			mkdir _eclipse_unpack
+			cd _eclipse_unpack
 			tar xzf $fn
 			wget -nv https://github.com/seeq12/eclipse-import-projects-plugin/raw/master/jar/com.seeq.eclipse.importprojects_1.4.0.jar \
 				-O eclipse/plugins/com.seeq.eclipse.importprojects_1.4.0.jar
 			sed 's/-Xmx1024m/-Xmx3024m/' eclipse/eclipse.ini
+			mv eclipse ${bin_dir}
+			cd ..
+			rmdir _eclipse_unpack
 			#rm $fn
 		fi
 		activate $component $bin_dir
