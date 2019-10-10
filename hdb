@@ -17,7 +17,7 @@ case "$cmd" in
 		./enter.bash "$@"
 	;;
 	run)
-		./run.bash "$@"
+		./run.bash -d "$@"
 	;;
 	*)
 		echo "usage: $0 run <new_container_name>"
