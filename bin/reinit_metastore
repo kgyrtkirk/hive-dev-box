@@ -44,9 +44,6 @@ case $type in
     ;;
     mysql)
         #FIXME: /var/lib/docker ?
-        #FIXME:move
-        sudo apt-get install -y mariadb-client
-        sudo apt install -y default-mysql-client
 
         containerName=dev_mysql
         if isContainerRunning $containerName;then
@@ -92,6 +89,43 @@ EOF
         conf set hive/hive-site javax.jdo.option.ConnectionPassword mypassword
     ;;
     postgres)
+        containerName=dev_postgres
+        if isContainerRunning $containerName;then
+            if [ $force == "1" ];then
+                $DOCKER rm -f "$containerName"
+            fi
+        fi
+
+        if isContainerRunning $containerName;then
+            echo ok
+        else
+            echo start
+            RUN_OPTS+=" --name $containerName"
+            RUN_OPTS+=" --network hive-dev-box-net"
+            RUN_OPTS+=" -e POSTGRES_PASSWORD=mypassword"
+            RUN_OPTS+=" --restart always -d"
+            $DOCKER run $RUN_OPTS postgres
+        fi
+        echo "waiting for postgres to be available..."
+        wait-for-port --timeout=60 --host=$containerName 5432
+
+        # FIXME: PGHOST/PGUSER/PGDATABASE set in _conf
+        export PGHOST=$containerName
+        export PGUSER=hive
+        export PGDATABASE=$dbName
+        #export PGDATABASE=$dbName
+        echo $containerName:5432:$dbName:hive:mypassword > ~/.pgpass
+        echo $containerName:5432:postgres:postgres:mypassword >> ~/.pgpass
+        chmod 600 ~/.pgpass
+        psql -U postgres postgres -c "CREATE ROLE hive LOGIN PASSWORD 'mypassword'" || echo ok
+        
+        psql -U postgres postgres -c "drop database if exists $dbName"
+        psql -U postgres postgres -c "create database $dbName owner hive"
+        exit 0
+    ;;
+
+    postgres0)
+        
         sudo -u postgres dropdb metastore
         sudo -u postgres createdb metastore -O hiveuser
         conf set hive/hive-site javax.jdo.option.ConnectionDriverName org.postgresql.Driver

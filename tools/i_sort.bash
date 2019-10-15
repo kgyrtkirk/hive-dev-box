@@ -1,6 +1,9 @@
 #!/bin/bash -e
 
 apt-get install -y docker.io locales time git-review jq firefox-esr diffstat unzip zip
+apt-get install -y mariadb-client postgresql-client
+apt install -y default-mysql-client
+
 echo "LC_ALL=en_US.UTF-8" >> /etc/environment
 echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
