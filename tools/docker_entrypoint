@@ -27,7 +27,6 @@ if [ -t 0 ];then
     exec bash --login
 else
     echo "non-interactive shell detected; waiting for the end of the world... "
-    echo > /tmp/.empty
-    exec tail -f /tmp/.empty
+    while :; do sleep 60;done
 fi
 
