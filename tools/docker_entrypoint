@@ -9,12 +9,20 @@ echo " * installing some basic stuff..."
 sudo cp -rsf /hive-dev-box/etc/* /etc/
 sudo cp -rsf /hive-dev-box/bin/* /bin/
 
+function safe_sw() {
+  if [ -e "/active/$1" ];then
+    echo " * $1 is already present"
+  else
+    /bin/sw "$@"
+  fi
+}
 
-/bin/sw tez     0.9.1
-/bin/sw hadoop	3.1.2
-/bin/sw hive	3.1.2
-/bin/sw eclipse
-/bin/sw maven	3.6.1
+safe_sw tez    0.9.1
+safe_sw hadoop 3.1.2
+safe_sw hive   3.1.2
+safe_sw eclipse
+safe_sw maven  3.6.1
+safe_sw protobuf
 
 [ -d /toolbox/build/distributions ] && sudo dpkg -i /toolbox/build/distributions/*.deb
 
