@@ -1,4 +1,4 @@
 #!/bin/bash
 
 wait_port open 10000
-bl
+bl "$@"

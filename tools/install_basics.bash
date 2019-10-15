@@ -13,7 +13,9 @@ apt-get update
 apt-get install -y \
         wget curl nano gnupg lsb-release sysvbanner git \
         psmisc nano screen sysvbanner net-tools procps \
-        screen psmisc netcat psmisc nano screen sysvbanner #xbase-clients
+        screen psmisc netcat psmisc nano screen sysvbanner \
+        make gcc g++ \
+        locales time git-review jq diffstat unzip zip docker.io #xbase-clients
 
 apt-get clean
 

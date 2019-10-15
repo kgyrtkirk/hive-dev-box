@@ -1,7 +1,9 @@
 #!/bin/bash -e
 
 type=${1:-derby}
-
+shift
+force=0
+[ "$1" == "-f" ] && force=1
 
 # FIXME enable hive.metastore.schema.verification
 
@@ -11,6 +13,10 @@ DOCKER="sudo docker"
 function isContainerRunning() {
     [ "`$DOCKER ps -q -f name=$1`" != "" ]
 }
+
+dbName="ms_`hostname|tr '-' '_'`"
+echo "metastore databse name: $dbName"
+
 
 case $type in
     rebuild)
@@ -27,24 +33,6 @@ case $type in
         /usr/local/hive-toolbox/scripts/xl_hive_reinit `git config --get extra.ideProjects`
         exit 0
     ;;
-    x)
-        #FIXME:move
-        sudo apt-get install -y mariadb-client
-        name=dev_mysql
-        if isContainerRunning $name;then
-            echo ok
-        else
-            echo start
-            RUN_OPTS+=" --name $name"
-            RUN_OPTS+=" --network hive-dev-box-net"
-            RUN_OPTS+=" -e MYSQL_ALLOW_EMPTY_PASSWORD=1"
-            RUN_OPTS+=" --restart always -d"
-            $DOCKER run $RUN_OPTS mariadb
-            #wait_net_port dev_mysql 3306
-            #sleep 30
-        fi
-        exit 0
-    ;;
     derby)
         D=/data/hive/metastore_db
         rm -rf $D
@@ -52,7 +40,56 @@ case $type in
         conf set hive/hive-site javax.jdo.option.ConnectionURL "jdbc:derby:;databaseName=/data/hive/metastore_db;create=true"
         conf del hive/hive-site javax.jdo.option.ConnectionUserName
         conf del hive/hive-site javax.jdo.option.ConnectionPassword
-	cp /active/hive/lib/derby-*.jar /apps/lib/
+	    cp /active/hive/lib/derby-*.jar /apps/lib/
+    ;;
+    mysql)
+        #FIXME: /var/lib/docker ?
+        #FIXME:move
+        sudo apt-get install -y mariadb-client
+        sudo apt install -y default-mysql-client
+
+        containerName=dev_mysql
+        if isContainerRunning $containerName;then
+            if [ $force == "1" ];then
+                $DOCKER rm -f "$containerName"
+            fi
+        fi
+
+        if isContainerRunning $containerName;then
+            echo ok
+        else
+            echo start
+            RUN_OPTS+=" --name $containerName"
+            RUN_OPTS+=" --network hive-dev-box-net"
+            RUN_OPTS+=" -e MYSQL_ROOT_PASSWORD=mypassword"
+            RUN_OPTS+=" --restart always -d"
+            $DOCKER run $RUN_OPTS mariadb
+        fi
+        cat > ~/.my.cnf << EOF
+            [client]
+            user=hive
+            password=mypassword
+            database=$dbName
+            host=$containerName
+EOF
+        echo "waiting for mysql to be available..."
+        wait-for-port --timeout=60 --host=$containerName 3306
+        id
+        mysql -uroot mysql -f << EOF
+            drop database if exists $dbName;
+            create database $dbName;
+            CREATE USER IF NOT EXISTS 'hive'@'%' IDENTIFIED BY 'mypassword';
+            GRANT ALL PRIVILEGES ON $dbName.* TO 'hive'@'%';
+            FLUSH PRIVILEGES;
+EOF
+        mkdir -p /apps/lib
+        cd /apps/lib
+        [ ! -f mysql-connector-java-8.0.17.jar ] && wget -nv https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.17/mysql-connector-java-8.0.17.jar
+
+        conf set hive/hive-site javax.jdo.option.ConnectionDriverName com.mysql.jdbc.Driver
+        conf set hive/hive-site javax.jdo.option.ConnectionURL "jdbc:mysql://$containerName:3306/$dbName"
+        conf set hive/hive-site javax.jdo.option.ConnectionUserName hive
+        conf set hive/hive-site javax.jdo.option.ConnectionPassword mypassword
     ;;
     postgres)
         sudo -u postgres dropdb metastore
@@ -62,12 +99,7 @@ case $type in
         conf set hive/hive-site javax.jdo.option.ConnectionUserName hiveuser
         conf set hive/hive-site javax.jdo.option.ConnectionPassword mypassword
     ;;
-    mysql)
-        sudo mysql < <(echo 'drop database if exists metastore; create database metastore;')
-        conf set hive/hive-site javax.jdo.option.ConnectionDriverName com.mysql.jdbc.Driver
-        conf set hive/hive-site javax.jdo.option.ConnectionURL 'jdbc:mysql://localhost:3306/metastore'
-        conf set hive/hive-site javax.jdo.option.ConnectionUserName hive
-        conf set hive/hive-site javax.jdo.option.ConnectionPassword mypassword
+    mysql_old)
     ;;
     oracle)
         # docker must be installed/set up

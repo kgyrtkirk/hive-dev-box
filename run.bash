@@ -56,7 +56,10 @@ RUN_OPTS+=" -e TERM=$TERM"
 NET=hive-dev-box-net
 RUN_OPTS+=" --network $NET"
 
-docker build $BUILD_OPTS -t hive-dev-box .
+BUILD_OPTS+=" -t hive-dev-box"
+BUILD_OPTS+=" -t hive-dev-box:`date +%s`"
+
+docker build $BUILD_OPTS .
 docker network create $NET || true
 docker run          \
     $RUN_OPTS       \
