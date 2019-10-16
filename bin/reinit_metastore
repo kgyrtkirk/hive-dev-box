@@ -89,6 +89,7 @@ EOF
         conf set hive/hive-site javax.jdo.option.ConnectionPassword mypassword
     ;;
     postgres)
+        # FIXME: generalize
         containerName=dev_postgres
         if isContainerRunning $containerName;then
             if [ $force == "1" ];then
@@ -141,11 +142,56 @@ EOF
     mysql_old)
     ;;
     oracle)
+        # FIXME: generalize
+        containerName=dev_oracle
+        if isContainerRunning $containerName;then
+            if [ $force == "1" ];then
+                $DOCKER rm -f "$containerName"
+            fi
+        fi
+
+        if isContainerRunning $containerName;then
+            echo ok
+        else
+            echo start
+            RUN_OPTS+=" --name $containerName"
+            RUN_OPTS+=" --network hive-dev-box-net"
+            # FIXME: consider relaxing restart always
+            RUN_OPTS+=" --restart always -d"
+            $DOCKER run $RUN_OPTS oracleinanutshell/oracle-xe-11g
+        fi
+        echo "waiting for oracle to be available..."
+        wait-for-port --timeout=60 --host=$containerName 1521
+
+        echo "sudo docker exec -it $containerName /bin/bash -ic 'sqlplus -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys
+        # FIXME it would be better to detect wether stdin is a file or not...
+	    echo "sudo docker exec -i $containerName /bin/bash -ic 'sqlplus -S -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys0
+    	echo "sudo docker exec -it $containerName /bin/bash -ic 'sqlplus -L \"$dbName/mypassword\"' "'$@' | sudo dd of=/bin/sqlplus
+    	sudo chmod +x /bin/sqlplus{,_sys*}
+
+        sqlplus_sys0 << EOF
+    drop user $dbName cascade;
+
+	CREATE USER $dbName IDENTIFIED BY mypassword;
+	GRANT SELECT_CATALOG_ROLE TO $dbName;
+	GRANT CONNECT, RESOURCE TO $dbName;
+	QUIT;
+EOF
+    conf set hive/hive-site javax.jdo.option.ConnectionDriverName oracle.jdbc.OracleDriver
+    conf set hive/hive-site javax.jdo.option.ConnectionURL "jdbc:oracle:thin:@//$containerName/xe"
+    conf set hive/hive-site javax.jdo.option.ConnectionUserName $dbName
+    conf set hive/hive-site javax.jdo.option.ConnectionPassword mypassword
+
+    sudo docker cp $containerName:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar /apps/lib
+
+    ;;
+    oracle0)
+
         # docker must be installed/set up
         docker kill ora11 || echo 'not killed; probably not running...'
     	sleep 1
     	docker run -p 1521:1521 -d --name ora11 --rm oracleinanutshell/oracle-xe-11g
-	echo "sudo docker exec -it ora11 /bin/bash -ic 'sqlplus -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys
+        echo "sudo docker exec -it ora11 /bin/bash -ic 'sqlplus -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys
     # FIXME it would be better to detect wether stdin is a file or not...
 	echo "sudo docker exec -i ora11 /bin/bash -ic 'sqlplus -S -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys0
 	echo "sudo docker exec -it ora11 /bin/bash -ic 'sqlplus -L \"hive/mypassword\"' "'$@' | sudo dd of=/bin/sqlplus
