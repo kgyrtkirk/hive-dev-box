@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 apt-get install -y docker.io locales time git-review jq firefox-esr diffstat unzip zip
-apt-get install -y mariadb-client postgresql-client
+apt-get install -y mariadb-client postgresql-client  kdiff3
 apt install -y default-mysql-client
 
 echo "LC_ALL=en_US.UTF-8" >> /etc/environment
