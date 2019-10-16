@@ -14,7 +14,7 @@ function isContainerRunning() {
     [ "`$DOCKER ps -q -f name=$1`" != "" ]
 }
 
-dbName="ms_`hostname|tr '-' '_'`"
+dbName="ms_`hostname|tr '-' '_'|tr 'A-Z' 'a-z'`"
 echo "metastore databse name: $dbName"
 
 
@@ -121,7 +121,12 @@ EOF
         
         psql -U postgres postgres -c "drop database if exists $dbName"
         psql -U postgres postgres -c "create database $dbName owner hive"
-        exit 0
+
+
+        conf set hive/hive-site javax.jdo.option.ConnectionDriverName org.postgresql.Driver
+        conf set hive/hive-site javax.jdo.option.ConnectionURL "jdbc:postgresql://$containerName/$dbName"
+        conf set hive/hive-site javax.jdo.option.ConnectionUserName hive
+        conf set hive/hive-site javax.jdo.option.ConnectionPassword mypassword
     ;;
 
     postgres0)
