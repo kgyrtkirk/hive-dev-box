@@ -1,0 +1,51 @@
+#!/bin/bash -e
+
+component="$1"
+
+dsl=~/.config/srcs.dsl
+
+if [ ! -e "$dsl" ]; then
+    if [ "$component" == "__defaults__" ];then
+        (
+            echo '# srcs dsl language'
+            echo '# add_src <component> <remote_name> <git_remote_addr>'
+            for c in tez hive;do
+                echo "add_src $c apache https://github.com/apache/$c"
+            done
+        )> "$dsl"
+        exit 0
+    else
+        echo -e "ERROR: $dsl not found"
+        echo -e "you may get a default by calling invoking:\n   $0 __defaults__"
+        exit 1
+    fi
+fi
+
+[ "$component" == "" ] && echo "usage: $0 <component>" && exit 1
+
+function add_src() {
+    if [ "$1" == "$component" ];then
+        echo " * adding $2 ($3)"
+        git remote add "$2" "$3"
+    fi
+}
+
+# go to home dir
+cd
+[ -d "$component" ] && echo "sources for $component already exists" && exit 1
+
+git init "$component"
+
+cd "$component"
+refs="/reference/$component/"
+if [ -d "$refs" ];then
+    echo " * adding reference repo $refs"
+    echo "$refs/.git/objects" > .git/objects/info/alternates
+fi
+
+echo " * interpreting: $dsl"
+. $dsl
+
+git fetch --all
+
+banner ok
