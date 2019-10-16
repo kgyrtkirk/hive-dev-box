@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#FIXME have to come up with something to fix this
+#export HADOOP_CLASSPATH+=":/active/tez/q/*.jar:/active/tez/q/lib/*"
 export HADOOP_CLIENT_OPTS+=" -agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=n"
 export HADOOP_OPTS+=" -Xmx1g"
 hiveserver2

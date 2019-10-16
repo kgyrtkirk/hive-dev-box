@@ -44,7 +44,7 @@ component="${1}"
 shift
 case "$component" in
 	hive-dev)
-		d=/home/dev/hive/packaging/target/apache-hive-*-SNAPSHOT-bin/apache-hive-*-SNAPSHOT-bin/
+		d=/home/dev/hive/packaging/target/apache-hive-*-bin/apache-hive-*-bin/
 		[ ! -d $d ] && echo "ERROR: expected a directory at: $d" && exit 1
 		activate hive $d
 	;;
