@@ -136,6 +136,30 @@ case "$component" in
 		fi
 		activate $component $bin_dir
 	;;
+	thrift)
+		V=${1:-0.9.3}
+		bin_dir=/work/thrift-${V}
+		if [ -d "$bin_dir" ];then
+			echo "$bin_dir already installed"
+		else
+			echo " * installing thrift compiler $V"
+			sudo apt-get install -y autoconf make automake flex bison gcc  g++ libtool pkg-config #checkinstall
+			build_dir="$SW_DL_DIR/build_thrift_$V"
+			rm -rf "$build_dir"
+			mkdir -p "$build_dir"
+			cd "$build_dir"
+			wget -nv  https://github.com/apache/thrift/archive/${V}.tar.gz
+			tar xzf ${V}.tar.gz && rm ${V}.tar.gz
+			cd thrift-${V}
+			./bootstrap.sh
+			./configure --prefix=$bin_dir
+			make
+			ln -s compiler/cpp/ bin
+			ln -s contrib share
+			mv "$build_dir/thrift-${V}" "$bin_dir"
+		fi
+		activate $component $bin_dir
+	;;
 	*)
 		cat << EOF
 Switches between installed components
