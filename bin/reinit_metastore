@@ -1,9 +1,9 @@
 #!/bin/bash -e
 
 type=${1:-derby}
-shift
+[ "$#" -gt 0 ] && shift
 force=0
-[ "$1" == "-f" ] && force=1
+[ "$1" == "-f" ] && shift && force=1
 
 # FIXME enable hive.metastore.schema.verification
 
