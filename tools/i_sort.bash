@@ -17,6 +17,13 @@ mv wait-for-port /usr/bin
 
 sed -i 's/32m/36m/' ~dev/.bashrc
 
+cat >> ~dev/.bashrc <EOF
+
+alias grep='grep --color=auto'
+alias Grep=grep
+export USER=dev
+
+EOF
 
 # FIXME: consider setting
 #Set hive.tez.container.size=3356;
