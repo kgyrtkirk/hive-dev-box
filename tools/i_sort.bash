@@ -17,7 +17,7 @@ mv wait-for-port /usr/bin
 
 sed -i 's/32m/36m/' ~dev/.bashrc
 
-cat >> ~dev/.bashrc <EOF
+cat >> ~dev/.bashrc << EOF
 
 alias grep='grep --color=auto'
 alias Grep=grep
