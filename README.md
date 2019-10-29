@@ -79,9 +79,16 @@ You will have to manually configure this instance (once)
 It will be available at http://127.0.0.1:8081/
 use admin/password to login
 
-* make sure that Configurations / security / allow anonymous access is enabled
-* add some remote repositories like maven central or a caching mirror site if you know one
-* add a virtual repository named "wonder"  and add the remotes to it
+* make sure to have anonymous acces enabled:
+** left menu bar; Admin menu; Security / Security configuration > allow anonymous access is enabled
+* add some remote repositories
+** left menu bar: Admin menu: Repositories / Remote 
+*** add maven central / etc
+*** or some caching mirror repository if you know one
+* add the wonder virtual repository
+** left menu bar: Admin menu: Repositories / Virtual
+*** make sure to use the name "wonder" for it
+*** add remote repos to it
 
 This instance will be linked to the running development environment automatically
 
