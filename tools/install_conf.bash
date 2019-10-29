@@ -53,11 +53,20 @@ conf set hive/hive-site hive.execution.engine tez
 conf set hive/hive-site hive.log.explain.output true
 conf set hive/hive-site hive.in.test true
 conf set hive/hive-site hive.exec.scratchdir /data/hive
-# FIXME: this might not needed...
+# FIXME: this might not needed...but for me it is :)
 conf set hive/hive-site yarn.nodemanager.disk-health-checker.max-disk-utilization-per-disk-percentage 99
 
 conf set hive/hive-site hive.tez.container.size 3356
 conf set hive/hive-site hive.tez.java.opts -Xmx2g
+
+# enable transactions support
+conf set hive/hive-site hive.support.concurrency true
+conf set hive/hive-site hive.txn.manager org.apache.hadoop.hive.ql.lockmgr.DbTxnManager
+conf set hive/hive-site hive.mapred.mode nonstrict # not sure if this is also needed
+
+# disable results cache as it usually an obstacle during debugging..
+conf set hive/hive-site hive.query.results.cache.enabled false
+
 
 mkdir -p /data/hive /data/log /apps/lib /apps/tez /work /active ~dev/.m2 ~dev/.config
 chown dev /data{,/hive,/log} /apps/lib /apps/tez /work /active /apps ~dev/.m2 ~dev/.config
