@@ -9,7 +9,7 @@ _hive_dev_box_complete () {
     case "$prev" in
         enter)
             words="`docker ps --format '{{.Names}}'`"
-    	;;
+	;;
         run)
         ;;
         hdb)

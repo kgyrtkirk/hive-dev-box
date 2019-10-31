@@ -148,6 +148,22 @@ beyond the "obvious" `/bin` and `/lib` folders there are some which might make i
     * will also contain the workspace "template"
     * `bin` directory under this folder will be linked as `/home/dev/bin` so that scripts can be shared between containers and the host
 
+## hdb - easier access to running multiple envs
+
+* run NAME
+    * starts a new container with NAME - without attaching to it
+* enter NAME
+    * enters into the container
+
+### installation:
+```
+# create a symlink to hive-dev-box/hdb from an executable location ; eg $HOME/bin ?
+ln -s $PWD/hdb $HOME/bin/hdb
+# enable bash_completion for hdb
+# add the following line to .bashrc
+. <(hdb bash_completion)
+```
+
 ## sw - switch between versions of things
 
 ```shell
