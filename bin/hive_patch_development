@@ -4,6 +4,7 @@ srcs hive
 cd hive
 n=`hostname`
 git branch $n apache/master
+git checkout $n
 rebuild
 dev_eclipse
 

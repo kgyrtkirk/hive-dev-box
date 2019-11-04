@@ -4,7 +4,7 @@
 
 
 SW_DIR=${SW_DIR:-/work/}
-SW_DL_DIR=${SW_DL_DIR:-$SW_DIR/.downloads}
+SW_DL_DIR=${SW_DL_DIR:-$SW_DIR/downloads}
 
 mkdir -p $SW_DIR $SW_DL_DIR
 
