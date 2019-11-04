@@ -172,7 +172,7 @@ beyond the "obvious" `/bin` and `/lib` folders there are some which might make i
 ln -s $PWD/hdb $HOME/bin/hdb
 # enable bash_completion for hdb
 # add the following line to .bashrc
-. <(hdb bash_completion)
+. <($HOME/bin/hdb bash_completion)
 ```
 
 ## sw - switch between versions of things
