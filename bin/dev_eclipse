@@ -1,0 +1,23 @@
+#!/bin/bash -e
+
+cd
+
+name="`hostname`"
+
+WS=ws_$name
+if [ ! -d "$WS" ]; then
+    echo " * first run detected; initializing workspace"
+    mkdir $WS
+    cd $WS
+    tar xzf /hive-dev-box/tools/def_ws.tgz
+    git reset --hard
+    cd ..
+    for p in hive tez;do
+        if [ -d "$p" ]; then
+            echo " * importing $p..."
+            eclipse -nosplash -data ~/$WS -application com.seeq.eclipse.importprojects.headlessimport -import ~/$p
+        fi
+    done
+fi
+
+eclipse -nosplash -data "$WS" "$@"
