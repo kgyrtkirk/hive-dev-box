@@ -116,13 +116,25 @@ mkdir $HIVE_DEV_BOX_HOST_DIR
 # invoking with an argument names the container and will also be the preffered name for the ws and the development branch
 ./run.bash HIVE-12121-asd
 # when the terminal comes up
-# issuing the following command will
-#   * either creates or checks out the `hostname` named branch
-#   * builds hive
-#   * builds an eclipse workspace for it
-hive_patch_development
-# open eclipse
+# issuing the the following command will clone the sources based on your srcs dsl
+srcs hive
+# enter hive dir ; and create a local branch based on your requirements
+cd hive
+git branch `hostname` apache/master
+# if you need...patch the sources:
+cdpd-patcher hive
+#  run a full rebuild
+rebuild
+# you may run eclipse
 dev_eclipse
+```
+
+A shorter version exists for initializing upstream patch development
+
+```shell
+./run.bash HIVE-12121-asd
+# this will clone the source; creates a branch named after the containers hostname; runs a rebuild and open eclipse
+hive_patch_development
 ```
 
 ## filesystem layout

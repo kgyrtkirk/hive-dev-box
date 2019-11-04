@@ -1,0 +1,11 @@
+#!/bin/bash -e
+
+srcs hive
+cd hive
+n=`hostname`
+git branch $n apache/master
+rebuild
+dev_eclipse
+
+banner ok
+echo "run dev_eclipse to open eclipse"
