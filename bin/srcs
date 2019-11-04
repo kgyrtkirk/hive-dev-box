@@ -9,9 +9,12 @@ if [ ! -e "$dsl" ]; then
         (
             echo '# srcs dsl language'
             echo '# add_src <component> <remote_name> <git_remote_addr>'
-            for c in tez hive;do
+            echo '# git_config <component> <key> <value>'
+            for c in tez hive calcite;do
                 echo "add_src $c apache https://github.com/apache/$c"
             done
+git_config hive extra.ideProjects ql,common
+git_config hive extra.mavenOpts -Denforcer.skip -Phadoop-2,itests
         )> "$dsl"
         exit 0
     else
@@ -25,19 +28,40 @@ fi
 
 function add_src() {
     if [ "$1" == "$component" ];then
-        echo " * adding $2 ($3)"
-        git remote add "$2" "$3"
+        if [ -d ".git/refs/remotes/$2" ];then
+            echo " * already has remote $2"
+        else
+            echo " * adding $2 ($3)"
+            git remote add "$2" "$3"
+        fi
     fi
 }
 
+function git_config() {
+    if [ "$1" == "$component" ];then
+        echo " * git config $2=$3"
+        git config "$2" "$3"
+    fi
+}
+
+
+refs="/work/reference/$component/"
+mkdir -p "$refs"
+
+cd "$refs"
+[ ! -d .git ] && git init .
+echo " * updating refs ($refs)"
+echo " * interpreting: $dsl"
+. $dsl
+
+git fetch --all
+
 # go to home dir
 cd
-[ -d "$component" ] && echo "sources for $component already exists" && exit 1
-
-git init "$component"
+[ ! -d "$component" ] && git init "$component"
+#&& echo "sources for $component already exists" && exit 1
 
 cd "$component"
-refs="/reference/$component/"
 if [ -d "$refs" ];then
     echo " * adding reference repo $refs"
     echo "$refs/.git/objects" > .git/objects/info/alternates
