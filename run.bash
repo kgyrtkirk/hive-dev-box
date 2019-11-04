@@ -1,11 +1,5 @@
 #!/bin/bash
 set -e
-if [ "$GITHUB_USER" != "" ];then
-	RUN_OPTS+=" -e GITHUB_USER=$GITHUB_USER"
-	BUILD_OPTS+=" --build-arg GITHUB_USER=$GITHUB_USER"
-else
-	echo " * warning: you should set GITHUB_USER to your github account"
-fi
 
 if [ "$1" == "-d" ];then
     RUN_OPTS+=" -d"
