@@ -28,7 +28,7 @@ fi
 
 function add_src() {
     if [ "$1" == "$component" ];then
-        if [ -d ".git/refs/remotes/$2" ];then
+        if git remote get-url "$2" 2>&1 >/dev/null;then
             echo " * already has remote $2"
         else
             echo " * adding $2 ($3)"

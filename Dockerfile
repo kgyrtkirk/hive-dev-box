@@ -9,10 +9,6 @@ RUN /tools/install_java_zulu.bash
 COPY tools/install_eclipse.bash /tools/
 RUN /tools/install_eclipse.bash
 
-ARG GITHUB_USER=
-COPY tools/clone_references.bash /tools/
-RUN /tools/clone_references.bash ${GITHUB_USER}
-
 COPY tools/install_toolbox.bash /tools/
 RUN /tools/install_toolbox.bash
 

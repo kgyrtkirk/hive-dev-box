@@ -98,7 +98,6 @@ add an export to your .bashrc or similar; like:
 
 ```shell
 export HIVE_DEV_BOX_HOST_DIR=$HOME/hive-dev-box
-export GITHUB_USER=kgyrtkirk
 ```
 
 The dev environment will assume that you are working on upstream patches; and will always open a new branch forked from master
