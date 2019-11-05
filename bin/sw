@@ -49,10 +49,16 @@ case "$component" in
 		activate hive $d
 	;;
 	tez-dev)
+		sudo apt-get install -y xmlstarlet
 		rm -f /active/tez
-		f=/home/dev/tez/tez-dist/target/tez-*.tar.gz 
-		[ ! -e $f ] && echo "ERROR: expected a tar.gz: $d" && exit 1
+
+		v="`xmlstarlet sel  -N x=http://maven.apache.org/POM/4.0.0 -t -v x:project/x:version /home/dev/tez/pom.xml`"
+		d=/home/dev/tez/tez-dist/target/tez-$v-minimal
+		f=/home/dev/tez/tez-dist/target/tez-$v-minimal.tar.gz
+		[ ! -e $f ] && echo "ERROR: expected a tar.gz: $f" && exit 1
+		[ ! -d $d ] && echo "ERROR: expected a dir: $d" && exit 1
 		cp $f /apps/tez/tez.tar.gz
+		activate tez $d
 	;;
 	hive|hadoop|tez)
 		sw2 $component "$@"
