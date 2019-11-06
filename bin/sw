@@ -57,6 +57,7 @@ case "$component" in
 		f=/home/dev/tez/tez-dist/target/tez-$v-minimal.tar.gz
 		[ ! -e $f ] && echo "ERROR: expected a tar.gz: $f" && exit 1
 		[ ! -d $d ] && echo "ERROR: expected a dir: $d" && exit 1
+		conf set tez/tez-site tez.use.cluster.hadoop-libs true
 		cp $f /apps/tez/tez.tar.gz
 		activate tez $d
 	;;
