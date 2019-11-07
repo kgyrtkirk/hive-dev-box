@@ -120,6 +120,20 @@ case "$component" in
 		fi
 		activate $component $bin_dir
 	;;
+	derby)
+		version=${1:-10.14.2.0}
+		bin_dir=$SW_DIR/db-derby-${version}-bin
+		if [ -d "$bin_dir" ];then
+			echo "$bin_dir already installed"
+		else
+			fn=$SW_DL_DIR/db-derby-${version}-bin.zip
+			dl $fn \
+				https://www-eu.apache.org/dist/db/derby/db-derby-${version}/db-derby-${version}-bin.zip
+			unzip $fn
+			#rm $fn
+		fi
+		activate $component $bin_dir
+	;;
 	protobuf)
 		version=${1:-2.5.0}
 		bin_dir=/work/protobuf-${version}
@@ -146,6 +160,7 @@ case "$component" in
 	thrift)
 		V=${1:-0.9.3}
 		bin_dir=/work/thrift-${V}
+		sudo apt-get install -y autoconf make automake flex bison gcc  g++ libtool pkg-config #checkinstall
 		if [ -d "$bin_dir" ];then
 			echo "$bin_dir already installed"
 		else
