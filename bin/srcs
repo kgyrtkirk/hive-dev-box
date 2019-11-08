@@ -13,8 +13,8 @@ if [ ! -e "$dsl" ]; then
             for c in tez hive calcite;do
                 echo "add_src $c apache https://github.com/apache/$c"
             done
-git_config hive extra.ideProjects ql,common
-git_config hive extra.mavenOpts -Denforcer.skip -Phadoop-2,itests
+	    echo 'git_config hive extra.ideProjects ql,common'
+	    echo 'git_config hive extra.mavenOpts -Denforcer.skip -Phadoop-2,itests'
         )> "$dsl"
         exit 0
     else
