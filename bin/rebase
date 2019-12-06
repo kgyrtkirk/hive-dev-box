@@ -1,4 +1,4 @@
 #!/bin/bash -e
 upstream="`git config --local --get extra.upstream || echo apache/master`"
-git diff `git merge-base HEAD $upstream` "$@"
+git rebase -i $upstream
 
