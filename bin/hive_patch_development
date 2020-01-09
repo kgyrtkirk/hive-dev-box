@@ -5,8 +5,6 @@ cd hive
 n=`hostname`
 git branch $n apache/master
 git checkout $n
+git push kgyrtkirk -u HEAD
 rebuild
-dev_eclipse
-
 banner ok
-echo "run dev_eclipse to open eclipse"
