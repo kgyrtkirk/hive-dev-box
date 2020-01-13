@@ -7,11 +7,7 @@ name="`hostname`"
 WS=ws_$name
 if [ ! -d "$WS" ]; then
     echo " * first run detected; initializing workspace"
-    mkdir $WS
-    cd $WS
-    tar xzf /hive-dev-box/tools/def_ws.tgz
-    git reset --hard
-    cd ..
+    git clone https://github.com/kgyrtkirk/default-eclipse-workspace $WS
     for p in hive tez;do
         if [ -d "$p" ]; then
             echo " * importing $p..."
