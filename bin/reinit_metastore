@@ -17,6 +17,22 @@ function isContainerRunning() {
 dbName="ms_`hostname|tr '-' '_'|tr 'A-Z' 'a-z'`"
 echo "metastore databse name: $dbName"
 
+function startup_container() {
+    local containerName=$1
+    shift
+    if isContainerRunning $containerName;then
+        if [ $force == "1" ];then
+            $DOCKER rm -f "$containerName"
+        fi
+    fi
+
+    if isContainerRunning $containerName;then
+        echo "@ $containerName is running..."
+    else
+        echo "@ starting $containerName..."
+        $DOCKER run --name $containerName $*
+    fi
+}
 
 case $type in
     rebuild)
@@ -43,25 +59,14 @@ case $type in
 	    cp /active/hive/lib/derby-*.jar /apps/lib/
     ;;
     mysql)
-        #FIXME: /var/lib/docker ?
-
         containerName=dev_mysql
-        if isContainerRunning $containerName;then
-            if [ $force == "1" ];then
-                $DOCKER rm -f "$containerName"
-            fi
-        fi
+        RUN_OPTS+=" --network hive-dev-box-net"
+        RUN_OPTS+=" -e MYSQL_ROOT_PASSWORD=mypassword"
+        RUN_OPTS+=" --restart always -d"
+        RUN_OPTS+=" mariadb"
 
-        if isContainerRunning $containerName;then
-            echo ok
-        else
-            echo start
-            RUN_OPTS+=" --name $containerName"
-            RUN_OPTS+=" --network hive-dev-box-net"
-            RUN_OPTS+=" -e MYSQL_ROOT_PASSWORD=mypassword"
-            RUN_OPTS+=" --restart always -d"
-            $DOCKER run $RUN_OPTS mariadb
-        fi
+        startup_container $containerName $RUN_OPTS
+
         cat > ~/.my.cnf << EOF
             [client]
             user=hive
@@ -89,24 +94,13 @@ EOF
         conf set hive/hive-site javax.jdo.option.ConnectionPassword mypassword
     ;;
     postgres)
-        # FIXME: generalize
         containerName=dev_postgres
-        if isContainerRunning $containerName;then
-            if [ $force == "1" ];then
-                $DOCKER rm -f "$containerName"
-            fi
-        fi
+        RUN_OPTS+=" --network hive-dev-box-net"
+        RUN_OPTS+=" -e POSTGRES_PASSWORD=mypassword"
+        RUN_OPTS+=" --restart always -d"
+        RUN_OPTS+=" postgres"
+        startup_container $containerName $RUN_OPTS
 
-        if isContainerRunning $containerName;then
-            echo ok
-        else
-            echo start
-            RUN_OPTS+=" --name $containerName"
-            RUN_OPTS+=" --network hive-dev-box-net"
-            RUN_OPTS+=" -e POSTGRES_PASSWORD=mypassword"
-            RUN_OPTS+=" --restart always -d"
-            $DOCKER run $RUN_OPTS postgres
-        fi
         echo "waiting for postgres to be available..."
         wait-for-port --timeout=60 --host=$containerName 5432
 
@@ -130,26 +124,16 @@ EOF
         conf set hive/hive-site javax.jdo.option.ConnectionPassword mypassword
     ;;
     oracle)
-        # FIXME: generalize
         containerName=dev_oracle
-        if isContainerRunning $containerName;then
-            if [ $force == "1" ];then
-                $DOCKER rm -f "$containerName"
-            fi
-        fi
+        RUN_OPTS+=" --network hive-dev-box-net"
+        # FIXME: consider relaxing restart always
+        RUN_OPTS+=" --restart always -d"
+        RUN_OPTS+=" oracleinanutshell/oracle-xe-11g"
+        startup_container $containerName $RUN_OPTS
 
-        if isContainerRunning $containerName;then
-            echo ok
-        else
-            echo start
-            RUN_OPTS+=" --name $containerName"
-            RUN_OPTS+=" --network hive-dev-box-net"
-            # FIXME: consider relaxing restart always
-            RUN_OPTS+=" --restart always -d"
-            $DOCKER run $RUN_OPTS oracleinanutshell/oracle-xe-11g
-        fi
         echo "waiting for oracle to be available..."
         wait-for-port --timeout=60 --host=$containerName 1521
+        wait-for-port --timeout=60 --host=$containerName 8080
 
         echo "sudo docker exec -it $containerName /bin/bash -ic 'sqlplus -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys
         # FIXME it would be better to detect wether stdin is a file or not...
@@ -172,6 +156,9 @@ EOF
 
     sudo docker cp $containerName:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar /apps/lib
 
+    ;;
+    mssql)
+        docker run  -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=passwordX@ASD' -d mcr.microsoft.com/mssql/server:2019-latest
     ;;
     *)
         banner not impl
