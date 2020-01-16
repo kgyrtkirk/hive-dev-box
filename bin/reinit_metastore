@@ -17,6 +17,19 @@ function isContainerRunning() {
 dbName="ms_`hostname|tr '-' '_'|tr 'A-Z' 'a-z'`"
 echo "metastore databse name: $dbName"
 
+function installFile() {
+    D="$1"
+    URL="$2"
+    mkdir -p /apps/lib
+    cd /apps/lib
+    N="`basename "$URL"`"
+    if [ ! -f "$N" ];then
+        echo "@ installing $N"
+        wget -O "$N.tmp" -nv "$URL"
+        mv "$N.tmp" "$N"
+    fi
+
+}
 function startup_container() {
     local containerName=$1
     shift
@@ -135,10 +148,10 @@ EOF
         wait-for-port --timeout=60 --host=$containerName 1521
         wait-for-port --timeout=60 --host=$containerName 8080
 
-        echo "sudo docker exec -it $containerName /bin/bash -ic 'sqlplus -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys
+        echo "$DOCKER exec -it $containerName /bin/bash -ic 'sqlplus -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys
         # FIXME it would be better to detect wether stdin is a file or not...
-	    echo "sudo docker exec -i $containerName /bin/bash -ic 'sqlplus -S -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys0
-    	echo "sudo docker exec -it $containerName /bin/bash -ic 'sqlplus -L \"$dbName/mypassword\"' "'$@' | sudo dd of=/bin/sqlplus
+	    echo "$DOCKER exec -i $containerName /bin/bash -ic 'sqlplus -S -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys0
+    	echo "$DOCKER exec -it $containerName /bin/bash -ic 'sqlplus -L \"$dbName/mypassword\"' "'$@' | sudo dd of=/bin/sqlplus
     	sudo chmod +x /bin/sqlplus{,_sys*}
 
         sqlplus_sys0 << EOF
@@ -149,16 +162,53 @@ EOF
 	GRANT CONNECT, RESOURCE TO $dbName;
 	QUIT;
 EOF
-    conf set hive/hive-site javax.jdo.option.ConnectionDriverName oracle.jdbc.OracleDriver
-    conf set hive/hive-site javax.jdo.option.ConnectionURL "jdbc:oracle:thin:@//$containerName/xe"
-    conf set hive/hive-site javax.jdo.option.ConnectionUserName $dbName
-    conf set hive/hive-site javax.jdo.option.ConnectionPassword mypassword
+        conf set hive/hive-site javax.jdo.option.ConnectionDriverName oracle.jdbc.OracleDriver
+        conf set hive/hive-site javax.jdo.option.ConnectionURL "jdbc:oracle:thin:@//$containerName/xe"
+        conf set hive/hive-site javax.jdo.option.ConnectionUserName $dbName
+        conf set hive/hive-site javax.jdo.option.ConnectionPassword mypassword
 
-    sudo docker cp $containerName:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar /apps/lib
-
+        sudo docker cp $containerName:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar /apps/lib
     ;;
     mssql)
-        docker run  -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=passwordX@ASD' -d mcr.microsoft.com/mssql/server:2019-latest
+        containerName=dev_mssql
+        RUN_OPTS+=" --network hive-dev-box-net"
+        # FIXME: consider relaxing restart always
+        RUN_OPTS+=" --restart always -d"
+        RUN_OPTS+=" -e ACCEPT_EULA=Y"
+        RUN_OPTS+=" -e SA_PASSWORD=passwordX@ASD"
+        RUN_OPTS+=" mcr.microsoft.com/mssql/server:2019-latest"
+        startup_container $containerName $RUN_OPTS
+
+	    echo "$DOCKER exec -i $containerName /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'passwordX@ASD' "'$@' | sudo dd of=/bin/sqlcmd_SA0
+    	echo "$DOCKER exec -it $containerName /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'passwordX@ASD' "'$@' | sudo dd of=/bin/sqlcmd_SA
+    	echo "$DOCKER exec -it $containerName /opt/mssql-tools/bin/sqlcmd -S localhost -d $dbName -U hiveuser -P 'mypassword@ASD' "'$@' | sudo dd of=/bin/sqlcmd
+    	sudo chmod +x /bin/sqlcmd{_SA,_SA0,}
+
+        echo "waiting for mssql to be available..."
+        wait-for-port --timeout=60 --host=$containerName 1433
+
+        installFile /apps/lib https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/7.4.1.jre8/mssql-jdbc-7.4.1.jre8.jar
+        
+        #make sure hiveuser exists...
+        sqlcmd_SA0 << EOF
+CREATE LOGIN hiveuser with password='mypassword@ASD';
+CREATE USER hiveuser for login hiveuser;
+GO
+EOF
+
+        sqlcmd_SA0 << EOF
+DROP DATABASE IF EXISTS $dbName;
+CREATE DATABASE $dbName;
+GO
+ALTER AUTHORIZATION ON DATABASE::$dbName TO hiveuser;
+GO
+EOF
+
+        conf set hive/hive-site javax.jdo.option.ConnectionDriverName com.microsoft.sqlserver.jdbc.SQLServerDriver
+        conf set hive/hive-site javax.jdo.option.ConnectionURL "jdbc:sqlserver://$containerName:1433;DatabaseName=$dbName"
+        conf set hive/hive-site javax.jdo.option.ConnectionUserName hiveuser
+        conf set hive/hive-site javax.jdo.option.ConnectionPassword mypassword@ASD
+
     ;;
     *)
         banner not impl
