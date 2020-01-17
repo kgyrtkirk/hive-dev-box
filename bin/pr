@@ -1,0 +1,5 @@
+#!/bin/bash -e
+
+[ "$1" == "" ]  && echo "usage: $0 <PR_ID>" && exit 1
+git fetch apache pull/$1/head:PR-$1
+git checkout PR-$1
