@@ -130,6 +130,7 @@ EOF
         psql -U postgres postgres -c "drop database if exists $dbName"
         psql -U postgres postgres -c "create database $dbName owner hive"
 
+        installFile /apps/lib https://repo1.maven.org/maven2/postgresql/postgresql/9.1-901.jdbc4/postgresql-9.1-901.jdbc4.jar
 
         conf set hive/hive-site javax.jdo.option.ConnectionDriverName org.postgresql.Driver
         conf set hive/hive-site javax.jdo.option.ConnectionURL "jdbc:postgresql://$containerName/$dbName"

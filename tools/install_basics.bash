@@ -15,7 +15,10 @@ apt-get install -y \
         psmisc nano screen sysvbanner net-tools procps \
         screen psmisc netcat psmisc nano screen sysvbanner \
         make gcc g++ \
-        locales time git-review jq diffstat unzip zip docker.io #xbase-clients
+        locales time git-review jq diffstat unzip zip docker.io \
+        firefox-esr graphviz \
+        mariadb-client postgresql-client kdiff3 \
+        default-mysql-client
 
 apt-get clean
 
