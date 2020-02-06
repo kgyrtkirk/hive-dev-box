@@ -3,5 +3,6 @@
 N=$1 
 #65898/1
 S="`echo "$1" | cut -d '/' -f1|tail -c3`"
+echo git fetch cdh refs/changes/$S/$N && git checkout FETCH_HEAD
 git fetch cdh refs/changes/$S/$N && git checkout FETCH_HEAD
 
