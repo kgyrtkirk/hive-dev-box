@@ -49,7 +49,7 @@ The aim of this project is to provide an easier way to test-drive hive releases
 
 ```shell
 # build and launch the hive-dev-box container
-./run.bash 
+./hdb run hive-test
 # after building the container you will get a prompt inside it
 # initialize the metastore with
 reinit_metastore
@@ -114,7 +114,7 @@ mkdir $HIVE_DEV_BOX_HOST_DIR
 
 ```shell
 # invoking with an argument names the container and will also be the preffered name for the ws and the development branch
-./run.bash HIVE-12121-asd
+./hdb run HIVE-12121-asd
 # when the terminal comes up
 # issuing the the following command will clone the sources based on your srcs dsl
 srcs hive
@@ -132,7 +132,7 @@ dev_eclipse
 A shorter version exists for initializing upstream patch development
 
 ```shell
-./run.bash HIVE-12121-asd
+./hdb run HIVE-12121-asd
 # this will clone the source; creates a branch named after the containers hostname; runs a rebuild and open eclipse
 hive_patch_development
 ```
