@@ -18,6 +18,7 @@ case "$cmd" in
 	;;
 	run)
 		./run.bash -d "$@"
+		./enter.bash "$@"
 	;;
 	run0)
 		./run.bash "$@"
