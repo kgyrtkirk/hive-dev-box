@@ -7,6 +7,4 @@ COPY bin/* /bin/
 	
 USER dev
 ENTRYPOINT []
-
-
-
+CMD ["bash"]
