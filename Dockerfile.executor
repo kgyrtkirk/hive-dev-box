@@ -1,0 +1,12 @@
+FROM kgyrtkirk/hive-dev-box:latest
+
+USER root
+
+COPY etc/* /etc/
+COPY bin/* /bin/
+	
+USER dev
+ENTRYPOINT []
+
+
+
