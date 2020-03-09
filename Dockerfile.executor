@@ -8,6 +8,8 @@ RUN userdel dev
 RUN groupadd -g 1000 jenkins
 RUN useradd -m -o -u 1000 -g 1000 -d /home/jenkins -s /bin/bash jenkins
 
+RUN tools/install_executor.bash
+
 WORKDIR /home/jenkins
 USER jenkins
 ENTRYPOINT []
