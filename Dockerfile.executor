@@ -2,15 +2,16 @@ FROM kgyrtkirk/hive-dev-box:latest
 
 USER root
 
-COPY etc/* /etc/
-COPY bin/* /bin/
-RUN userdel dev
-RUN groupadd -g 1000 jenkins
-RUN useradd -m -o -u 1000 -g 1000 -d /home/jenkins -s /bin/bash jenkins
-
 COPY tools/install_executor.bash /tools/
 RUN /tools/install_executor.bash
-RUN apt-get install -y rsync
+
+
+COPY tools/install_executor2.bash /tools/
+RUN /tools/install_executor2.bash
+
+COPY etc/* /etc/
+COPY bin/* /bin/
+
 WORKDIR /home/jenkins
 USER jenkins
 ENTRYPOINT []
