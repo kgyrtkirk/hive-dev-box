@@ -51,7 +51,6 @@ conf set hive/hive-site hive.metastore.local true
 conf set hive/hive-site hive.user.install.directory file:///tmp
 conf set hive/hive-site hive.execution.engine tez
 conf set hive/hive-site hive.log.explain.output true
-conf set hive/hive-site hive.in.test true
 conf set hive/hive-site hive.exec.scratchdir /data/hive
 # FIXME: this might not needed...but for me it is :)
 conf set hive/hive-site yarn.nodemanager.disk-health-checker.max-disk-utilization-per-disk-percentage 99

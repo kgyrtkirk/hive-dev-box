@@ -1,0 +1,18 @@
+#!/bin/bash -e
+
+COMMIT=${1}
+rm -rf /tmp/fp
+git format-patch -o /tmp/fp "${COMMIT}^..${COMMIT}"
+
+for f in `git diff-tree --no-commit-id --name-only -r $COMMIT`;do
+	[ -f "$f" ] && continue
+	echo "might be problematic: $f"
+	newFile="$(find . -name "`basename "$f"`" -printf '%P\n')"
+	[ ! -f "$newFile" ] && echo "there might be multiple alternatives to $f ; not supported => DIY" && exit 1
+	echo "s|$f|$newFile|g" >&3
+done 3>/tmp/fp/replace.sed
+
+sed -f /tmp/fp/replace.sed < /tmp/fp/000* > /tmp/fp/new.patch
+
+#git am -p0 /tmp/fp/new.patch
+git apply -3 -p0 /tmp/fp/new.patch
