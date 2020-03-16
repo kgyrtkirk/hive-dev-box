@@ -92,6 +92,24 @@ case "$component" in
 		fi
 		activate $component $bin_dir
 	;;
+	idea)
+		version=${1:-2019.3.3}
+		bin_dir=$SW_DIR/ideaIC-$version
+		if [ -d "$bin_dir" ];then
+			echo "$bin_dir already installed"
+		else
+			fn=$SW_DL_DIR/ideaIC-${version}.tar.gz
+			dl $fn \
+				https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz
+			tmp=${bin_dir}.tmp
+			rm -rf "$tmp"
+			mkdir "$tmp"
+			tar -C "$tmp" -xzf "$fn"
+			( cd $tmp; ln -s * current)
+			mv "$tmp" "$bin_dir"
+		fi
+		activate $component $bin_dir/current
+	;;
 	visualvm)
 		version=${1:-1.4.4}
 		v1=${version//./}
