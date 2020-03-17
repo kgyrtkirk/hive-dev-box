@@ -1,0 +1,43 @@
+#!/bin/bash
+
+[ "$3" == "" ] && echo "usage: $0 <kube.yml> <namespace> <jar>" && exit 1
+
+set -o pipefail
+#set -x
+set -e
+
+
+k="kubectl --kubeconfig=$1 --namespace=$2"
+JAR=$3
+
+JAR_PATH="`$k logs pod/hiveserver2-0 -c init-custom-jars-localizer| grep CUSTOM_JARS_PATH | tr ' ' '\n'|grep '^s3a'|tail -n1|tee >(cat >&2)`"
+
+[ "$JAR_PATH" == "" ] && echo error JAR_PATH && exit 2
+
+echo $JAR_PATH
+
+set -x
+F="`basename "$JAR_PATH"`"
+
+S=/tmp/cj_script
+cat > $S << EOF
+#!/bin/bash
+#hdfs dfs -mkdir -p $(dirname $(dirname $JAR_PATH))
+hdfs dfs -mkdir -p           $(dirname $JAR_PATH)
+hdfs dfs -rm -r -f 		       $JAR_PATH
+hdfs dfs -mkdir -p                     $JAR_PATH
+hdfs dfs -copyFromLocal /tmp/`basename $JAR` $JAR_PATH/
+EOF
+
+chmod +x $S
+cat $S
+
+$k cp $JAR hiveserver2-0:/tmp/
+$k cp $S hiveserver2-0:$S
+
+$k exec -t hiveserver2-0 $S
+
+$k delete pod/hiveserver2-0
+banner ok
+#$k delete hiveserver2-0
+
