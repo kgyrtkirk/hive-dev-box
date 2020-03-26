@@ -1,0 +1,16 @@
+#!/bin/bash -e
+
+# File needs to be called /hooks/build relative to the Dockerfile.
+# $IMAGE_NAME var is injected into the build so the tag is correct.
+
+echo "[@] hooks/build"
+set
+
+BUILD_ARGS="build"
+if [ "$DOCKER_TAG" == "executor-1001" ];then
+	BUILD_ARGS+=" --build-arg UID=1001"
+fi
+BUILD_ARGS+=" -f $DOCKERFILE_PATH -t $IMAGE_NAME ."
+
+set -x
+docker $BUILD_ARGS
