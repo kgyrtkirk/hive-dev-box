@@ -1,0 +1,5 @@
+#!/bin/bash --login
+
+set -e
+export USER=`whoami`
+"$@"
