@@ -83,7 +83,7 @@ export HIVE_CONF_DIR=/etc/hive/
 
 export JAVA_HOME=/usr/lib/jvm/zulu-8-amd64/
 
-export PATH=$PATH:/active/hive/bin:/active/hadoop/bin:/active/eclipse/:/active/maven/bin/:/active/protobuf/bin:/active/jvisualvm/bin
+export PATH=$PATH:/active/hive/bin:/active/hadoop/bin:/active/eclipse/:/active/maven/bin/:/active/protobuf/bin:/active/jvisualvm/bin:/active/kubebuilder/bin
 
 
 EOF

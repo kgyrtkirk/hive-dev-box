@@ -201,6 +201,20 @@ case "$component" in
 		fi
 		activate $component $bin_dir
 	;;
+	kubebuilder)
+		V=1.0.8
+		arch=amd64
+		bin_dir=/work/kubebuilder_${V}_linux_${arch}
+		if [ -d "$bin_dir" ];then
+			echo "$bin_dir already installed"
+		else
+			fn=$SW_DL_DIR/kubebuilder-${version}.tar.gz
+			dl $fn \
+				"https://github.com/kubernetes-sigs/kubebuilder/releases/download/v${V}/kubebuilder_${V}_linux_${arch}.tar.gz"
+			tar xzf $fn
+		fi
+		activate $component $bin_dir
+	;;
 	*)
 		cat << EOF
 Switches between installed components

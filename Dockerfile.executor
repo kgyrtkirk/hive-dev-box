@@ -7,12 +7,15 @@ RUN /tools/install_executor.bash
 
 
 COPY tools/install_executor2.bash /tools/
-RUN /tools/install_executor2.bash
+ARG UID=1000
+RUN /tools/install_executor2.bash ${UID}
 
 COPY etc/* /etc/
 COPY bin/* /bin/
 
 WORKDIR /home/jenkins
 USER jenkins
-ENTRYPOINT []
+
+COPY tools/docker_entrypoint.executor /.entrypoint
+ENTRYPOINT ["/.entrypoint"]
 CMD ["bash"]
