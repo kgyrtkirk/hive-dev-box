@@ -22,6 +22,6 @@ export USER=jenkins
 
 EOF
 
-apt-get install -y rsync
+apt-get install -y rsync python
 
 #sw thrift
