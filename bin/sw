@@ -38,10 +38,13 @@ function activate() {
 
 }
 
+IFS=, read -ra components <<< "$1"
+#components="${1}"
+shift
+
+for component in "${components[@]}";do
 
 cd $SW_DIR
-component="${1}"
-shift
 case "$component" in
 	hive-dev)
 		d=/home/dev/hive/packaging/target/apache-hive-*-bin/apache-hive-*-bin/
@@ -228,3 +231,5 @@ EOF
 		exit 1
 	;;
 esac
+
+done
