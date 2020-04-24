@@ -14,6 +14,7 @@ JAR_PATH="`$k logs pod/hiveserver2-0 -c init-custom-jars-localizer| grep CUSTOM_
 
 [ "$JAR_PATH" == "" ] && echo error JAR_PATH && exit 2
 
+JAR_PATH=${JAR_PATH%%.}
 echo $JAR_PATH
 
 set -x
