@@ -76,6 +76,8 @@ chmod 777 -R /data
 # FIXME: fix sdkman
 cat > /etc/profile.d/confs.sh << EOF
 
+export MAVEN_OPTS=-Xmx2g
+
 export HADOOP_CONF_DIR=/etc/hadoop
 export HADOOP_LOG_DIR=/data/log
 export HADOOP_CLASSPATH=/etc/tez/:/active/tez/lib/*:/active/tez/*:/apps/lib/*
@@ -83,7 +85,7 @@ export HIVE_CONF_DIR=/etc/hive/
 
 export JAVA_HOME=/usr/lib/jvm/zulu-8-amd64/
 
-export PATH=$PATH:/active/hive/bin:/active/hadoop/bin:/active/eclipse/:/active/maven/bin/:/active/protobuf/bin:/active/jvisualvm/bin:/active/kubebuilder/bin
+export PATH=$PATH:/active/hive/bin:/active/hadoop/bin:/active/eclipse/:/active/maven/bin/:/active/protobuf/bin:/active/visualvm/bin:/active/kubebuilder/bin:/active/idea/bin
 
 
 EOF
