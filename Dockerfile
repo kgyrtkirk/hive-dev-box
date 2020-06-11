@@ -1,6 +1,6 @@
 FROM debian:buster
 
-COPY tools/build_cleanup /tool/
+COPY tools/build_cleanup /tools/
 
 COPY tools/install_basics /tools/
 RUN /tools/install_basics

@@ -2,7 +2,6 @@
 
 sed -i 's/deb.debian.org/ftp.hu.debian.org/' /etc/apt/sources.list
 
-
 debconf-set-selections <(cat << EOF
 keyboard-configuration	keyboard-configuration/variant	select	English (US)
 EOF
