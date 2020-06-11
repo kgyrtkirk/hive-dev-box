@@ -2,13 +2,13 @@ FROM kgyrtkirk/hive-dev-box:latest
 
 USER root
 
-COPY tools/install_executor.bash /tools/
-RUN /tools/install_executor.bash
+COPY tools/install_executor /tools/
+RUN /tools/install_executor
 
 
-COPY tools/install_executor2.bash /tools/
+COPY tools/install_executor2 /tools/
 ARG UID=1000
-RUN /tools/install_executor2.bash ${UID}
+RUN /tools/install_executor2 ${UID}
 
 COPY etc/* /etc/
 COPY bin/* /bin/

@@ -2,17 +2,17 @@ FROM debian:buster
 
 COPY tools/build_cleanup /tool/
 
-COPY tools/install_basics.bash /tools/
-RUN /tools/install_basics.bash
+COPY tools/install_basics /tools/
+RUN /tools/install_basics
 
-COPY tools/install_java_zulu.bash /tools/
-RUN /tools/install_java_zulu.bash
+COPY tools/install_java_zulu /tools/
+RUN /tools/install_java_zulu
 
-COPY tools/install_toolbox.bash /tools/
-RUN /tools/install_toolbox.bash
+COPY tools/install_toolbox /tools/
+RUN /tools/install_toolbox
 
-COPY tools/i_sort.bash /tools/
-RUN /tools/i_sort.bash
+COPY tools/i_sort /tools/
+RUN /tools/i_sort
 
 COPY etc  /etc
 COPY bin  /bin
