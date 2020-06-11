@@ -17,8 +17,8 @@ RUN /tools/i_sort
 COPY etc  /etc
 COPY bin  /bin
 
-COPY tools/install_conf.bash /tools/
-RUN /tools/install_conf.bash
+COPY tools/install_conf /tools/
+RUN /tools/install_conf
 
 USER dev
 WORKDIR /home/dev
