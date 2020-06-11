@@ -47,7 +47,8 @@ for component in "${components[@]}";do
 cd $SW_DIR
 case "$component" in
 	hive-dev)
-		d=/home/dev/hive/packaging/target/apache-hive-*-bin/apache-hive-*-bin/
+		HIVE_DIR=${1:-/home/dev/hive/}
+		d=$HIVE_DIR/packaging/target/apache-hive-*-bin/apache-hive-*-bin/
 		[ ! -d $d ] && echo "ERROR: expected a directory at: $d" && exit 1
 		activate hive $d
 	;;
