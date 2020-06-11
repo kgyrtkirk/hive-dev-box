@@ -1,0 +1,4 @@
+#!/bin/bash
+
+apt-get clean
+rm -rf /mnt/work/downloads/*

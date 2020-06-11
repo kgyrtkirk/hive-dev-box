@@ -9,7 +9,7 @@ force=0
 
 echo "@ initializing: $type"
 
-DOCKER="sudo docker"
+DOCKER="sudo -E docker"
 function isContainerRunning() {
     [ "`$DOCKER ps -q -f name=$1`" != "" ]
 }
