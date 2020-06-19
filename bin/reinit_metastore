@@ -16,11 +16,13 @@ function isContainerRunning() {
     [ "`$DOCKER ps -q -f name=$1`" != "" ]
 }
 
-if [ "DBNAME" == "" ];then
+if [ "$DBNAME" == "" ];then
 	dbName="ms_`hostname|tr '-' '_'|tr 'A-Z' 'a-z'`"
 else
 	dbName=$DBNAME
 fi
+
+WAIT_FOR_PORT="wait-for-port --timeout=300"
 
 echo "metastore database name: $dbName"
 
@@ -94,8 +96,9 @@ case $type in
             host=$containerName
 EOF
         echo "waiting for mysql to be available..."
-        wait-for-port --timeout=60 --host=$containerName 3306
+        $WAIT_FOR_PORT --host=$containerName 3306
         id
+echo $dbName
         mysql -uroot mysql -f << EOF
             drop database if exists $dbName;
             create database $dbName;
@@ -120,7 +123,7 @@ EOF
         startup_container $containerName $RUN_OPTS
 
         echo "waiting for postgres to be available..."
-        wait-for-port --timeout=60 --host=$containerName 5432
+        $WAIT_FOR_PORT --host=$containerName 5432
 
         # FIXME: PGHOST/PGUSER/PGDATABASE set in _conf
         export PGHOST=$containerName
@@ -150,8 +153,8 @@ EOF
         startup_container $containerName $RUN_OPTS
 
         echo "waiting for oracle to be available..."
-        wait-for-port --timeout=60 --host=$containerName 1521
-        wait-for-port --timeout=60 --host=$containerName 8080
+        $WAIT_FOR_PORT --host=$containerName 1521
+        $WAIT_FOR_PORT --host=$containerName 8080
 
         echo "$DOCKER exec -it $containerName /bin/bash -ic 'sqlplus -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys
         # FIXME it would be better to detect wether stdin is a file or not...
@@ -189,7 +192,7 @@ EOF
         sudo chmod +x /bin/sqlcmd{_SA,_SA0,}
 
         echo "waiting for mssql to be available..."
-        wait-for-port --timeout=60 --host=$containerName 1433
+        $WAIT_FOR_PORT --host=$containerName 1433
 
         installFile /apps/lib https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/7.4.1.jre8/mssql-jdbc-7.4.1.jre8.jar
 	sleep 3
