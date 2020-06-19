@@ -16,8 +16,13 @@ function isContainerRunning() {
     [ "`$DOCKER ps -q -f name=$1`" != "" ]
 }
 
-dbName="ms_`hostname|tr '-' '_'|tr 'A-Z' 'a-z'`"
-echo "metastore databse name: $dbName"
+if [ "DBNAME" == "" ];then
+	dbName="ms_`hostname|tr '-' '_'|tr 'A-Z' 'a-z'`"
+else
+	dbName=$DBNAME
+fi
+
+echo "metastore database name: $dbName"
 
 function installFile() {
     D="$1"
@@ -167,7 +172,7 @@ EOF
         conf set hive/hive-site javax.jdo.option.ConnectionUserName $dbName
         conf set hive/hive-site javax.jdo.option.ConnectionPassword mypassword
 
-        sudo docker cp $containerName:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar /apps/lib
+        $DOCKER cp $containerName:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar /apps/lib
     ;;
     mssql)
         containerName=dev_mssql
@@ -178,16 +183,16 @@ EOF
         RUN_OPTS+=" mcr.microsoft.com/mssql/server:2019-latest"
         startup_container $containerName $RUN_OPTS
 
-	    echo "$DOCKER exec -i $containerName /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'passwordX@ASD' "'$@' | sudo dd of=/bin/sqlcmd_SA0
-    	echo "$DOCKER exec -it $containerName /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'passwordX@ASD' "'$@' | sudo dd of=/bin/sqlcmd_SA
-    	echo "$DOCKER exec -it $containerName /opt/mssql-tools/bin/sqlcmd -S localhost -d $dbName -U hiveuser -P 'mypassword@ASD' "'$@' | sudo dd of=/bin/sqlcmd
-    	sudo chmod +x /bin/sqlcmd{_SA,_SA0,}
+        echo "$DOCKER exec -i $containerName /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'passwordX@ASD' "'$@' | sudo dd of=/bin/sqlcmd_SA0
+        echo "$DOCKER exec -it $containerName /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'passwordX@ASD' "'$@' | sudo dd of=/bin/sqlcmd_SA
+        echo "$DOCKER exec -it $containerName /opt/mssql-tools/bin/sqlcmd -S localhost -d $dbName -U hiveuser -P 'mypassword@ASD' "'$@' | sudo dd of=/bin/sqlcmd
+        sudo chmod +x /bin/sqlcmd{_SA,_SA0,}
 
         echo "waiting for mssql to be available..."
         wait-for-port --timeout=60 --host=$containerName 1433
 
         installFile /apps/lib https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/7.4.1.jre8/mssql-jdbc-7.4.1.jre8.jar
-        
+	sleep 3
         #make sure hiveuser exists...
         sqlcmd_SA0 << EOF
 CREATE LOGIN hiveuser with password='mypassword@ASD';
