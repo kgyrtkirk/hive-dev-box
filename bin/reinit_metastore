@@ -149,7 +149,7 @@ EOF
         containerName=dev_oracle
         # FIXME: consider relaxing restart always
         RUN_OPTS+=" --restart always -d"
-        RUN_OPTS+=" oracleinanutshell/oracle-xe-11g"
+        RUN_OPTS+=" pvargacl/oracle-xe-18.4.0"
         startup_container $containerName $RUN_OPTS
 
         echo "waiting for oracle to be available..."
