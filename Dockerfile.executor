@@ -1,4 +1,4 @@
-FROM hive-dev-box-jdk11:1.0
+FROM kgyrtkirk/hive-dev-box:latest
 
 USER root
 
