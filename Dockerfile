@@ -17,6 +17,9 @@ COPY bin  /bin
 COPY tools/install_conf /tools/
 RUN /tools/install_conf
 
+RUN apt-get install -q -y binutils openjdk-11-jdk-headless
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
+
 USER dev
 WORKDIR /home/dev
 
