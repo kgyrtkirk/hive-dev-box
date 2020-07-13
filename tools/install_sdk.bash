@@ -11,7 +11,8 @@ curl -s "https://get.sdkman.io" | bash
 source "$SDKMAN_DIR/bin/sdkman-init.sh"
 
 #sdk install java 7.0.222-zulu
-sdk install java 8.0.222-zulu
+#sdk install java 8.0.222-zulu
+sdk install java 11.0.7-open
 #sdk install maven 3.6.1
 
 cat > /etc/bashrc.d << EOF
