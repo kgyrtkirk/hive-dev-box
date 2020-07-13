@@ -5,9 +5,6 @@ COPY tools/build_cleanup /tools/
 COPY tools/install_basics /tools/
 RUN /tools/install_basics
 
-COPY tools/install_java_zulu /tools/
-RUN /tools/install_java_zulu
-
 COPY tools/install_toolbox /tools/
 RUN /tools/install_toolbox
 
