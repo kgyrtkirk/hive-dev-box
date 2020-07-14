@@ -20,6 +20,14 @@ RUN /tools/install_conf
 RUN apt-get install -q -y binutils openjdk-11-jdk-headless
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
 
+ENV MAVEN_OPTS=-Xmx2g
+ENV HADOOP_CONF_DIR=/etc/hadoop
+ENV HADOOP_LOG_DIR=/data/log
+ENV HADOOP_CLASSPATH=/etc/tez/:/active/tez/lib/*:/active/tez/*:/apps/lib/*
+ENV HIVE_CONF_DIR=/etc/hive/
+
+ENV PATH "$PATH:/active/hive/bin:/active/hadoop/bin:/active/eclipse/:/active/maven/bin/:/active/protobuf/bin:/active/visualvm/bin:/active/kubebuilder/bin:/active/idea/bin"
+
 USER dev
 WORKDIR /home/dev
 
