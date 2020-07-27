@@ -46,6 +46,9 @@ for component in "${components[@]}";do
 
 cd $SW_DIR
 case "$component" in
+	java)
+		sudo update-java-alternatives --set zulu-$1-amd64
+	;;
 	hive-dev)
 		HIVE_DIR=${1:-/home/dev/hive/}
 		d=$HIVE_DIR/packaging/target/apache-hive-*-bin/apache-hive-*-bin/
