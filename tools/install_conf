@@ -73,7 +73,7 @@ chmod 777 -R /data
 
 # use ssd for docker
 
-sw java 8
+sudo -u dev sw java 8
 
 # FIXME: fix sdkman
 cat > /etc/profile.d/confs.sh << EOF
