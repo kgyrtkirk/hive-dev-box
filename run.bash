@@ -34,6 +34,11 @@ if [ "$DISPLAY" != "" ];then
     fi
 fi
 
+if [ "$SSH_AUTH_SOCK" != "" ];then
+    echo " * enabling SSH_AUTH_SOCK"
+    RUN_OPTS+=" -v $(dirname $SSH_AUTH_SOCK):$(dirname $SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK"
+fi
+
 RUN_OPTS+=" -v `pwd`/settings.xml:/home/dev/.m2/settings.xml"
 RUN_OPTS+=" -v $HOME/.ssh:/home/dev/.ssh"
 RUN_OPTS+=" -v $HOME/.gitconfig:/home/dev/.gitconfig"
