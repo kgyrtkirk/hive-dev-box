@@ -55,6 +55,9 @@ RUN_OPTS+=" -e TERM=$TERM"
 
 NET=hive-dev-box-net
 RUN_OPTS+=" --network $NET"
+#RUN_OPTS+=" --shm-size 2g"
+#RUN_OPTS+=" --security-opt seccomp=unconfined"
+RUN_OPTS+=" --security-opt seccomp=seccomp.json"
 
 BUILD_OPTS+=" -t hive-dev-box"
 BUILD_OPTS+=" -t hive-dev-box:`date +%s`"
