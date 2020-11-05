@@ -52,6 +52,7 @@ cat >> ~dev/.bashrc << EOF
 
 alias grep='grep --color=auto'
 alias Grep=grep
+alias diffstat='diffstat -p0'
 export USER=dev
 
 EOF
