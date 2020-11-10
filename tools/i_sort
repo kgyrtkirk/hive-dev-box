@@ -7,4 +7,6 @@
 #conf set hive/hive-site hive.tez.java.opts -Xmx2g
 # FIXME: scale up mem values?
 
+apt-get install -y patchutils
+
 /tools/build_cleanup
