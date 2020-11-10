@@ -1,0 +1,24 @@
+#!/bin/bash -e
+
+set -x
+d="`date +%Y%m%d%H%M%S`"
+
+push="echo NOT pushing"
+if [ "$1" == "push" ]; then
+	push="docker push"
+fi
+
+function build() {
+	n="$1"
+	shift
+	docker build -t kgyrtkirk/hive-dev-box:${n} \
+		      -t kgyrtkirk/hive-dev-box:${n}-$d	"$@"
+
+	$push kgyrtkirk/hive-dev-box:${n}
+	$push kgyrtkirk/hive-dev-box:${n}-$d
+}
+
+build latest		-f Dockerfile .
+build executor		-f Dockerfile.executor .
+build executor-1001	-f Dockerfile.executor --build-arg UID=1001 .
+
