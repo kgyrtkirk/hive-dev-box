@@ -62,7 +62,7 @@ RUN_OPTS+=" --security-opt seccomp=seccomp.json"
 BUILD_OPTS+=" -t hive-dev-box"
 BUILD_OPTS+=" -t hive-dev-box:`date +%s`"
 
-docker pull debian:buster
+#docker pull debian:buster
 docker build $BUILD_OPTS .
 docker network create $NET || true
 docker run          \
