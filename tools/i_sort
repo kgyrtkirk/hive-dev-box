@@ -7,6 +7,6 @@
 #conf set hive/hive-site hive.tez.java.opts -Xmx2g
 # FIXME: scale up mem values?
 
-apt-get install -y patchutils
+apt-get install -y patchutils python-networkx
 
 /tools/build_cleanup
