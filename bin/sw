@@ -74,6 +74,7 @@ case "$component" in
 		sw2 $component "$@"
 	;;
 	eclipse)
+		#version=${1:-2020-09}
 		version=${1:-2019-06}
 		state=${2:-R}
 		type=${3:-java}
@@ -85,6 +86,7 @@ case "$component" in
 			#http://mirrors.uniri.hr/eclipse//technology/epp/downloads/release/2019-03/R/eclipse-java-2019-03-R-linux-gtk-x86_64.tar.gz
 			path=eclipse//technology/epp/downloads/release/${version}/${state}/eclipse-${type}-${version}-${state}-linux-gtk-x86_64.tar.gz
 			dl $fn \
+				https://mirror.dkm.cz/${path} \
 				http://eclipse.mirror.garr.it/mirrors/${path}	\
 				http://mirrors.uniri.hr/${path}
 			rm -rf _eclipse_unpack
