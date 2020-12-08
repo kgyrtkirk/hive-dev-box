@@ -1,0 +1,10 @@
+#!/bin/bash -e
+
+
+apt-get install -y patchutils python-networkx
+
+echo 'deb-src http://ftp.hu.debian.org/debian buster main' > /etc/apt/sources.list.d/srcs.list
+apt-get update
+apt-get install -y dpkg-dev
+
+/tools/build_cleanup

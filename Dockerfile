@@ -11,6 +11,9 @@ RUN /tools/install_java_zulu
 COPY tools/install_toolbox /tools/
 RUN /tools/install_toolbox
 
+COPY tools/install_xmlstarlet /tools/
+RUN /tools/install_xmlstarlet
+
 COPY tools/i_sort /tools/
 RUN /tools/i_sort
 
