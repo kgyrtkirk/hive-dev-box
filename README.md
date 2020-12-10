@@ -4,6 +4,34 @@
 
 To make some easily accessible environment to run and develop Hive.
 
+## How could this project be used
+
+### containerized development platform
+
+Isolates work on different branches/etc by leveraging container isolation
+X11 apps could still run like "normal" application (I tend to multiple eclipse instances for every patch I'm actually working)
+
+Full isolation makes it easier to customize everything toward the goal...all ports can be binded/etc.
+
+You may also run hive inside...
+
+### test executor
+
+There is a prebacked image which contains some build tools in the image itself - that image is used at ci.hive.apache.org to run tests
+
+### bazaar
+
+Ability to run some version of hive as a standalone container;
+
+Lets launch a hive with:
+```
+docker run --rm -d -p 10000:10000 -v hive-dev-box_work:/work kgyrtkirk/hive-dev-box:bazaar
+```
+the above will initialize the metastore and launch a nodemanger/resourcemanager and hive as separate processes inside the container (in a screen session)
+
+* you may choose different versions by setting: HIVE_VERSION, TEZ_VERSION or HADOOP_VERSION
+* add `-v hive-dev-box_data:/data` to enable persistent metastore/warehouse
+
 ### Testability aspect
 
 There are sometimes bugreports agains earlier releases; but testing these out sometimes is problematic - running/switching between versions is kinda problematic. I was using some vagrant based box which was usefull doing this...

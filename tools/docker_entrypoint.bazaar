@@ -1,0 +1,32 @@
+#!/bin/bash --login
+
+set -e
+
+echo " * installing some basic stuff..."
+
+function safe_sw() {
+  if [ -e "/active/$1" ];then
+    echo " * $1 is already present"
+  else
+    /bin/sw "$@"
+  fi
+}
+
+safe_sw tez    ${TEZ_VERSION:-0.9.1}
+safe_sw hadoop ${HADOOP_VERSION:-3.1.2}
+safe_sw hive   ${HIVE_VERSION:-3.1.2}
+
+hive_launch -d -I
+
+cat /etc/motd
+
+echo "@@@ you may access the processes running via 'screen -r -x'"
+
+if [ -t 0 ];then
+    export USER=`whoami`
+    exec bash --login
+else
+    echo "non-interactive shell detected; waiting for the end of the world... "
+    while :; do sleep 60;done
+fi
+

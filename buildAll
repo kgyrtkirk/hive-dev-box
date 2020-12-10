@@ -21,4 +21,5 @@ function build() {
 build latest		-f Dockerfile .
 build executor		-f Dockerfile.executor .
 build executor-1001	-f Dockerfile.executor --build-arg UID=1001 .
+build bazaar		-f Dockerfile.bazaar .
 

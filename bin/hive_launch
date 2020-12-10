@@ -1,6 +1,28 @@
 #!/bin/bash
 
 set -e
+
+for i in "$@";do
+	case "$i" in
+		-d|--detached)
+			SCREEN_OPTS+=" -dm "
+		;;
+		-I|--init-default-metastore)
+			D=/data/hive/metastore_db
+			if [ ! -d "$D" ]; then
+				echo "@@@ init metastore"
+				reinit_metastore
+			else
+				echo "@@@ metastore already inited at $D"
+			fi
+		;;
+		*)
+			echo "!!! unknown option $i" >&2 && exit 1
+		;;
+	esac
+done
+
+
 wait_port close 8040
 wait_port close 8042
 wait_port close 8030
@@ -15,4 +37,4 @@ screen -t HS2  3        spawn_shell_after hs2_debug
 screen -t BL   4        spawn_shell_after safe_bl
 EOF
 
-screen -c /tmp/screenrc1
+screen $SCREEN_OPTS -c /tmp/screenrc1
