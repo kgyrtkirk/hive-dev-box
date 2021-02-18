@@ -22,6 +22,8 @@ if [ "$DISPLAY" != "" ];then
     fi
 fi
 
+#export HIVE_TEST_DOCKER_HOST=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.Gateway}}{{end}}' `hostname`)
+
 isContainerRunning "$1" || docker start "$1"
 
 docker exec -it "$1" /bin/bash -login

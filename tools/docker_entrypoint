@@ -30,6 +30,7 @@ safe_sw protobuf
 #echo "exitcode: $?"
 
 cat /etc/motd
+
 if [ -t 0 ];then
     export USER=`whoami`
     exec bash --login

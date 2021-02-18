@@ -8,6 +8,12 @@
 # FIXME: scale up mem values?
 
 cd tmp
+apt-get install -y dnsutils
+
+cat >> ~dev/.bashrc << EOF
+export HIVE_TEST_DOCKER_HOST="\`ip r | grep '^default'|cut -d ' ' -f 3\`"
+EOF
+
 apt-get source xmlstarlet
 apt-get install -y debhelper dh-autoreconf autotools-dev libxml2-dev libxslt1-dev automake xsltproc gawk docbook-xsl-ns fop ghostscript
 
