@@ -6,16 +6,27 @@ d="`date +%Y%m%d%H%M%S`"
 push="echo NOT pushing"
 if [ "$1" == "push" ]; then
 	push="docker push"
+	shift
+fi
+
+
+baseName=kgyrtkirk/hive-dev-box
+altName=kgyrtkirk/hive-dev-box
+if [ "$1" != "" ]; then
+	altName="$1"
+	shift
 fi
 
 function build() {
 	n="$1"
 	shift
-	docker build -t kgyrtkirk/hive-dev-box:${n} \
-		      -t kgyrtkirk/hive-dev-box:${n}-$d	"$@"
+	docker build -t  $baseName:${n} \
+		      -t $baseName:${n}-$d	"$@"
+	docker tag $baseName:${n} $altName:${n}
+	docker tag $baseName:${n} $altName:${n}-$d
 
-	$push kgyrtkirk/hive-dev-box:${n}
-	$push kgyrtkirk/hive-dev-box:${n}-$d
+	$push $altName:${n}
+	$push $altName:${n}-$d
 }
 
 build latest		-f Dockerfile .
