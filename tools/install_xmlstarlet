@@ -1,10 +1,72 @@
 #!/bin/bash -e
 
-
-apt-get install -y patchutils python-networkx
+cd tmp
 
 echo 'deb-src http://ftp.hu.debian.org/debian buster main' > /etc/apt/sources.list.d/srcs.list
 apt-get update
 apt-get install -y dpkg-dev
+
+apt-get source xmlstarlet
+apt-get install -y debhelper dh-autoreconf autotools-dev libxml2-dev libxslt1-dev automake xsltproc gawk docbook-xsl-ns fop ghostscript
+
+cd xmlstarlet-1.6.1
+
+patch -p1 << EOF
+diff --git a/debian/patches/series b/debian/patches/series
+index d727d16..97bc5f9 100644
+--- a/debian/patches/series
++++ b/debian/patches/series
+@@ -4,3 +4,4 @@
+ 70-remove-link-usr-lib.patch
+ 80-fix-unesc-dquot.patch
+ 90-fix-upstream-version.patch
++xml_parse_huge
+diff --git a/debian/patches/xml_parse_huge b/debian/patches/xml_parse_huge
+new file mode 100644
+index 0000000..b0c7dcb
+--- /dev/null
++++ b/debian/patches/xml_parse_huge
+@@ -0,0 +1,21 @@
++Description: <short summary of the patch>
++Author: Zoltan Haindrich <kirk@rxd.hu>
++Bug-Debian: https://bugs.debian.org/722870
++Bug-Debian: https://bugs.debian.org/837122
++Bug-Debian: https://bugs.debian.org/850842
++
++---
++Bug: <url in upstream bugtracker>
++Forwarded: <no|not-needed|url proving that it has been forwarded>
++Last-Update: 2020-12-08
++
++--- xmlstarlet-1.6.1.orig/src/xml_edit.c
+++++ xmlstarlet-1.6.1/src/xml_edit.c
++@@ -550,6 +550,7 @@ edOutput(const char* filename, const Xml
++         (g_ops->preserveFormat? 0 : XML_SAVE_FORMAT) |
++         (g_ops->omit_decl? XML_SAVE_NO_DECL : 0);
++     int read_options =
+++       XML_PARSE_HUGE |
++         (g_ops->nonet? XML_PARSE_NONET : 0);
++     xmlSaveCtxtPtr save;
++ 
+diff --git a/src/xml_edit.c b/src/xml_edit.c
+index a9b2b33..8239cdc 100644
+--- a/src/xml_edit.c
++++ b/src/xml_edit.c
+@@ -550,6 +550,7 @@ edOutput(const char* filename, const XmlEdAction* ops, int ops_count,
+         (g_ops->preserveFormat? 0 : XML_SAVE_FORMAT) |
+         (g_ops->omit_decl? XML_SAVE_NO_DECL : 0);
+     int read_options =
++       XML_PARSE_HUGE |
+         (g_ops->nonet? XML_PARSE_NONET : 0);
+     xmlSaveCtxtPtr save;
+ 
+EOF
+
+dpkg-buildpackage
+cd ..
+dpkg -i xmlstarlet_1.6.1-2_amd64.deb
+rm -rf xmlstarlet*
+
+
 
 /tools/build_cleanup
