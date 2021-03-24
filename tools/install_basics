@@ -20,7 +20,7 @@ apt-get install -y \
         xbase-clients libgtk3.0 software-properties-common \
         docker.io locales time git-review jq firefox-esr diffstat unzip zip graphviz \
         mariadb-client postgresql-client  kdiff3 golang bash-completion \
-        default-mysql-client python libxml2-utils rsync lnav xmlstarlet jq colordiff xclip sudo wget vim tree pastebinit
+        default-mysql-client python libxml2-utils rsync lnav xmlstarlet jq colordiff xclip sudo wget vim tree pastebinit patchutils python-networkx
 
 groupadd -f -g 1000 dev
 useradd -m -o -u 1000 -g 1000 -d /home/dev -s /bin/bash dev
