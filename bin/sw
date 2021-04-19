@@ -195,7 +195,7 @@ case "$component" in
 			echo "$bin_dir already installed"
 		else
 			echo " * installing thrift compiler $V"
-			sudo apt-get install -y autoconf make automake flex bison gcc  g++ libtool pkg-config #checkinstall
+			sudo apt-get install -y autoconf make automake flex bison gcc  g++ libtool pkg-config #checkinstall #python3-setuptools
 			build_dir="$SW_DL_DIR/build_thrift_$V"
 			rm -rf "$build_dir"
 			mkdir -p "$build_dir"
@@ -204,7 +204,7 @@ case "$component" in
 			tar xzf ${V}.tar.gz && rm ${V}.tar.gz
 			cd thrift-${V}
 			./bootstrap.sh
-			./configure --prefix=$bin_dir
+			./configure --prefix=$bin_dir --without-py3 --without-python
 			make
 			ln -s compiler/cpp/ bin
 			ln -s contrib share

@@ -17,10 +17,10 @@ cat >> ~dev/.bashrc << EOF
 export HIVE_TEST_DOCKER_HOST="\`ip r | grep '^default'|cut -d ' ' -f 3\`"
 
 if [ "$DISPLAY" != "" ]; then
-  export WID=`xprop -root _NET_ACTIVE_WINDOW|cut -d ' ' -f5`
+  export WID=\`xprop -root _NET_ACTIVE_WINDOW|cut -d ' ' -f5\`
 fi
 
-function urgent() { wmctrl -i -r $WID   -b add,demands_attention; backburner $HOSTNAME;}
+function urgent() { wmctrl -i -r \$WID   -b add,demands_attention; backburner \$HOSTNAME;}
 
 EOF
 

@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+#buildAll push docker-sandbox.infra.cloudera.com/hive/hive-dev-box
+
+
 set -x
 d="`date +%Y%m%d%H%M%S`"
 
