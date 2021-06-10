@@ -68,6 +68,9 @@ conf set hive/hive-site hive.query.results.cache.enabled false
 #conf set hive/hive-site hive.metastore.rawstore.impl org.apache.hadoop.hive.metastore.cache.CachedStore
 #conf set hive/metastore metastore.rawstore.impl org.apache.hadoop.hive.metastore.cache.CachedStore
 
+conf set hive/hivemetastore-site metastore.housekeeping.threads.on true
+
+
 mkdir -p /data/hive /data/log /apps/lib /apps/tez /work /active ~dev/.m2 ~dev/.config
 chown dev /data{,/hive,/log} /apps/lib /apps/tez /work /active /apps ~dev/.m2 ~dev/.config
 chmod 777 -R /data
