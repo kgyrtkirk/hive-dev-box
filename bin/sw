@@ -121,6 +121,25 @@ case "$component" in
 		fi
 		activate $component $bin_dir/current
 	;;
+	mat)
+		version=1.12.0
+		echo "@@ only 1.12.0"
+		bin_dir=$SW_DIR/mat-$version
+		if [ -d "$bin_dir" ];then
+			echo "$bin_dir already installed"
+		else
+			fn=$SW_DL_DIR/ideaIC-${version}.tar.gz
+			dl $fn \
+				https://rhlx01.hs-esslingen.de/pub/Mirrors/eclipse/mat/1.12.0/rcp/MemoryAnalyzer-1.12.0.20210602-linux.gtk.x86_64.zip
+			tmp=${bin_dir}.tmp
+			rm -rf "$tmp"
+			mkdir "$tmp"
+			unzip -d "$tmp" "$fn"
+			#( cd $tmp; ln -s * current)
+			mv "$tmp" "$bin_dir"
+		fi
+		activate $component $bin_dir/mat
+	;;
 	visualvm)
 		version=${1:-1.4.4}
 		v1=${version//./}
