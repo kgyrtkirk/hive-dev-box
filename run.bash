@@ -59,15 +59,31 @@ RUN_OPTS+=" --shm-size 2g"
 #RUN_OPTS+=" --security-opt seccomp=unconfined"
 RUN_OPTS+=" --security-opt seccomp=seccomp.json"
 
-BUILD_OPTS+=" -t hive-dev-box"
-BUILD_OPTS+=" -t hive-dev-box:`date +%s`"
 
+HDB_TYPE=${HDB_TYPE:-hive}
+IMG_NAME=${HDB_TYPE}-dev-box
+
+case "${HDB_TYPE}" in
+	hive)
+		;;
+	impala)
+			BUILD_OPTS+=" -f Dockerfile.$HDB_TYPE"
+			RUN_OPTS+=" --privileged"
+		;;
+	*)
+		echo "invalid type $HDB_TYPE"
+		exit 1;
+	;;
+esac
+
+BUILD_OPTS+=" -t $IMG_NAME"
+BUILD_OPTS+=" -t $IMG_NAME:`date +%s`"
 #docker pull debian:buster
 docker build $BUILD_OPTS .
 docker network create $NET || true
 docker run          \
     $RUN_OPTS       \
     "$@"            \
-    hive-dev-box    \
+    $IMG_NAME       \
     /bin/bash
 

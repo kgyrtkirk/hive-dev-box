@@ -11,3 +11,4 @@ fi
 
 git clean -dfx
 rm -rf ~/.m2/repository/
+rm ~/ws_*/.metadata/.plugins/org.eclipse.jdt.core/*.index

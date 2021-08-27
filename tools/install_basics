@@ -3,7 +3,27 @@
 sed -i 's/deb.debian.org/ftp.hu.debian.org/' /etc/apt/sources.list
 
 debconf-set-selections <(cat << EOF
+keyboard-configuration	keyboard-configuration/altgr	select	The default for the keyboard layout
+keyboard-configuration	keyboard-configuration/unsupported_layout	boolean	true
+keyboard-configuration	keyboard-configuration/compose	select	No compose key
+keyboard-configuration	keyboard-configuration/unsupported_config_options	boolean	true
+keyboard-configuration	keyboard-configuration/model	select	Generic 105-key PC (intl.)
+keyboard-configuration	keyboard-configuration/toggle	select	No toggling
+keyboard-configuration	keyboard-configuration/xkb-keymap	select	
+keyboard-configuration	keyboard-configuration/ctrl_alt_bksp	boolean	false
+keyboard-configuration	keyboard-configuration/store_defaults_in_debconf_db	boolean	true
+keyboard-configuration	keyboard-configuration/unsupported_config_layout	boolean	true
+keyboard-configuration	keyboard-configuration/layoutcode	string	us
 keyboard-configuration	keyboard-configuration/variant	select	English (US)
+keyboard-configuration	console-setup/detect	detect-keyboard	
+keyboard-configuration	keyboard-configuration/switch	select	No temporary switch
+keyboard-configuration	keyboard-configuration/layout	select	English (US)
+keyboard-configuration	console-setup/ask_detect	boolean	false
+keyboard-configuration	keyboard-configuration/variantcode	string	
+keyboard-configuration	keyboard-configuration/modelcode	string	pc105
+keyboard-configuration	keyboard-configuration/unsupported_options	boolean	true
+keyboard-configuration	keyboard-configuration/optionscode	string	
+keyboard-configuration	console-setup/detected	note	
 EOF
 )
 
@@ -14,12 +34,12 @@ apt-get install -y \
         screen psmisc netcat psmisc nano screen sysvbanner \
         make gcc g++ \
         locales time git-review jq diffstat unzip zip docker.io \
-        firefox-esr graphviz \
-        mariadb-client postgresql-client kdiff3 \
+        graphviz \
+        postgresql-client kdiff3 \
         default-mysql-client \
         xbase-clients libgtk3.0 software-properties-common \
-        docker.io locales time git-review jq firefox-esr diffstat unzip zip graphviz \
-        mariadb-client postgresql-client  kdiff3 golang bash-completion \
+        docker.io locales time git-review jq diffstat unzip zip graphviz \
+        postgresql-client  kdiff3 golang bash-completion \
         default-mysql-client python libxml2-utils rsync lnav xmlstarlet jq colordiff xclip sudo wget vim tree pastebinit patchutils python-networkx
 
 groupadd -f -g 1000 dev

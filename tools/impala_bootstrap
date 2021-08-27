@@ -1,0 +1,15 @@
+#!/bin/bash
+set -e
+
+git clone --depth=1 https://github.com/apache/impala
+#https://gitbox.apache.org/repos/asf/impala.git
+
+cd impala
+
+export IMPALA_HOME=`pwd`
+sudo mkdir /usr/local/apache-maven-3.5.4
+echo > bin/jenkins/populate_m2_directory.py
+./bin/bootstrap_system.sh
+
+cd ..
+rm -r impala
