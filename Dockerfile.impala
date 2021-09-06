@@ -26,8 +26,8 @@ COPY bin  /bin
 COPY tools/install_conf /tools/
 RUN /tools/install_conf
 
-#COPY tools/install_x2go /tools/
-#RUN /tools/install_x2go
+COPY tools/install_x2go /tools/
+RUN /tools/install_x2go
 
 USER dev
 WORKDIR /home/dev
@@ -41,6 +41,6 @@ RUN /tools/impala_bootstrap
 
 ENV IMPALA_TOOLCHAIN /work/toolchain.impala
 
-COPY tools/docker_entrypoint /.entrypoint
+COPY tools/entrypoint.impala /.entrypoint
 ENTRYPOINT ["/.entrypoint"]
 

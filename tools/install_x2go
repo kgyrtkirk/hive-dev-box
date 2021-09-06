@@ -1,0 +1,7 @@
+#!/bin/bash -e
+
+apt-get update
+apt-get install -y x2goserver{,-xsession} xfce4
+apt-get upgrade -y
+
+/tools/build_cleanup

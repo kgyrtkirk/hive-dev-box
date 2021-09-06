@@ -1,0 +1,41 @@
+#!/bin/bash --login
+
+set -e
+
+#first_run_wizard
+
+echo " * installing some basic stuff..."
+
+sudo cp -rsf /hive-dev-box/etc/* /etc/ || true # old coreutils
+sudo cp -rsf /hive-dev-box/bin/* /bin/ || true
+
+function safe_sw() {
+  if [ -e "/active/$1" ];then
+    echo " * $1 is already present"
+  else
+    /bin/sw "$@"
+  fi
+}
+
+safe_sw tez    0.9.1
+safe_sw hadoop 3.1.2
+safe_sw eclipse
+safe_sw hive   3.1.2
+safe_sw maven  3.6.1
+safe_sw protobuf
+
+[ -d /toolbox/build/distributions ] && sudo dpkg -i /toolbox/build/distributions/*.deb
+
+#reinit_metastore > /dev/null 2>&1
+#echo "exitcode: $?"
+
+cat /etc/motd
+
+if [ -t 0 ];then
+    export USER=`whoami`
+    exec bash --login
+else
+    echo "non-interactive shell detected; waiting for the end of the world... "
+    while :; do sleep 60;done
+fi
+
