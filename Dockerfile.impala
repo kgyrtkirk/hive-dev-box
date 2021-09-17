@@ -39,6 +39,9 @@ ENV LC_ALL en_US.UTF-8
 COPY tools/impala_bootstrap /tools/
 RUN /tools/impala_bootstrap
 
+COPY tools/iii /tools/
+RUN /tools/iii
+
 ENV IMPALA_TOOLCHAIN /work/toolchain.impala
 
 COPY tools/entrypoint.impala /.entrypoint

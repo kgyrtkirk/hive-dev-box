@@ -23,6 +23,9 @@ COPY bin  /bin
 COPY tools/install_conf /tools/
 RUN /tools/install_conf
 
+COPY tools/iii /tools/
+RUN /tools/iii
+
 USER dev
 WORKDIR /home/dev
 
