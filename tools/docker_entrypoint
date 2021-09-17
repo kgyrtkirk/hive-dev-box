@@ -29,6 +29,8 @@ safe_sw protobuf
 #reinit_metastore > /dev/null 2>&1
 #echo "exitcode: $?"
 
+sudo /etc/init.d/ssh start
+
 cat /etc/motd
 
 if [ -t 0 ];then

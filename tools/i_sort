@@ -11,7 +11,7 @@ addgroup --gid 999 docker_access
 adduser dev docker_access
 
 cd tmp
-apt-get install -y dnsutils wmctrl
+apt-get install -y dnsutils wmctrl firefox-esr
 
 cat >> ~dev/.bashrc << EOF
 export HIVE_TEST_DOCKER_HOST="\`ip r | grep '^default'|cut -d ' ' -f 3\`"

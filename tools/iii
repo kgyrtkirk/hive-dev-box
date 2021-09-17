@@ -1,53 +1,16 @@
 #!/bin/bash
 set -e
 
-
-
-ls /usr/bin/pyth*
-update-alternatives --install /usr/bin/python python /usr/bin/python3 2
-update-alternatives --install /usr/bin/python python /usr/bin/python2 1
-#update-alternatives --config python
-
-python --version
-
-curl -s https://packagecloud.io/install/repositories/segment/aws-okta/script.deb.sh | sudo bash
-sed -i 's/buster/stretch/' /etc/apt/sources.list.d/segment_aws-okta.list
-sudo apt-get update
-sudo apt-get install -y aws-okta
-
-sudo apt-get install -y proxychains4 virtualenv python3-pip
-
-pip3 install cdpcli
-
-
-cd /tmp/
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-sudo ./aws/install
-
-rm awscliv2.zip
-rm -rf aws
+sudo apt-get install -y proxychains4
 
 cat << EOF | sudo dd of=/etc/proxychains4.conf
 strict_chain
-
-
-
 proxy_dns
-
 remote_dns_subnet 224
-
 tcp_read_time_out 15000
 tcp_connect_time_out 8000
-
-
-
-
-
-
 [ProxyList]
 socks5 172.18.0.1 1080
 EOF
-
 
 /tools/build_cleanup

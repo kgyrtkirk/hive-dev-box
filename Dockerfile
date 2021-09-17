@@ -17,14 +17,21 @@ RUN /tools/install_toolbox
 COPY tools/i_sort /tools/
 RUN /tools/i_sort
 
+COPY tools/cdpcli /tools/
+RUN /tools/cdpcli
+
 COPY etc  /etc
 COPY bin  /bin
+
+COPY tools/iii /tools/
+RUN /tools/iii
 
 COPY tools/install_conf /tools/
 RUN /tools/install_conf
 
-COPY tools/iii /tools/
-RUN /tools/iii
+COPY tools/install_x2go /tools/
+RUN /tools/install_x2go
+
 
 USER dev
 WORKDIR /home/dev
