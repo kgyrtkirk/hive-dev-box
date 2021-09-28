@@ -149,7 +149,7 @@ EOF
         containerName=dev_oracle
         # FIXME: consider relaxing restart always
         RUN_OPTS+=" --restart always -d"
-        RUN_OPTS+=" pvargacl/oracle-xe-18.4.0"
+        RUN_OPTS+=" quay.io/maksymbilenko/oracle-12c"
         startup_container $containerName $RUN_OPTS
 
         echo "waiting for oracle to be available..."
@@ -168,6 +168,7 @@ EOF
 	CREATE USER $dbName IDENTIFIED BY mypassword;
 	GRANT SELECT_CATALOG_ROLE TO $dbName;
 	GRANT CONNECT, RESOURCE TO $dbName;
+	GRANT UNLIMITED TABLESPACE TO $dbName;
 	QUIT;
 EOF
         conf set hive/hive-site javax.jdo.option.ConnectionDriverName oracle.jdbc.OracleDriver
@@ -175,7 +176,8 @@ EOF
         conf set hive/hive-site javax.jdo.option.ConnectionUserName $dbName
         conf set hive/hive-site javax.jdo.option.ConnectionPassword mypassword
 
-        $DOCKER cp $containerName:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar /apps/lib
+        #$DOCKER cp $containerName:/u01/app/oracle/product/11.2.0/xe/jdbc/lib/ojdbc6.jar /apps/lib
+        $DOCKER cp $containerName:/u01/app/oracle-product/12.2.0/SE/dmu/jlib/ojdbc6.jar /apps/lib
     ;;
     mssql)
         containerName=dev_mssql
