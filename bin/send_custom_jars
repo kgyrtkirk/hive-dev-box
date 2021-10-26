@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+
+J=$HOME/h.tar.gz
+K=${K:-~/.kube/config}
+
+[ "$NS" == "" ] && echo "NS not set!" && exit 1
+[ ! -s "$K" ] && echo "K=$K is not set correctly !" && exit 1
+
+set -x
+
+#cd packaging/target/apache-hive-3.1.3000.7.2.3.0-181-bin/apache-hive-3.1.3000.7.2.3.0-181-bin/lib
+cd packaging/target/apache-hive-*-bin/apache-hive-*-bin/lib
+
+tar czf $J hive*jar
+
+deploy_custom_jars $K $NS $J
+
