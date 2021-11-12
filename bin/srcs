@@ -54,7 +54,7 @@ echo " * updating refs ($refs)"
 echo " * interpreting: $dsl"
 . $dsl
 
-git fetch --all
+git fetch -j10 --all
 
 # go to home dir
 cd
@@ -70,6 +70,6 @@ fi
 echo " * interpreting: $dsl"
 . $dsl
 
-git fetch --all
+git fetch -j10 --all
 
 banner ok
