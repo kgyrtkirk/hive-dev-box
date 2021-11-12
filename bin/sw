@@ -169,6 +169,20 @@ case "$component" in
 		fi
 		activate $component $bin_dir
 	;;
+	mvnd)
+		version=${1:-0.7.0}
+		bin_dir=$SW_DIR/mvnd-${version}-linux-amd64
+		if [ -d "$bin_dir" ];then
+			echo "$bin_dir already installed"
+		else
+			fn=$SW_DL_DIR/mvnd-${version}.zip
+			dl $fn \
+				https://github.com/mvndaemon/mvnd/releases/download/${version}/mvnd-${version}-linux-amd64.zip
+			unzip $fn
+		fi
+		activate $component $bin_dir
+		echo "PATH+=:/active/mvnd/bin" | sudo tee /etc/profile.d/mvnd.sh
+	;;
 	derby)
 		version=${1:-10.14.2.0}
 		bin_dir=$SW_DIR/db-derby-${version}-bin

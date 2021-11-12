@@ -6,6 +6,10 @@ C2="`git config --local --get extra.usermavenopts`"
 echo "@@@ $C $C2" >&2
 
 MVN="/active/maven/bin/mvn"
+if [ -x /active/mvnd/bin/mvnd ];then
+  echo "@@@ using mvnd"
+  MVN=/active/mvnd/bin/mvnd
+fi
 
 $MVN $C $C2 "$@"
 exit $?
