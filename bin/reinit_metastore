@@ -119,7 +119,7 @@ EOF
         containerName=dev_postgres
         RUN_OPTS+=" -e POSTGRES_PASSWORD=mypassword"
         RUN_OPTS+=" --restart always -d"
-        RUN_OPTS+=" postgres"
+        RUN_OPTS+=" postgres:buster"
         startup_container $containerName $RUN_OPTS
 
         echo "waiting for postgres to be available..."
