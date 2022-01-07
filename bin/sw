@@ -104,7 +104,7 @@ case "$component" in
 		activate $component $bin_dir
 	;;
 	idea)
-		version=${1:-2021.2.3}
+		version=${1:-2021.3.1}
 		bin_dir=$SW_DIR/ideaIC-$version
 		if [ -d "$bin_dir" ];then
 			echo "$bin_dir already installed"
