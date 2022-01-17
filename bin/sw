@@ -223,35 +223,25 @@ case "$component" in
 	thrift)
 		V=${1:-0.9.3}
 		bin_dir=/work/thrift-${V}
-		sudo apt-get install -y autoconf make automake flex bison gcc  g++ libtool pkg-config libboost1.67-dev libssl-dev #checkinstall
+		sudo apt-get install -y autoconf make automake flex bison gcc  g++ libtool pkg-config #checkinstall
 		if [ -d "$bin_dir" ];then
 			echo "$bin_dir already installed"
 		else
 			echo " * installing thrift compiler $V"
 			sudo apt-get install -y autoconf make automake flex bison gcc  g++ libtool pkg-config #checkinstall #python3-setuptools
 			build_dir="$SW_DL_DIR/build_thrift_$V"
-			install_dir="$SW_DL_DIR/install_thrift_$V"
-			rm -rf "$build_dir" "$install_dir"
+			rm -rf "$build_dir"
 			mkdir -p "$build_dir"
 			cd "$build_dir"
 			wget -nv  https://github.com/apache/thrift/archive/${V}.tar.gz
 			tar xzf ${V}.tar.gz && rm ${V}.tar.gz
 			cd thrift-${V}
 			./bootstrap.sh
-			./configure --prefix=$install_dir --without-py3 --without-python  --without-qt5 --without-erlang \
-				--without-nodejs --without-nodets --without-lua --without-python --without-perl \
-				--without-php --without-php_extension --without-dart --without-ruby --without-haskell --without-go --without-swift --without-rs \
-				--without-cl --without-haxe --without-netstd --without-d --with-cpp --with-java
+			./configure --prefix=$bin_dir --without-py3 --without-python  --without-qt5 --without-java --without-erlang --without-nodejs --without-nodets --without-lua --without-python --without-perl --without-php --without-php_extension --without-dart --without-ruby --without-haskell --without-go --without-swift --without-rs --without-cl --without-haxe --without-netstd --without-d
 			make
-			make install
-			cd contrib/fb303
-			./bootstrap.sh
-			./configure --prefix=$install_dir
-			make
-			make install
 			ln -s compiler/cpp/ bin
 			ln -s contrib share
-			mv "$install_dir/thrift-${V}" "$bin_dir"
+			mv "$build_dir/thrift-${V}" "$bin_dir"
 		fi
 		activate $component $bin_dir
 	;;
