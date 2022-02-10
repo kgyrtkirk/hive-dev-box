@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-sed -i 's/deb.debian.org/ftp.hu.debian.org/' /etc/apt/sources.list
+sed -i 's/deb.debian.org/ftp.bme.hu/' /etc/apt/sources.list
 
 debconf-set-selections <(cat << EOF
 keyboard-configuration	keyboard-configuration/altgr	select	The default for the keyboard layout

@@ -2,7 +2,7 @@
 
 cd tmp
 
-echo 'deb-src http://ftp.hu.debian.org/debian buster main' > /etc/apt/sources.list.d/srcs.list
+echo 'deb-src http://ftp.bme.hu/debian buster main' > /etc/apt/sources.list.d/srcs.list
 apt-get update
 apt-get install -y dpkg-dev
 
