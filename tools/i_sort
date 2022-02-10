@@ -7,16 +7,18 @@
 #conf set hive/hive-site hive.tez.java.opts -Xmx2g
 # FIXME: scale up mem values?
 
-addgroup --gid 999 docker_access
-adduser dev docker_access
+#addgroup --gid 999 docker_access
+#adduser dev docker_access
 
 cd tmp
-apt-get install -y dnsutils wmctrl firefox-esr
+#apt-get install -y dnsutils wmctrl firefox-esr
 
 cat >> ~dev/.bashrc << EOF
 export HIVE_TEST_DOCKER_HOST="\`ip r | grep '^default'|cut -d ' ' -f 3\`"
 
-if [ "$DISPLAY" != "" ]; then
+[ -d /hive-dev-box/ ] && . /hive-dev-box/bashrc
+
+if [ "\$DISPLAY" != "" ]; then
   export WID=\`xprop -root _NET_ACTIVE_WINDOW|cut -d ' ' -f5\`
 fi
 

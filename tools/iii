@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-sudo apt-get install -y proxychains4
+#sudo apt-get install -y proxychains4
 
 cat << EOF | sudo dd of=/etc/proxychains4.conf
 strict_chain

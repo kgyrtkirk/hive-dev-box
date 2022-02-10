@@ -32,7 +32,6 @@ RUN /tools/install_conf
 COPY tools/install_x2go /tools/
 RUN /tools/install_x2go
 
-
 USER dev
 WORKDIR /home/dev
 
