@@ -8,7 +8,7 @@ _hive_dev_box_complete () {
     COMPREPLY=( )
     case "$prev" in
         enter)
-            words="`docker ps --format '{{.Names}}'`"
+            words="`docker ps -a --format '{{.Names}}'`"
 	;;
         run)
         ;;
