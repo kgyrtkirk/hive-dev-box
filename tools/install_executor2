@@ -3,5 +3,6 @@ set -e
 
 sw hadoop 3.1.2
 sw tez 0.9.1
+sw tez 0.10.1
 
 /tools/build_cleanup
