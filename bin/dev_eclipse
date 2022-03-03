@@ -2,6 +2,16 @@
 
 cd
 
+function safe_sw() {
+  if [ -e "/active/$1" ];then
+    echo " * $1 is already present"
+  else
+    /bin/sw "$@"
+  fi
+}
+
+safe_sw eclipse
+
 name="`hostname`"
 
 WS=ws_$name

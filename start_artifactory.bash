@@ -40,6 +40,7 @@ docker exec -it artifactory /bin/bash
 curl -X POST -u admin:password -H "Content-type: application/json" http://localhost:8081/artifactory/ui/artifactimport/system \
   -d '{ "path":"/tmp/backup.zip","excludeContent":false,"excludeMetadata":false,"verbose":false,"zip":true,"action":"system"}'
 
+# after executing the above command you will be able to log into artifactory by using: admin/admin
 ===
 EOF
 

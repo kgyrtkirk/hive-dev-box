@@ -102,30 +102,19 @@ Every container will be reaching out to almost the same artifacts; so employing 
 ./start_artifactory.bash
 ```
 
-You will have to manually configure this instance (once)
+To configure this instance the start_artifactory command will show a few commands you will need to execute to set it up - once its running.
 
-It will be available at http://127.0.0.1:8081/
-use admin/password to login
+After that you will be able to acccess artifactory at http://127.0.0.1:8081/ by using admin/admin to login.
 
-* make sure to have anonymous acces enabled:
-** left menu bar; Admin menu; Security / Security configuration > allow anonymous access is enabled
-* add some remote repositories
-** left menu bar: Admin menu: Repositories / Remote 
-*** add maven central / etc
-*** or some caching mirror repository if you know one
-* add the wonder virtual repository
-** left menu bar: Admin menu: Repositories / Virtual
-*** make sure to use the name "wonder" for it
-*** add remote repos to it
-
-This instance will be linked to the running development environment automatically
+This instance will be linked to the running development environment(s) automatically
 
 ### set properties (once)(optional)
 
 add an export to your .bashrc or similar; like:
 
 ```shell
-export HIVE_DEV_BOX_HOST_DIR=$HOME/hive-dev-box
+# to have a shared folder between all the dev containers and also the host system:
+export HIVE_DEV_BOX_HOST_DIR=$HOME/hdb
 ```
 
 The dev environment will assume that you are working on upstream patches; and will always open a new branch forked from master
