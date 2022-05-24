@@ -84,7 +84,7 @@ case $type in
         containerName=dev_mysql
         RUN_OPTS+=" -e MYSQL_ROOT_PASSWORD=mypassword"
         RUN_OPTS+=" --restart always -d"
-        RUN_OPTS+=" mariadb"
+        RUN_OPTS+=" mariadb:10.8.3"
 
         startup_container $containerName $RUN_OPTS
 
