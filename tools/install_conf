@@ -43,6 +43,7 @@ conf set hadoop/capacity-scheduler yarn.scheduler.capacity.root.default.state RU
 #yarn.scheduler.capacity.queue-mappings ''
 
 conf set tez/tez-site tez.lib.uris '${fs.defaultFS}/apps/tez/tez.tar.gz'
+conf set tez/tez-site tez.use.cluster.hadoop-libs true
 #conf set tez/tez-site tez.am.resource.memory.mb 512
 
 conf set hive/hive-site hive.metastore.warehouse.dir /data/hive/warehouse
