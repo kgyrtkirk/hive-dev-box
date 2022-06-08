@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+conf set hive/hive-site hive.tez.java.opts "-agentlib:jdwp=transport=dt_socket,server=y,address=8001,suspend=y"
+conf set tez/tez-site tez.am.launch.cmd-opts "-agentlib:jdwp=transport=dt_socket,server=y,address=8001,suspend=y"
+
+conf set hive/hive-site hive.tez.java.opts ""
+conf set tez/tez-site tez.am.launch.cmd-opts ""

@@ -1,0 +1,40 @@
+#!/bin/bash
+set -e
+
+#which yum && yum install -y nano lsof
+
+[ "$#" -ne 2 ] && echo "usage: $0 $PID [show|backup|patch]" && exit 1
+
+PID=$1
+
+case "$2" in
+	show)
+		function operate() {
+			echo "OP >$1< >$2<"
+		}
+	;;
+	backup)
+		d="backup.`date +%s`"
+		function operate() {
+			echo "backup $2 to $d"
+			mkdir -p "$d"
+			cp "$2" "$d/"
+		}
+	;;
+	patch)
+		function operate() {
+			echo "cp	$1	$2"
+			cp "$1" "$2"
+		}
+	;;
+	*)
+esac
+
+
+ls *.jar | while read jar;do
+  echo "@ $jar"
+  lsof -n -p $PID|grep -F "/${jar}" | sed -r 's/.* ([^ ]+jar).*/\1/' | sort | uniq | while read target;do
+    operate "$jar" "$target"
+  done
+done
+
