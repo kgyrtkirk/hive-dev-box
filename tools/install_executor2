@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-sw hadoop 3.1.2
+sw hadoop 3.3.1
+sw hadoop 3.1.0
 sw tez 0.9.1
 sw tez 0.10.1
 
