@@ -1,4 +1,5 @@
-FROM debian:buster
+#FROM debian:buster
+FROM debian:bullseye
 
 COPY tools/build_cleanup /tools/
 
@@ -17,8 +18,8 @@ RUN /tools/install_toolbox
 COPY tools/i_sort /tools/
 RUN /tools/i_sort
 
-COPY tools/cdpcli /tools/
-RUN /tools/cdpcli
+#COPY tools/cdpcli /tools/
+#RUN /tools/cdpcli
 
 COPY etc  /etc
 COPY bin  /bin
@@ -31,6 +32,9 @@ RUN /tools/install_conf
 
 COPY tools/install_x2go /tools/
 RUN /tools/install_x2go
+
+COPY tools/y /tools/
+RUN /tools/y
 
 USER dev
 WORKDIR /home/dev
