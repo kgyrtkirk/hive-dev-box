@@ -1,0 +1,13 @@
+#!/bin/bash -e
+
+sudo apt-get install -y cmake  libssl-dev \
+	krb5-multidev libkrb5-dev gdb \
+		 libreadline-dev libz-dev bison flex bear ninja-build meson libipc-run-perl iproute2 gitsome clang-format-13
+
+
+#export DEBUGINFOD_URLS="https://debuginfod.debian.net"
+
+sudo mkdir /usr/local/pg
+sudo chown dev /usr/local/pg
+/tools/build_cleanup
+#deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye main
