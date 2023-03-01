@@ -9,7 +9,7 @@ case "${#A[@]}" in
     1)  psql=${A[0]};   ;;
     *)  psql=${A[1]};   ;;
 esac
-echo    "psql: $psql"
+echo    "psql: $psql" >&2
 
 PSQLRC=<(
 [ -e "$PSQLRC" ] && echo "\i $PSQLRC"
@@ -21,22 +21,13 @@ select pg_backend_pid();
 \! sed -r 's/ +//g;/^[0-9]+$/p;d' -i /tmp/_pgsql_debug_pid
 \o
 do $e$ begin raise notice 'backend PID stored in /tmp/_pgsql_debug_pid'; end $e$ ;
-
+EOF
+if [ "$PSQL_WAIT_PORT" != "" ];then
+cat << EOF
 -- wait for debugger
-\if :{?debugger_wait_port}
 do $e$ begin raise notice 'waiting for debugger; connect to 5555 after attach'; end $e$ ;
 \setenv debugger_wait_port 5555
-\! nc -l -p $debugger_wait_port
-\endif
+\! cat /tmp/_pgsql_debug_pid | nc -l -w0 -p 5555
 EOF
+fi
 ) exec $psql "$@"
-# exec $psql -f <(
-# ) "$@"
-
-
-echo 0.${A[0]}
-echo ${A[@]}
-
-echo ${#A[@]}
-echo 1.${A[1]}
-
