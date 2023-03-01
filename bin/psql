@@ -1,0 +1,42 @@
+#!/bin/bash
+set -e
+
+command -v which >/dev/null 2>&1 || { echo "I require which but it's not installed.  Aborting." >&2; exit 1; }
+
+A=( `which -a psql` )
+case "${#A[@]}" in
+    0)  echo "$0: ERROR: no psql on PATH?" && exit 1;   ;;
+    1)  psql=${A[0]};   ;;
+    *)  psql=${A[1]};   ;;
+esac
+echo    "psql: $psql"
+
+PSQLRC=<(
+[ -e "$PSQLRC" ] && echo "\i $PSQLRC"
+e='$e'
+cat << EOF
+-- save pid into file
+\o /tmp/_pgsql_debug_pid
+select pg_backend_pid();
+\! sed -r 's/ +//g;/^[0-9]+$/p;d' -i /tmp/_pgsql_debug_pid
+\o
+do $e$ begin raise notice 'backend PID stored in /tmp/_pgsql_debug_pid'; end $e$ ;
+
+-- wait for debugger
+\if :{?debugger_wait_port}
+do $e$ begin raise notice 'waiting for debugger; connect to 5555 after attach'; end $e$ ;
+\setenv debugger_wait_port 5555
+\! nc -l -p $debugger_wait_port
+\endif
+EOF
+) exec $psql "$@"
+# exec $psql -f <(
+# ) "$@"
+
+
+echo 0.${A[0]}
+echo ${A[@]}
+
+echo ${#A[@]}
+echo 1.${A[1]}
+

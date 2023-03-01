@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e
+
+[ -d "$PGDATA" ] && "PGDATA ($PGDATA) exists -> exiting" && exit 1
+
+initdb
+
+cat >> $PGDATA/postgresql.conf << EOF
+shared_preload_libraries = 'timescaledb'
+listen_addresses = '*'
+EOF
+
+cat >> $PGDATA/pg_hba.conf << EOF
+host all all 0.0.0.0/0 trust
+EOF
+
