@@ -22,8 +22,6 @@ else
 	dbName=$DBNAME
 fi
 
-WAIT_FOR_PORT="wait-for-port --timeout=300"
-
 echo "metastore database name: $dbName"
 
 function installFile() {
@@ -53,6 +51,17 @@ function startup_container() {
     else
         echo "@ starting $containerName..."
         $DOCKER run --name $containerName $*
+    fi
+}
+
+function wait_for_port() {
+    local containerName=$1
+    local port=$2
+    echo "Waiting for port $port in $containerName to be available..."
+    wait-for-port --timeout=300 --host=$containerName $port || status=$?
+    if [ $status > 0 ]; then
+      $DOCKER logs $containerName
+      exit $status
     fi
 }
 
@@ -95,8 +104,7 @@ case $type in
             database=$dbName
             host=$containerName
 EOF
-        echo "waiting for mysql to be available..."
-        $WAIT_FOR_PORT --host=$containerName 3306
+        wait_for_port $containerName 3306
         id
 echo $dbName
         mysql -uroot mysql -f << EOF
@@ -122,8 +130,7 @@ EOF
         RUN_OPTS+=" postgres:buster"
         startup_container $containerName $RUN_OPTS
 
-        echo "waiting for postgres to be available..."
-        $WAIT_FOR_PORT --host=$containerName 5432
+        wait_for_port $containerName 5432
 
         # FIXME: PGHOST/PGUSER/PGDATABASE set in _conf
         export PGHOST=$containerName
@@ -152,9 +159,8 @@ EOF
         RUN_OPTS+=" quay.io/maksymbilenko/oracle-12c"
         startup_container $containerName $RUN_OPTS
 
-        echo "waiting for oracle to be available..."
-        $WAIT_FOR_PORT --host=$containerName 1521
-        $WAIT_FOR_PORT --host=$containerName 8080
+        wait_for_port $containerName 1521
+        wait_for_port $containerName 8080
 
         echo "$DOCKER exec -it $containerName /bin/bash -ic 'sqlplus -L \"system/oracle\"' "'$@' | sudo dd of=/bin/sqlplus_sys
         # FIXME it would be better to detect wether stdin is a file or not...
@@ -193,8 +199,7 @@ EOF
         echo "$DOCKER exec -it $containerName /opt/mssql-tools/bin/sqlcmd -S localhost -d $dbName -U hiveuser -P 'mypassword@ASD' "'$@' | sudo dd of=/bin/sqlcmd
         sudo chmod +x /bin/sqlcmd{_SA,_SA0,}
 
-        echo "waiting for mssql to be available..."
-        $WAIT_FOR_PORT --host=$containerName 1433
+        wait_for_port $containerName 1433
 
         installFile /apps/lib https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/7.4.1.jre8/mssql-jdbc-7.4.1.jre8.jar
 	sleep 3
