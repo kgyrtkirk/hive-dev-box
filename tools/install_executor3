@@ -22,6 +22,6 @@ export USER=jenkins
 
 EOF
 
-apt-get install -y rsync python
+apt-get install -y rsync python3
 
 /tools/build_cleanup

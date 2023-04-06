@@ -3,13 +3,19 @@ set -e
 
 command -v which >/dev/null 2>&1 || { echo "I require which but it's not installed.  Aborting." >&2; exit 1; }
 
-A=( `which -a psql` )
-case "${#A[@]}" in
-    0)  echo "$0: ERROR: no psql on PATH?" && exit 1;   ;;
-    1)  psql=${A[0]};   ;;
-    *)  psql=${A[1]};   ;;
-esac
+for p in `which -a psql`;do
+    [ "`realpath "$p"`" != "`realpath "$0"`" ] && psql="$p" && break
+done
+
+[ "$p" == "" ]  && echo "$0: ERROR: no psql on PATH?" && exit 1
+
 echo    "psql: $psql" >&2
+
+for arg in "$@";do 
+    [ "$arg" != "-X" ] && ARGS+=( "$arg" )
+done
+
+[ "$PSQLRC" == "" ] && PSQLRC=~/.psqlrc
 
 PSQLRC=<(
 [ -e "$PSQLRC" ] && echo "\i $PSQLRC"
@@ -26,8 +32,8 @@ if [ "$PSQL_WAIT_PORT" != "" ];then
 cat << EOF
 -- wait for debugger
 do $e$ begin raise notice 'waiting for debugger; connect to 5555 after attach'; end $e$ ;
-\setenv debugger_wait_port 5555
 \! cat /tmp/_pgsql_debug_pid | nc -l -w0 -p 5555
+\! sleep 3
 EOF
 fi
 ) exec $psql "$@"

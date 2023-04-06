@@ -79,7 +79,7 @@ chmod 777 -R /data
 
 # use ssd for docker
 
-sudo -u dev sw java 8
+#sudo -u dev sw java 8
 
 # FIXME: fix sdkman
 cat > /etc/profile.d/confs.sh << EOF
@@ -93,6 +93,6 @@ export HIVE_CONF_DIR=/etc/hive/
 
 export PATH=$PATH:/active/hive/bin:/active/hadoop/bin:/active/eclipse/:/active/maven/bin/:/active/protobuf/bin:/active/visualvm/bin:/active/kubebuilder/bin:/active/idea/bin
 
-. /etc/profile.d/java.sh
+#. /etc/profile.d/java.sh
 
 EOF

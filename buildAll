@@ -1,6 +1,7 @@
 #!/bin/bash -e
 
 #buildAll push docker-sandbox.infra.cloudera.com/hive/hive-dev-box
+#127.0.0.1:5000
 
 
 set -x
@@ -32,8 +33,8 @@ function build() {
 	$push $altName:${n}-$d
 }
 
-build latest		-f Dockerfile .
+#build latest		-f Dockerfile .
 build executor		-f Dockerfile.executor .
-build executor-1001	-f Dockerfile.executor --build-arg UID=1001 .
-build bazaar		-f Dockerfile.bazaar .
+#build executor-1001	-f Dockerfile.executor --build-arg UID=1001 .
+#build bazaar		-f Dockerfile.bazaar .
 

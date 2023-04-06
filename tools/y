@@ -11,3 +11,11 @@ sudo apt-get install -y cmake  libssl-dev \
 #sudo chown dev /usr/local/pg
 /tools/build_cleanup
 #deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye main
+
+cat >> ~dev/.bashrc << EOF
+
+export PGDATA=/home/dev/pg/current/data
+export PATH+=:/home/dev/pg/current/bin
+
+
+EOF

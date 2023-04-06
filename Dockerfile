@@ -1,5 +1,5 @@
 #FROM debian:buster
-FROM debian:bullseye
+FROM debian:bookworm
 
 COPY tools/build_cleanup /tools/
 
@@ -9,8 +9,8 @@ RUN /tools/install_basics
 COPY tools/install_java_zulu /tools/
 RUN /tools/install_java_zulu
 
-COPY tools/install_xmlstarlet /tools/
-RUN /tools/install_xmlstarlet
+#COPY tools/install_xmlstarlet /tools/
+#RUN /tools/install_xmlstarlet
 
 COPY tools/install_toolbox /tools/
 RUN /tools/install_toolbox

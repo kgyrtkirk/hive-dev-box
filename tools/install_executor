@@ -1,10 +1,14 @@
 #!/bin/bash
 set -e
 
-chown dev /work
-sudo -u dev sw maven
-sudo -u dev sw protobuf
-sudo -u dev sw thrift 0.16.0
+chown jenkins /work
 
-/tools/build_cleanup
+pwd
+git clone -o postgres https://github.com/postgres/postgres
+#pgx
+#sudo -u dev sw maven
+#sudo -u dev sw protobuf
+#sudo -u dev sw thrift 0.16.0
+
+#/tools/build_cleanup
 

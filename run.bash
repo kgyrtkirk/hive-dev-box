@@ -9,6 +9,7 @@ else
 fi
 
 if [ "$1" != "" ];then
+    echo "$1" >> ~/.hdb_containers
     RUN_OPTS+=" --name $1 --hostname $1"
     shift
 fi

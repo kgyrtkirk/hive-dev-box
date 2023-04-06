@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-sed -i 's/deb.debian.org/ftp.bme.hu/' /etc/apt/sources.list
+#sed -i 's/deb.debian.org/ftp.bme.hu/' /etc/apt/sources.list
 
 debconf-set-selections <(cat << EOF
 keyboard-configuration	keyboard-configuration/altgr	select	The default for the keyboard layout
@@ -31,7 +31,7 @@ apt-get update
 apt-get install -y \
         wget curl nano gnupg lsb-release sysvbanner git \
         psmisc nano screen sysvbanner net-tools procps \
-        screen psmisc netcat psmisc nano screen sysvbanner \
+        screen psmisc netcat-openbsd psmisc nano screen sysvbanner \
         make gcc g++ \
         locales time git-review jq diffstat unzip zip docker.io \
         graphviz \
@@ -40,14 +40,14 @@ apt-get install -y \
         xbase-clients libgtk3.0 software-properties-common \
         docker.io locales time git-review jq diffstat unzip zip graphviz \
         postgresql-client  kdiff3 golang bash-completion \
-        default-mysql-client python libxml2-utils rsync lnav xmlstarlet jq colordiff xclip sudo wget vim tree pastebinit patchutils \
+        default-mysql-client libxml2-utils rsync lnav xmlstarlet jq colordiff xclip sudo wget vim tree pastebinit patchutils \
         dnsutils wmctrl firefox-esr proxychains4
 #python-networkx 
 
 groupadd -f -g 1000 dev
 useradd -m -o -u 1000 -g 1000 -d /home/dev -s /bin/bash dev
 
-addgroup --gid 999 docker_access
+addgroup --gid 777 docker_access
 adduser dev docker_access
 
 echo 'root:root' | chpasswd
