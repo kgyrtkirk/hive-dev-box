@@ -18,6 +18,11 @@ RUN /tools/install_executor
 COPY tools/install_executor2 /tools/
 RUN /tools/install_executor2
 
+#COPY tools/install_executor3 /tools/
+#RUN /tools/install_executor3
+
+ADD pgr2junit /bin
+
 COPY tools/docker_entrypoint.executor /.entrypoint
 ENTRYPOINT ["/.entrypoint"]
 CMD ["bash"]
