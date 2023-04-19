@@ -1,0 +1,65 @@
+#!/bin/bash
+set -e
+
+# places postgresql installations and sources like:
+# $HOME/pg
+#    $ROOT		-> default: $HOME/pg
+#         /current	-> <last_version>
+#         /REL_15_2	-> build of tag REL_15_2
+#                  /src -> sources
+#                  /... -> pg install prefix dir
+#
+
+ROOT=${ROOT:-$HOME/pg}
+PG_SOURCES=${PG_SOURCES:-$HOME/postgres}
+
+export CPPFLAGS="-DLOCK_DEBUG=1 -DDEBUG_DEADLOCK=1 -DUSE_VALGRIND"
+export CFLAGS="-O0 -ggdb3 -fno-omit-frame-pointer -pg"
+export CXXFLAGS=$CFLAGS
+
+CONF_OPTS="--enable-tap-tests --enable-debug --enable-cassert"
+CONF_OPTS+=" --with-openssl"
+
+cd $PG_SOURCES
+
+# ensure that we are in postrgres dir
+git remote get-url postgres
+
+VERSION=${1:-15}
+case "$VERSION" in
+	11|12|13|14|15)
+		VERSION=`git tag|grep -E "^REL_${VERSION}_[0-9]+$"|sort|tail -n1`
+		;;
+	*)
+		echo "using $1 as tag"
+esac
+
+echo "looking for $VERSION in $PG_SOURCES"
+cd $PG_SOURCES
+git log -n1 --oneline  "$VERSION"
+
+# ensure that we are in postrgres dir
+git remote get-url postgres
+
+PREFIX=$ROOT/$VERSION
+SRCS=$PREFIX/src
+
+if [ ! -s $SRCS/configure ] ;then
+	git worktree add $SRCS $VERSION
+fi
+cd $SRCS
+
+# wipe out unlink calls of regression.* files
+sed -n '/unlink(.*filename)/p;d' `find $SRCS -name pg_regress.c`
+
+#git clean -dfx
+#git checkout $VERSION
+
+rm -f $ROOT/current
+ln -s $PREFIX $ROOT/current
+
+./configure --prefix=$PREFIX $CONF_OPTS
+time make -j9 install
+time make -C contrib -j9 install
+
+
