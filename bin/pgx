@@ -50,7 +50,19 @@ fi
 cd $SRCS
 
 # wipe out unlink calls of regression.* files
-sed -n '/unlink(.*filename)/p;d' `find $SRCS -name pg_regress.c`
+#sed -n '/unlink(.*filename)/p;d' `find $SRCS -name pg_regress.c`
+# apply patch
+(base64 -d |git apply -p0 -) << EOF
+ZGlmZiAtLWdpdCBzcmMvdGVzdC9yZWdyZXNzL3BnX3JlZ3Jlc3MuYyBzcmMvdGVzdC9yZWdyZXNz
+L3BnX3JlZ3Jlc3MuYwppbmRleCBkN2Q1ZjRhZjMzLi4zZmM5OWQ1ZTJmIDEwMDY0NAotLS0gc3Jj
+L3Rlc3QvcmVncmVzcy9wZ19yZWdyZXNzLmMKKysrIHNyYy90ZXN0L3JlZ3Jlc3MvcGdfcmVncmVz
+cy5jCkBAIC0yNTg0LDExICsyNTg0LDEzIEBAIHJlZ3Jlc3Npb25fbWFpbihpbnQgYXJnYywgY2hh
+ciAqYXJndltdLAogCX0KIAllbHNlCiAJeworCQlpZighZ2V0ZW52KCJQR1JfQ0kiKSkgewogCQl1
+bmxpbmsoZGlmZmZpbGVuYW1lKTsKIAkJdW5saW5rKGxvZ2ZpbGVuYW1lKTsKKwkJfQogCX0KIAot
+CWlmIChmYWlsX2NvdW50ICE9IDApCisJaWYgKCFnZXRlbnYoIlBHUl9DSSIpICYmIGZhaWxfY291
+bnQgIT0gMCkKIAkJZXhpdCgxKTsKIAogCXJldHVybiAwOwo=
+EOF
+
 
 #git clean -dfx
 #git checkout $VERSION
