@@ -2,6 +2,6 @@
 set -e
 
 V=0.3.8
-wget -nv -O toolbox.deb https://github.com/kgyrtkirk/hive-toolbox/releases/download/${V}/hive-toolbox_${V}_all.deb
+wget -nv -O toolbox.deb https://github.infra.cloudera.com/CDH/hive-toolbox/raw/master/releases/hive-toolbox_${V}_all.deb
 dpkg -i toolbox.deb
 rm toolbox.deb
