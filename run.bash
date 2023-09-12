@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-
+echo "$RUN_OPTS"
 if [ "$1" == "-d" ];then
     RUN_OPTS+=" -d"
     shift

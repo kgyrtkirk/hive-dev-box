@@ -11,6 +11,7 @@ if [ -x /active/mvnd/bin/mvnd ];then
   MVN=/active/mvnd/bin/mvnd
 fi
 
+#$MVN  "$@"
 $MVN $C $C2 "$@"
 exit $?
 

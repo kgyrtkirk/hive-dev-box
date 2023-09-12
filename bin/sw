@@ -74,8 +74,8 @@ case "$component" in
 		sw2 $component "$@"
 	;;
 	eclipse)
-		#version=${1:-2020-09}
-		version=${1:-2019-06}
+		#version=${1:-2019-06}
+		version=${1:-2023-06}
 		state=${2:-R}
 		type=${3:-java}
 		bin_dir=$SW_DIR/eclipse-${version}-${state}-${type}
@@ -104,7 +104,7 @@ case "$component" in
 		activate $component $bin_dir
 	;;
 	idea)
-		version=${1:-2021.3.1}
+		version=${1:-2023.2}
 		bin_dir=$SW_DIR/ideaIC-$version
 		if [ -d "$bin_dir" ];then
 			echo "$bin_dir already installed"
@@ -169,16 +169,40 @@ case "$component" in
 		fi
 		activate $component $bin_dir
 	;;
+	druid)
+		version=${1:-27.0.0}
+		bin_dir=$SW_DIR/apache-druid-$version
+		if [ -d "$bin_dir" ];then
+			echo "$bin_dir already installed"
+		else
+			fn=$SW_DL_DIR/apache-druid-${version}.tar.gz
+			dl $fn \
+				https://dlcdn.apache.org/druid/${version}/apache-druid-${version}-bin.tar.gz \
+				${apache_mirror}/druid/${version}/apache-maven-${version}-bin.tar.gz \
+				${archive_mirror}/druid/${version}/apache-maven-${version}-bin.tar.gz
+			tar xzf $fn
+			
+			#rm $fn
+		fi
+		activate $component $bin_dir
+	;;
 	mvnd)
-		version=${1:-0.7.1}
+		#version=${1:-0.7.1}
+		version=${1:-0.9.0}
 		bin_dir=$SW_DIR/mvnd-${version}-linux-amd64
 		if [ -d "$bin_dir" ];then
 			echo "$bin_dir already installed"
 		else
 			fn=$SW_DL_DIR/mvnd-${version}.zip
 			dl $fn \
-				https://github.com/mvndaemon/mvnd/releases/download/${version}/mvnd-${version}-linux-amd64.zip
-			unzip $fn
+				https://github.com/mvndaemon/mvnd/releases/download/${version}/mvnd-${version}-linux-amd64.zip \
+				https://github.com/mvndaemon/mvnd/releases/download/${version}/maven-mvnd-${version}-linux-amd64.zip
+			tmp=${bin_dir}.tmp
+			rm -rf "$tmp"
+			mkdir "$tmp"
+			unzip -d "$tmp" $fn
+			mv $tmp/* "${bin_dir}"
+			rm -rf "$tmp"
 		fi
 		activate $component $bin_dir
 		echo "PATH+=:/active/mvnd/bin" | sudo tee /etc/profile.d/mvnd.sh

@@ -1,0 +1,10 @@
+#!/bin/bash -e
+
+nice srcs druid
+cd druid
+n=`hostname`
+git branch $n apache/master
+git checkout $n
+git push kgyrtkirk -u HEAD
+nice -n 19 rebuild --ide
+banner ok

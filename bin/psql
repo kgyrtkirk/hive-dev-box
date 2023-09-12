@@ -3,7 +3,7 @@ set -e
 
 # in case fd#9 is open; write messages there ; otherwise use fd#2
 [ -t 9 ] && msgfd=9 || msgfd=2
-
+#ls -l /proc/self/fd/ >&$msgfd
 command -v which >/dev/null 2>&1 || { echo "I require which but it's not installed.  Aborting." >&2; exit 1; }
 
 for p in `which -a psql`;do
@@ -51,7 +51,8 @@ cat << EOF
 \! echo 'waiting for debugger; connect to 5555 to get the actual PID!' >&$msgfd
 \! cat /tmp/_pgsql_debug_pid | nc -l -w0 -p 5555
 \! echo 'waiting a bit for gdb to buckle in...' >&$msgfd
-\! sleep 3
+\! sleep 5
+\! echo 'done!' >&$msgfd
 EOF
 fi
 ) exec $psql "${ARGS[@]}"
