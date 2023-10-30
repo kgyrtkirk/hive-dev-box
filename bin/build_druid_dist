@@ -1,0 +1,1 @@
+time mvn install -Papache-release,dist,rat -DskipTests -Pskip-static-checks -Dgpg.skip -Ddependency-check.skip

@@ -1,0 +1,36 @@
+#!/bin/bash
+
+MODULES="`git config --local extra.ideProjects`"
+
+set -e
+if [ "$MODULES" == "" ];then
+        echo -e "no ide modules; use:\n git config --local extra.ideProjects ql,common"
+        exit 1
+fi
+
+if git status --porcelain=2|grep .;then
+    echo "> worktree is not clean; continue?"
+    read
+    if [ "$REPLY" != "y" ]; then
+        echo "interrupted.."
+        exit 1
+    fi
+fi
+
+MOPTS="-ntp -DskipTests -Dcheckstyle.skip -Dpmd.skip -Denforcer.skip -Dforbiddenapis.skip -Dmaven.gitcommitid.skip=true"
+
+if [ "$1" == "--ide" ];then
+  MOPTS+=" -pl $MODULES"
+  shift
+fi
+MOPTS+=" $@"
+
+banner clean
+git clean -dfx
+banner install
+
+echo "ideProjects: $MODULES"
+time mvn install source:jar install $MOPTS -am -Pdist
+banner eclipse
+time mvn eclipse:eclipse $MOPTS -pl $MODULES -DdownloadSources -DdownloadJavadoc
+banner ok
