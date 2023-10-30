@@ -1,0 +1,41 @@
+#!/bin/bash -eux
+# Note: assumes "base" and "milestone" are the same (for the backport PR)
+git fetch --all
+base="28.0.0"
+pr="$1"
+myrepo="kgyrtkirk"
+backport="backport-$pr-to-$base"
+if [ -n "$GIT_TOKEN" ]
+then
+  if [ "$(curl -u "$myrepo:$GIT_TOKEN" -s https://api.github.com/repos/apache/druid/pulls/"$pr" |jq -r '.merged')" != "true" ]
+  then
+    echo "PR $2 not yet merged" >&2
+    exit 1
+  fi
+  milestone="$(curl -u "$myrepo:$GIT_TOKEN"  -s https://api.github.com/repos/apache/druid/milestones | jq '.[]|select(.title == "$base")|.number')"
+  title="$(curl -u "$myrepo:$GIT_TOKEN" -s https://api.github.com/repos/apache/druid/pulls/"$pr" |jq '.title'|perl -pe's/^"/"[Backport] /')"
+  commit="$(git log --pretty=oneline apache/master |perl -nle '/^(\w+)\s.+\(#'"$pr"'\)$/ && print $1' | perl -pe'$x++; END { die unless $x == 1 }')"
+  git checkout "$base"
+  git pull
+  if git rev-list "$base" | fgrep -q "$commit"
+  then
+    exit 0
+  fi
+  git branch -D "$backport" ||: >/dev/null 2>&1
+  git checkout -b "$backport"
+  git cherry-pick -x "$commit"
+  git push $myrepo -u "$backport"
+  curl -u "$myrepo:$GIT_TOKEN" -XPOST -d@- https://api.github.com/repos/apache/druid/pulls <<EOF
+{
+  "title"     : $title,
+  "head"      : "$myrepo:$backport",
+  "base"      : "$base",
+  "body"      : "Backport of #$pr to $base.",
+  "milestone" : "$milestone",
+  "labels"    : ["Backport"]
+}
+EOF
+else
+  echo "GitHub personal token not provided, not submitting pull request" >&2
+  exit 1
+fi
