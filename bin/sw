@@ -57,6 +57,18 @@ case "$component" in
 		[ ! -d $d ] && echo "ERROR: expected a directory at: $d" && exit 1
 		activate hive $d
 	;;
+	druid-dev)
+		# ln -s  $PWD/processing/target/druid-processing-29.0.0-SNAPSHOT.jar  /active/druid/lib/
+		# ln -s  $PWD/sql/target/druid-sql-29.0.0-SNAPSHOT.jar  /active/druid/lib/
+		DIR=${1:-/home/dev/druid/}
+		cd $DIR/distribution/target/
+		mkdir -p dev
+		cd dev
+		tar xzf ../apache-druid-*-bin.tar.gz
+		d=$DIR/distribution/target/dev/apache-druid-*
+		[ ! -d $d ] && echo "ERROR: expected a directory at: $d" && exit 1
+		activate druid $d
+	;;
 	tez-dev)
 		sudo apt-get install -y xmlstarlet
 		rm -f /active/tez
@@ -155,7 +167,7 @@ case "$component" in
 		activate $component $bin_dir
 	;;
 	maven)
-		version=${1:-3.8.4}
+		version=${1:-3.9.5}
 		bin_dir=$SW_DIR/apache-maven-$version
 		if [ -d "$bin_dir" ];then
 			echo "$bin_dir already installed"
