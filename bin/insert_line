@@ -1,0 +1,15 @@
+#!/bin/bash
+
+[ "$#" -ne 3 ] && echo "usage: $0 <file> <line> <row>" && exit 1
+file=$1
+line=$2
+msg=$3
+
+[ ! -e "$file" ] && echo "nonexistent file: $file" && exit 2
+
+t="${file}.il"
+set -e
+head -n "$[ $line - 1 ]"	"$file"		> "$t"
+echo "$msg"			>> "$t"
+tail -n +"$line" "$file"	>> "$t"
+mv "$t" "$file"

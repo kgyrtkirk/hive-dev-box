@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e
+grep  -Eo '/.+.java:\[.*error.*' "$1"|sort -r| while read str;do
+	a="${str%%]*}"
+	msg="${str:$[ ${#a} + 2 ]}"
+	file="${a%:*}"
+	line="${a//*[}"
+	line="${line%,*}"
+	if [ "$DEBUG" != "" ]; then
+		echo "$line"
+		echo "file >$file< "
+		echo "msg >$msg<"
+		echo "line >$line<"
+	fi
+	insert_line "$file" "$line" "// FIXME:${str:${#file}}"
+	#exit
+done
