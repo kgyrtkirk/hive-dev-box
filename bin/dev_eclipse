@@ -17,7 +17,7 @@ name="`hostname`"
 WS=ws_$name
 if [ ! -d "$WS" ]; then
     echo " * first run detected; initializing workspace"
-    git clone https://github.com/kgyrtkirk/default-eclipse-workspace $WS
+    git clone git@github.com:kgyrtkirk/default-eclipse-workspace $WS
     for p in hive tez druid;do
         if [ -d "$p" ]; then
             echo " * importing $p..."

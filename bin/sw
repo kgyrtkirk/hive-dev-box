@@ -61,13 +61,18 @@ case "$component" in
 		# ln -s  $PWD/processing/target/druid-processing-29.0.0-SNAPSHOT.jar  /active/druid/lib/
 		# ln -s  $PWD/sql/target/druid-sql-29.0.0-SNAPSHOT.jar  /active/druid/lib/
 		DIR=${1:-/home/dev/druid/}
-		cd $DIR/distribution/target/
-		mkdir -p dev
-		cd dev
-		tar xzf ../apache-druid-*-bin.tar.gz
-		d=$DIR/distribution/target/dev/apache-druid-*
+		D=$DIR/distribution/target/
+		T=~/dev-druid
+		[ -d "$T" ] && echo "already present $T" && exit 1
+		mkdir -p "$T"
+		cd "$T"
+		tar xzf $D/apache-druid-*-bin.tar.gz
+		d=$T/apache-druid-*
+		#ineffective?
 		[ ! -d $d ] && echo "ERROR: expected a directory at: $d" && exit 1
 		activate druid $d
+		cd /active/druid
+		tar xzf ~/host/small-debug-conf.tgz
 	;;
 	tez-dev)
 		sudo apt-get install -y xmlstarlet

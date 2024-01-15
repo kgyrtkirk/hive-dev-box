@@ -1,10 +1,11 @@
 #!/bin/bash
 
 set -e
-grep  -Eo '/.+.java:\[.*error.*' "$1"|sort -r| while read str;do
+grep  -Eo '/.+.java:\[.*error.*' "$1"|sort -r|uniq| while read str;do
 	a="${str%%]*}"
 	msg="${str:$[ ${#a} + 2 ]}"
 	file="${a%:*}"
+	file0="${a%:*}"
 	line="${a//*[}"
 	line="${line%,*}"
 	if [ "$DEBUG" != "" ]; then
@@ -13,6 +14,11 @@ grep  -Eo '/.+.java:\[.*error.*' "$1"|sort -r| while read str;do
 		echo "msg >$msg<"
 		echo "line >$line<"
 	fi
-	insert_line "$file" "$line" "// FIXME:${str:${#file}}"
+	file="${file#*\/}"
+	file="${file#*\/}"
+	file="${file#*\/}"
+	file="${file#*\/}"
+	file="${file#*\/}"
+	insert_line "$file" "$line" "// FIXME:${str:${#file0}}"
 	#exit
 done

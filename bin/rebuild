@@ -33,4 +33,6 @@ echo "ideProjects: $MODULES"
 time mvn install source:jar install $MOPTS -am -Pdist
 banner eclipse
 time mvn eclipse:eclipse $MOPTS -pl $MODULES -DdownloadSources -DdownloadJavadoc
+
+find . -name .classpath | xargs -n1 sed -i 's+kind="output" path="target/classes"+kind="output" path="target/eclipse/classes"+'
 banner ok
