@@ -47,8 +47,8 @@ for component in "${components[@]}";do
 cd $SW_DIR
 case "$component" in
 	java)
-		sudo update-java-alternatives --set zulu-$1-amd64
-		echo "export JAVA_HOME=/usr/lib/jvm/zulu-$1-amd64/" | sudo tee /etc/profile.d/java.sh
+		sudo update-java-alternatives --set zulu$1-ca-amd64
+		echo "export JAVA_HOME=/usr/lib/jvm/zulu$1-ca-amd64/" | sudo tee /etc/profile.d/java.sh
 		echo "open a new shell or run: . /etc/profile.d/java.sh"
 	;;
 	hive-dev)
