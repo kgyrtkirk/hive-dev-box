@@ -4,14 +4,13 @@ apt-get install gnupg ca-certificates curl wget
 curl -s https://repos.azul.com/azul-repo.key | sudo gpg --dearmor -o /usr/share/keyrings/azul.gpg
 echo "deb [signed-by=/usr/share/keyrings/azul.gpg] https://repos.azul.com/zulu/deb stable main" | sudo tee /etc/apt/sources.list.d/zulu.list
 
-# downgrade jdk8 to avoid timestamp issue
+apt-get update
+apt-get install -y zulu8-jdk zulu11-jdk zulu17-jdk
+
+# downgrade jdk8 to 1.8.0_262-b19 to avoid timestamp issue
 wget -nv https://cdn.azul.com/zulu/bin/zulu8.48.0.51-ca-fx-jdk8.0.262-linux_x64.tar.gz
 tar zxf zulu8.48.0.51-ca-fx-jdk8.0.262-linux_x64.tar.gz && rm zulu8.48.0.51-ca-fx-jdk8.0.262-linux_x64.tar.gz
-mkdir /usr/lib/jvm/
-mv zulu8.48.0.51-ca-fx-jdk8.0.262-linux_x64 /usr/lib/jvm/zulu8-ca-amd64
-
-apt-get update
-apt-get install -y zulu11-jdk zulu17-jdk
+rm -rf /usr/lib/jvm/zulu8-ca-amd64 &&  mv zulu8.48.0.51-ca-fx-jdk8.0.262-linux_x64 /usr/lib/jvm/zulu8-ca-amd64
 
 update-java-alternatives --set zulu8-ca-amd64
 
