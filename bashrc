@@ -54,3 +54,6 @@ function enable_urgent_on_fail() {
     export PROMPT_COMMAND+='urgent_prompt_command;'
 }
 
+
+# hack; but enables by default everywhere
+enable_urgent_on_fail
