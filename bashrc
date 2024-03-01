@@ -36,16 +36,11 @@ function urgent_prompt_command() {
     local last_ret=$?
     active_window=`get_active_wid`
     window_urgent
-    if [ "$last_ret" != 0 ];then
-        backburner  $HOSTNAME
-        return
-    fi
     [ "$LAST_CMD_START" == "" ] && return
     cmd_time=$[ $EPOCHSECONDS - $LAST_CMD_START ]
-    if [ $cmd_time -gt 60 ]; then
-        backburner $HOSTNAME
+    if [ $cmd_time -gt 30 -a $last_ret -ne 0 ]; then
+        backburner "$HOSTNAME time: $cmd_time exit: $last_ret"
     fi
-    export LAST_CMD_START=
 }
 
 export LAST_CMD_START=
@@ -57,6 +52,5 @@ function enable_urgent_on_fail() {
     export WID=`get_active_wid`
     export PS0+='${PS1:$(( LAST_CMD_START=$EPOCHSECONDS )):0}'
     export PROMPT_COMMAND+='urgent_prompt_command;'
-
 }
 
