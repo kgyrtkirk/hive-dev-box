@@ -24,6 +24,8 @@ fi
 
 function urgent() { wmctrl -i -r \$WID   -b add,demands_attention; backburner \$HOSTNAME;}
 
+[ -f ~/host/bashrc ] && . ~/host/bashrc
+
 EOF
 
 

@@ -11,7 +11,7 @@ echo "deb [signed-by=/usr/share/keyrings/azul.gpg] https://repos.azul.com/zulu/d
 apt-get update
 #apt-cache search java
 apt-cache search zulu
-apt-get install -y zulu{8,11}{,-src}
+apt-get install -y zulu{8,11,21}{,-src}
 
 #update-java-alternatives --set zulu-8-amd64
 

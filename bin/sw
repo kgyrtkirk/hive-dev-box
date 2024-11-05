@@ -102,16 +102,20 @@ case "$component" in
 			fn=$SW_DL_DIR/eclipse-${type}-${version}.tar.gz
 			#http://mirrors.uniri.hr/eclipse//technology/epp/downloads/release/2019-03/R/eclipse-java-2019-03-R-linux-gtk-x86_64.tar.gz
 			path=eclipse//technology/epp/downloads/release/${version}/${state}/eclipse-${type}-${version}-${state}-linux-gtk-x86_64.tar.gz
+			#https://mirror.leitecastro.com/eclipse/oomph/epp/2024-06/R/eclipse-inst-jre-linux64.tar.gz
+			#path=eclipse/oomph/epp/${version}/${state}/eclipse-inst-jre-linux64.tar.gz
+			#https://archive.eclipse.org/technology/epp/downloads/release/2023-06/R/eclipse-java-2023-06-R-linux-gtk-x86_64.tar.gz
 			dl $fn \
 				https://mirror.dkm.cz/${path} \
 				http://eclipse.mirror.garr.it/mirrors/${path}	\
-				http://mirrors.uniri.hr/${path}
+				https://mirror.leitecastro.com/${path} \
+				httpx://mirrors.uniri.hr/${path}
 			rm -rf _eclipse_unpack
 			mkdir _eclipse_unpack
 			cd _eclipse_unpack
 			tar xzf $fn
-			wget -nv https://github.com/seeq12/eclipse-import-projects-plugin/raw/master/jar/com.seeq.eclipse.importprojects_1.4.0.jar \
-				-O eclipse/plugins/com.seeq.eclipse.importprojects_1.4.0.jar
+			#wget -nv https://github.com/seeq12/eclipse-import-projects-plugin/raw/master/jar/com.seeq.eclipse.importprojects_1.4.0.jar \
+			#	-O eclipse/plugins/com.seeq.eclipse.importprojects_1.4.0.jar
 			sed 's/-Xmx1024m/-Xmx3024m/' eclipse/eclipse.ini
 			mv eclipse ${bin_dir}
 			cd ..
@@ -139,15 +143,16 @@ case "$component" in
 		activate $component $bin_dir/current
 	;;
 	mat)
-		version=1.12.0
-		echo "@@ only 1.12.0"
+		version=1.15.0
+		echo "@@ only 1.15.0"
 		bin_dir=$SW_DIR/mat-$version
 		if [ -d "$bin_dir" ];then
 			echo "$bin_dir already installed"
 		else
-			fn=$SW_DL_DIR/ideaIC-${version}.tar.gz
+			fn=$SW_DL_DIR/mat-${version}.tar.gz
 			dl $fn \
-				https://rhlx01.hs-esslingen.de/pub/Mirrors/eclipse/mat/1.12.0/rcp/MemoryAnalyzer-1.12.0.20210602-linux.gtk.x86_64.zip
+				https://rhlx01.hs-esslingen.de/pub/Mirrors/eclipse/mat/1.15.0/rcp/MemoryAnalyzer-1.15.0.20231206-linux.gtk.x86_64.zip
+			#	https://rhlx01.hs-esslingen.de/pub/Mirrors/eclipse/mat/1.12.0/rcp/MemoryAnalyzer-1.12.0.20210602-linux.gtk.x86_64.zip
 			tmp=${bin_dir}.tmp
 			rm -rf "$tmp"
 			mkdir "$tmp"
@@ -158,7 +163,8 @@ case "$component" in
 		activate $component $bin_dir/mat
 	;;
 	visualvm)
-		version=${1:-1.4.4}
+		#version=${1:-1.4.4}
+		version=${1:-2.1.9}
 		v1=${version//./}
 		bin_dir=$SW_DIR/visualvm_$v1
 		if [ -d "$bin_dir" ];then
@@ -204,8 +210,8 @@ case "$component" in
 		activate $component $bin_dir
 	;;
 	mvnd)
-		#version=${1:-0.9.0}
-		version=${1:-1.0-m8}
+		version=${1:-0.9.0}
+		#version=${1:-1.0-m8}
 		bin_dir=$SW_DIR/mvnd-${version}-linux-amd64
 		if [ -d "$bin_dir" ];then
 			echo "$bin_dir already installed"

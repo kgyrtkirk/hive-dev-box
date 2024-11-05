@@ -38,15 +38,21 @@ function urgent_prompt_command() {
     window_urgent
     [ "$LAST_CMD_START" == "" ] && return
     cmd_time=$[ $EPOCHSECONDS - $LAST_CMD_START ]
-    if [ $cmd_time -gt 30 -a $last_ret -ne 0 ]; then
+    if [ $cmd_time -gt 3 -a $last_ret -ne 0 ]; then
         backburner "$HOSTNAME time: $cmd_time exit: $last_ret"
     fi
+    LAST_CMD_START=
 }
 
 export LAST_CMD_START=
 function enable_urgent_on_fail() {
     if [ "$DISPLAY" == "" ]; then
-        echo "warn: DISPLAY not set; urgent_on_fail disabled!"
+        echo "urgent_on_fail disabled: DISPLAY not set"
+        return
+    fi
+    if ! command -v wmctrl &> /dev/null
+    then
+        echo "urgent_on_fail disabled: wmctrl could not be found"
         return
     fi
     export WID=`get_active_wid`

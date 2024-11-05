@@ -17,7 +17,7 @@ if git status --porcelain=2|grep .;then
     fi
 fi
 
-MOPTS="-ntp -DskipTests -Dcheckstyle.skip -Dpmd.skip -Denforcer.skip -Dforbiddenapis.skip -Dmaven.gitcommitid.skip=true"
+MOPTS="-ntp -DskipTests -Dcheckstyle.skip -Dpmd.skip -Denforcer.skip -Dforbiddenapis.skip -Dmaven.gitcommitid.skip=true -Pskip-static-checks"
 
 if [ "$1" == "--ide" ];then
   MOPTS+=" -pl $MODULES"

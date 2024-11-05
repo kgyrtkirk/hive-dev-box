@@ -1,5 +1,6 @@
 #FROM debian:buster
 FROM debian:bookworm
+#FROM debian:trixie
 
 COPY tools/build_cleanup /tools/
 
